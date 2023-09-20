@@ -1,7 +1,9 @@
+import Router from "./Router";
+
 function App() {
   return (
     <>
-      <h1>MiMall</h1>
+      <Router />
     </>
   );
 }
