@@ -1,10 +1,9 @@
 import { Icon } from "@iconify/react";
+import { SidebarData } from "@customTypes/index";
 import React from "react";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { RiArrowRightSLine } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
 
-function SubMenu({ item }) {
+function SubMenu({ item }: { item: SidebarData }) {
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -38,7 +37,7 @@ function SubMenu({ item }) {
                     {nav.icon}
                   </div>
                   <div
-                    className={`font-ray SidebarLabel font-semibold text-sm  w-[8rem] truncate ${
+                    className={`font-ray SidebarLabel font-semibold line-clamp-1 ${
                       pathname.includes(nav.path)
                         ? "text-primary"
                         : "text-white"
@@ -52,13 +51,14 @@ function SubMenu({ item }) {
                     pathname.includes(nav.path) ? "text-primary" : "text-white"
                   }`}
                 >
-                  {nav.subNav &&
-                    nav.subNav.length > 0 &&
-                    (pathname.includes(nav.path) ? (
-                      <MdOutlineKeyboardArrowDown size={17} />
-                    ) : (
-                      <RiArrowRightSLine size={17} />
-                    ))}
+                  {nav.subNav && nav.subNav.length > 0 && (
+                    <Icon
+                      icon="ic:baseline-keyboard-arrow-right"
+                      className={`transform ${
+                        pathname.includes(nav.path) ? "rotate-90" : "rotate-0"
+                      } duration-300`}
+                    />
+                  )}
                 </div>
               </Link>
             </div>
@@ -75,40 +75,29 @@ function SubMenu({ item }) {
           {pathname.includes(nav.path) &&
             nav.subNav &&
             nav.subNav.length > 0 &&
-            nav.subNav.map(
-              (subNavItem, index) =>
-                subNavItem.condition && (
+            nav.subNav.map((subNavItem, index) => (
+              <Link
+                className="font-second ml-[18%] text-sm space-y-2 mt-3"
+                to={item.navItems[0].path}
+                key={index}
+              >
+                <Link
+                  to={subNavItem.path}
+                  className={`Sidebarlabel flex items-center  space-x-2 tracking-wider mb-3 font-ray font-semibold `}
+                >
                   <div
-                    className="font-second ml-[18%] text-sm space-y-2 mt-3"
-                    to={item.path}
-                    key={index}
+                    className={`${
+                      pathname.includes(nav.path) ? "text-white" : "text-white"
+                    } flex`}
                   >
-                    <Link
-                      to={subNavItem.path}
-                      className={`Sidebarlabel flex items-center  space-x-2 tracking-wider mb-3 font-ray font-semibold `}
-                    >
-                      <div
-                        className={`${
-                          pathname.includes(nav.path)
-                            ? "text-white"
-                            : "text-white"
-                        } flex`}
-                      >
-                        {pathname === subNavItem.path ? (
-                          <Icon
-                            icon="ep:select"
-                            className="h-3 w-3 mr-2 mt-1"
-                          />
-                        ) : (
-                          subNavItem.icon
-                        )}
-
-                        {subNavItem.title}
-                      </div>
-                    </Link>
+                    {pathname === subNavItem.path && (
+                      <Icon icon="ep:select" className="h-3 w-3 mr-2 mt-1" />
+                    )}
+                    {subNavItem.title}
                   </div>
-                )
-            )}
+                </Link>
+              </Link>
+            ))}
         </React.Fragment>
       ))}
     </div>
