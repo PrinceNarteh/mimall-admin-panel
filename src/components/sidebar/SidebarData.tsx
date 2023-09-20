@@ -20,7 +20,7 @@ export const sidebarData: SidebarData[] = [
     navItems: [
       {
         groupTitle: "Administrators",
-        icon: <Icon icon="clarity:administrator-line" fontSize={22} />,
+        icon: <Icon icon="clarity:administrator-line" fontSize={"22"} />,
         path: "/admins",
         subNav: [
           {
@@ -35,7 +35,7 @@ export const sidebarData: SidebarData[] = [
       },
       {
         groupTitle: "Delivery Companies",
-        icon: <Icon icon="carbon:delivery" fontSize={22} />,
+        icon: <Icon icon="carbon:delivery" fontSize={"22"} />,
         path: "/delivery-companies",
         subNav: [
           {
@@ -50,7 +50,7 @@ export const sidebarData: SidebarData[] = [
       },
       {
         groupTitle: "Shops",
-        icon: <Icon icon="icon-park-outline:shop" fontSize={22} />,
+        icon: <Icon icon="icon-park-outline:shop" fontSize={"22"} />,
         path: "/shops",
         subNav: [
           {
@@ -68,11 +68,31 @@ export const sidebarData: SidebarData[] = [
 
   // SERVICES
   {
-    sectionTitle: "FINANCE",
+    sectionTitle: "SERVICES",
     navItems: [
       {
-        groupTitle: "Cost & Payment",
-        icon: <Icon icon="fluent:payment-32-regular" className="h-6 w-6" />,
+        groupTitle: "Products",
+        icon: <Icon icon="icon-park-outline:ad-product" className="h-6 w-6" />,
+        path: "/products",
+        subNav: [
+          {
+            title: "App Products",
+            path: "/products",
+          },
+          {
+            title: "Add Product",
+            path: "/products/add-product",
+          },
+        ],
+      },
+      {
+        groupTitle: "Orders",
+        icon: (
+          <Icon
+            icon="material-symbols:shopping-cart-outline"
+            className="h-6 w-6"
+          />
+        ),
         path: "/payment/estimate",
         subNav: [],
       },
