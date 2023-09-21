@@ -1,8 +1,10 @@
 import { Icon } from "@iconify/react";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 type Props = {
+  name: string;
   data: {
     id: string;
     label: string;
@@ -11,17 +13,20 @@ type Props = {
   label: string;
   loading: boolean;
   link?: string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const CustomSelect = ({
+  name,
   data = [],
   placeholder = "",
   label = "",
-  onChange,
   loading = false,
   link,
 }: Props) => {
+  const {
+    setValue,
+    formState: { errors },
+  } = useFormContext();
   const [inputValue, setInputValue] = useState("");
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);
@@ -102,7 +107,7 @@ const CustomSelect = ({
             }`}
               onClick={() => {
                 if (item?.label?.toLowerCase() !== selected.toLowerCase()) {
-                  onChange(item.id);
+                  setValue(name, item.id);
                   setSelected(item?.label);
                   setOpen(false);
                   setInputValue("");
@@ -136,6 +141,11 @@ const CustomSelect = ({
           ) : null}
         </ul>
       ) : null}
+      {errors[name] && (
+        <span className="text-red-500 text-[12px]">
+          {errors[name]?.message as string}
+        </span>
+      )}
     </div>
   );
 };
