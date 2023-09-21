@@ -1,10 +1,12 @@
+import { useFormContext } from "react-hook-form";
+
 type Props = {
   name: string;
   type: string;
   label?: string;
-  required?: boolean;
+  required: boolean;
   placeholder?: string;
-  errorMessage?: string;
+  errorMessage: string;
 };
 
 function InputField({
@@ -12,17 +14,14 @@ function InputField({
   label,
   required,
   placeholder,
-  errorMessage,
+  errorMessage = "",
   type = "text",
+  ...res
 }: Props) {
-  // let {
-  //   register,
-  //   errors,
-  //   type = "text",
-  //   required = false,
-  //   errorMessage = "",
-  //   ...res
-  // } = props;
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <div className="flex-1">
@@ -39,17 +38,17 @@ function InputField({
         placeholder={placeholder}
         className=" placeholder:text-slate-400 block bg-white w-full outline-none border border-slate-400 shadow-md rounded-md py-3 pl-9 pr-3 sm:text-sm "
         {...register(name, {
-          ...(required && {
-            required: {
-              value: true,
-              message: errorMessage,
-            },
-          }),
+          required: {
+            value: required,
+            message: errorMessage,
+          },
         })}
         {...res}
       />
       {errors[name] && (
-        <span className="text-red-500 text-[12px]">{errors[name].message}</span>
+        <span className="text-red-500 text-[12px]">
+          {errors[name]?.message as string}
+        </span>
       )}
     </div>
   );
