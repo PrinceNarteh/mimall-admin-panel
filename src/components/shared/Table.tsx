@@ -26,7 +26,7 @@ export type SortingTableState = {
 type Props = {
   columns: [];
   data: [];
-  actionButton?: Function;
+  actionButton?: React.ReactNode;
   linkPath?: string;
 };
 
@@ -79,7 +79,7 @@ const Table = ({
           />
         </div>
 
-        {actionButton && actionButton()}
+        {actionButton && actionButton}
       </div>
 
       <table className="w-full">
@@ -108,26 +108,22 @@ const Table = ({
                       header.column.columnDef.header,
                       header.getContext()
                     )}
-                    {
-                      {
-                        asc: (
-                          <Icon
-                            icon="ic:baseline-arrow-drop-up"
-                            fontSize={25}
-                          />
-                        ),
-                        desc: (
-                          <Icon
-                            icon="ic:baseline-arrow-drop-down"
-                            fontSize={25}
-                          />
-                        ),
-                      }[
-                        header.column.getIsSorted()
-                          ? header.column.getIsSorted()
-                          : undefined
-                      ]
-                    }
+                    {/* {header.column.getIsSorted() !== false
+                      ? {
+                          asc: (
+                            <Icon
+                              icon="ic:baseline-arrow-drop-up"
+                              fontSize={25}
+                            />
+                          ),
+                          desc: (
+                            <Icon
+                              icon="ic:baseline-arrow-drop-down"
+                              fontSize={25}
+                            />
+                          ),
+                        }[header.column.getIsSorted()]
+                      : null} */}
                   </span>
                 </th>
               ))}
