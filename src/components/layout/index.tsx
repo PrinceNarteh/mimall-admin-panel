@@ -6,12 +6,10 @@ const Layout = () => {
   return (
     <div>
       <Sidebar />
-      <div className="ml-72 w-full bg-red-500">
-        <Header />
-        <div className="pt-20 p-5">
-          <Outlet />
-        </div>
-      </div>
+      <Header />
+      <main className="ml-72 font-ray overflow-y-auto min-h-screen relative pt-20 pb-10 bg-[url('/public/images/background.png')] bg-no-repeat bg-cover bg-[#f4f3f5]">
+        <Outlet />
+      </main>
     </div>
   );
 };

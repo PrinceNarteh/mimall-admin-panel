@@ -83,7 +83,7 @@ const Table = ({
         {actionButton && actionButton}
       </div>
 
-      <table className="w-full">
+      <table className="w-full p-2">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr
@@ -136,7 +136,9 @@ const Table = ({
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className="hover:bg-slate-100"
+              className={`cursor-pointer hover:bg-blue-100 duration-300 ${
+                row.index % 2 === 0 ? "bg-slate-100" : ""
+              }`}
               {...(linkPath && {
                 onClick: () => handleClick(row.original._id!),
               })}

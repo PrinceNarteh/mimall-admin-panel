@@ -4,6 +4,7 @@ import Table from "@src/components/shared/Table";
 import { User } from "@src/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import Spinner from "@src/components/shared/Spinner";
+import { getImage } from "@src/utils/getImage";
 
 const AllAdmins = () => {
   const { data, isLoading } = useGetQuery({
@@ -17,7 +18,8 @@ const AllAdmins = () => {
   const columns = [
     columnHelper.display({
       id: "name",
-      cell: () => <span>1</span>,
+      header: "No.",
+      cell: () => <span className="pl-2">1</span>,
     }),
     columnHelper.accessor((row) => `${row.first_name} ${row.last_name}`, {
       id: "Admin",
@@ -25,7 +27,7 @@ const AllAdmins = () => {
         <div className="flex items-center">
           <div>
             <img
-              src={props.row.original.profile_image}
+              src={getImage(props.row.original.profile_image, "admins")}
               alt=""
               className="h-12 w-12 object-cover rounded-full"
             />
@@ -41,10 +43,21 @@ const AllAdmins = () => {
         </div>
       ),
     }),
+    columnHelper.accessor("phone_number", {
+      header: "Phone Number",
+    }),
+    columnHelper.accessor("active", {
+      header: "Status",
+      cell: (cell) => <span>{cell.getValue() ? "Active" : "Not Active"}</span>,
+    }),
+    columnHelper.display({
+      header: "Details",
+      
+    }),
   ];
 
   return (
-    <div>
+    <div className="px-5">
       {isLoading && <Spinner isLoading={isLoading} />}
       <Table data={data} columns={columns} />
     </div>
