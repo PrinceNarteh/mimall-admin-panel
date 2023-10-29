@@ -5,6 +5,8 @@ import { User } from "@src/types";
 import { createColumnHelper } from "@tanstack/react-table";
 import Spinner from "@src/components/shared/Spinner";
 import { getImage } from "@src/utils/getImage";
+import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const AllAdmins = () => {
   const { data, isLoading } = useGetQuery({
@@ -52,7 +54,30 @@ const AllAdmins = () => {
     }),
     columnHelper.display({
       header: "Details",
-      
+      cell: () => (
+        <button className="text-xs border border-primary px-2 py-1 rounded text-primary">
+          Details
+        </button>
+      ),
+    }),
+    columnHelper.display({
+      header: "Actions",
+      cell: (props) => (
+        <span className="w-20 flex gap-3">
+          <Link to={`/companies/${props.row.original._id}/edit`}>
+            <Icon
+              icon="iconamoon:edit-light"
+              className="mt-[0.7rem] h-5 w-5 ml-3"
+            />
+          </Link>
+          <button>
+            <Icon
+              icon="fluent:delete-28-regular"
+              className="mt-[0.7rem] h-5 w-5 ml-3 text-red-500"
+            />
+          </button>
+        </span>
+      ),
     }),
   ];
 
