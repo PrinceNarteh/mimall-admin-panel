@@ -17,6 +17,29 @@ const AllAdmins = () => {
   const columns = [
     columnHelper.display({
       id: "name",
+      cell: () => <span>1</span>,
+    }),
+    columnHelper.accessor((row) => `${row.first_name} ${row.last_name}`, {
+      id: "Admin",
+      cell: (props) => (
+        <div className="flex items-center">
+          <div>
+            <img
+              src={props.row.original.profile_image}
+              alt=""
+              className="h-12 w-12 object-cover rounded-full"
+            />
+          </div>
+          <div className="ml-2">
+            <div className=" text-blue-900 text-[15px] font-bold leading-snug">
+              {props.row.original.first_name} {props.row.original.last_name}
+            </div>
+            <div className=" text-slate-400 text-sm font-normal leading-tight">
+              {props.row.original.email}
+            </div>
+          </div>
+        </div>
+      ),
     }),
   ];
 

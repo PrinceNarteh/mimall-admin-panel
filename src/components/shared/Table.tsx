@@ -24,19 +24,19 @@ export type SortingTableState = {
   sorting: SortingState;
 };
 
-type Props<T> = {
-  columns: ColumnDef<T>[];
+type Props = {
+  columns: [];
   data: [];
   actionButton?: React.ReactNode;
   linkPath?: string;
 };
 
-const Table = <T extends object>({
+const Table = ({
   columns = [],
   data = [],
   actionButton = undefined,
   linkPath = undefined,
-}: Props<T>) => {
+}: Props) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
