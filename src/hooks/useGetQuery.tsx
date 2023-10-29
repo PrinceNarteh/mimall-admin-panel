@@ -2,17 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useUser } from "./useUser";
 
-const baseURL = process.env.REACT_APP_BASE_URL;
+const baseURL = import.meta.env.VITE_API_URL;
 type Props = {
-  queryKey: string[];
-  method: "GET" | "POST";
   url: string;
-  data: { [key: string]: string };
-  options: {
+  queryKey: string[];
+  method?: "GET" | "POST";
+  data?: { [key: string]: string };
+  options?: {
     headers: { [key: string]: string };
     params: { [key: string]: string };
   };
-  enable: boolean;
+  enable?: boolean;
 };
 
 export const useGetQuery = ({

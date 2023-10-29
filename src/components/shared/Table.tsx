@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
 import {
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -23,23 +24,23 @@ export type SortingTableState = {
   sorting: SortingState;
 };
 
-type Props = {
-  columns: [];
+type Props<T> = {
+  columns: ColumnDef<T>[];
   data: [];
   actionButton?: React.ReactNode;
   linkPath?: string;
 };
 
-const Table = ({
+const Table = <T extends object>({
   columns = [],
   data = [],
   actionButton = undefined,
   linkPath = undefined,
-}: Props) => {
+}: Props<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const memorizedData = useMemo(() => data, []);
+  const memorizedData = useMemo(() => data, [data]);
   const table = useReactTable({
     data: memorizedData,
     columns,
@@ -137,7 +138,7 @@ const Table = ({
               key={row.id}
               className="hover:bg-slate-100"
               {...(linkPath && {
-                onClick: () => handleClick(row.original._id),
+                onClick: () => handleClick(row.original._id!),
               })}
             >
               {row.getVisibleCells().map((cell) => (
