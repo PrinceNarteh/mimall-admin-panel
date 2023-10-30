@@ -2,11 +2,11 @@ import { useFormContext } from "react-hook-form";
 
 type Props = {
   name: string;
-  type: string;
+  type?: string;
   label?: string;
-  required: boolean;
+  required?: boolean;
   placeholder?: string;
-  errorMessage: string;
+  errorMessage?: string;
 };
 
 function InputField({
@@ -36,7 +36,7 @@ function InputField({
       <input
         type={type}
         placeholder={placeholder}
-        className=" placeholder:text-slate-400 block bg-white w-full outline-none border border-slate-400 shadow-md rounded-md py-3 pl-9 pr-3 sm:text-sm "
+        className="placeholder:text-slate-400 block bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
         {...register(name, {
           required: {
             value: required,

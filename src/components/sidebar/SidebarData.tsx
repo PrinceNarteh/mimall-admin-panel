@@ -1,5 +1,5 @@
-import { SidebarData } from "@customTypes/index";
 import { Icon } from "@iconify/react";
+import { SidebarData } from "@src/customTypes";
 
 export const sidebarData: SidebarData[] = [
   // DASHBOARD
@@ -29,7 +29,7 @@ export const sidebarData: SidebarData[] = [
           },
           {
             title: "Add Administrators",
-            path: "/admins/add-administrator",
+            path: "/admins/add-admin",
           },
         ],
       },

@@ -23,7 +23,11 @@
 }
 
 .form-row {
-  @apply flex flex-col gap-x-5 gap-y-2 mb-3 lg:flex-row my-5;
+  @apply flex flex-col gap-x-5 gap-y-2 mb-3 items-center lg:flex-row my-5;
+}
+
+.PhoneInputInput:focus {
+  outline: none;
 }
 
 /* HTML: <div class="loader"></div> */

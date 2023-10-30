@@ -7,6 +7,7 @@ import Spinner from "@src/components/shared/Spinner";
 import { getImage } from "@src/utils/getImage";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Heading from "@src/components/shared/Heading";
 
 const AllAdmins = () => {
   const { data, isLoading } = useGetQuery({
@@ -82,8 +83,9 @@ const AllAdmins = () => {
   ];
 
   return (
-    <div className="px-5">
+    <div>
       {isLoading && <Spinner isLoading={isLoading} />}
+      <Heading label="All Administrators" />
       <Table data={data} columns={columns} />
     </div>
   );
