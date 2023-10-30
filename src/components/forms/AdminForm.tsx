@@ -1,15 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import useMutate from "@src/hooks/useMutate";
 import { Admin } from "@src/types";
+import { nationalities } from "@src/utils/nationalities";
+import { queryKeys } from "@src/utils/queryKeys";
+import { adminResolver } from "@src/utils/validators";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 import { z } from "zod";
-import InputField from "../shared/InputField";
-import ErrorMessage from "../shared/ErrorMessage";
-import { adminResolver } from "@src/utils/validators";
-import { nationalities } from "@src/utils/nationalities";
-import CustomFileInput from "../shared/CustomFileInput";
-import { useEffect, useState } from "react";
 import Button from "../shared/Button";
+import CustomFileInput from "../shared/CustomFileInput";
+import ErrorMessage from "../shared/ErrorMessage";
+import InputField from "../shared/InputField";
 
 const defaultValues = {
   first_name: "",
@@ -28,6 +32,7 @@ const defaultValues = {
 };
 
 const AdminForm = ({ admin }: { admin?: Admin }) => {
+  const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
   const formValues = adminResolver(admin);
@@ -37,8 +42,25 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
     resolver: zodResolver(adminResolver(admin)),
   });
 
+  const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+    const toastId = toast.loading("Creating Admin...");
+    const formData = new FormData();
+    Object.values(data).forEach((item) => formData.append(item[0], item[1]));
+
+    mutate(
+      {
+        url: queryKeys.AllAdmins.url,
+        data,
+      },
+      {
+        // async onSuccess() {
+        //   await queryClient.setQueryData(queryKeys.AllAdmins.key, oldData => {
+        //     return (oldData ?? []).map(item => [])
+        //   })
+        // }
+      }
+    );
   };
 
   useEffect(() => {
@@ -49,8 +71,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
     }
   }, [image, methods]);
 
-  console.log(methods.formState.errors);
-  console.log(methods.getValues());
+  console.log(queryClient);
 
   return (
     <div className="p-5 bg-white">

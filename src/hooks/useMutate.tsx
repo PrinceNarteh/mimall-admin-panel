@@ -6,9 +6,9 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 type Props = {
   url: string;
   data: object;
-  method: "GET" | "POST" | "PATCH" | "DELETE";
-  multipart: boolean;
-  options: {
+  method?: "GET" | "POST" | "PATCH" | "DELETE";
+  multipart?: boolean;
+  options?: {
     headers: { [key: string]: string };
     params: { [key: string]: string };
   };

@@ -15,8 +15,6 @@ const AllAdmins = () => {
     url: queryKeys.AllAdmins.url,
   });
 
-  console.log(data);
-
   const columnHelper = createColumnHelper<User>();
   const columns = [
     columnHelper.display({
