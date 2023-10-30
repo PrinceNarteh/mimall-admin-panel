@@ -12,7 +12,7 @@ type Props = {
 function InputField({
   name,
   label,
-  required,
+  required = false,
   placeholder,
   errorMessage = "",
   type = "text",

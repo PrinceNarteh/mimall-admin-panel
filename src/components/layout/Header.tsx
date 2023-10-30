@@ -41,7 +41,7 @@ const Header = () => {
             />
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center text-white">
             <Link to="/notification">
               <Icon
                 icon="ic:outline-notifications"

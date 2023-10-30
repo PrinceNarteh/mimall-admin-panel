@@ -1,6 +1,5 @@
 import AdminForm from "@src/components/forms/AdminForm";
 import Heading from "@src/components/shared/Heading";
-import React from "react";
 
 const AddAdmin = () => {
   return (
