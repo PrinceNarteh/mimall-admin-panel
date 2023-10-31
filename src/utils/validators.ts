@@ -1,4 +1,4 @@
-import { Admin } from "@src/types";
+import { Admin } from "@custom-types/index";
 import { z } from "zod";
 
 export const adminResolver = (admin: Admin | undefined) => {

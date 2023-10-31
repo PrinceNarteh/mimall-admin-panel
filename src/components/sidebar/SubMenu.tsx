@@ -1,5 +1,5 @@
+import { SidebarData } from "@custom-types/index";
 import { Icon } from "@iconify/react";
-import { SidebarData } from "@customTypes/index";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 

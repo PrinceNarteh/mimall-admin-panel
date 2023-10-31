@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useUser } from "./useUser";
 
-const baseURL = import.meta.env.VITE_API_URL;
+const baseURL = process.env.REACT_APP_BASE_URL;
 type Props = {
   url: string;
   queryKey: string[];

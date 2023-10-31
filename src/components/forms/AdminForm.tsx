@@ -1,9 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import useMutate from "@src/hooks/useMutate";
-import { Admin } from "@src/types";
-import { nationalities } from "@src/utils/nationalities";
-import { queryKeys } from "@src/utils/queryKeys";
-import { adminResolver } from "@src/utils/validators";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -14,6 +9,11 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
+import { Admin } from "@custom-types/index";
+import useMutate from "@hooks/useMutate";
+import { nationalities } from "src/utils/nationalities";
+import { queryKeys } from "src/utils/queryKeys";
+import { adminResolver } from "src/utils/validators";
 
 const defaultValues = {
   first_name: "",

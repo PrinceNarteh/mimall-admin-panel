@@ -1,5 +1,5 @@
+import { SidebarData } from "@custom-types/index";
 import { Icon } from "@iconify/react";
-import { SidebarData } from "@src/customTypes";
 
 export const sidebarData: SidebarData[] = [
   // DASHBOARD

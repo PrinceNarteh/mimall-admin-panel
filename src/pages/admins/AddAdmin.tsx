@@ -1,5 +1,5 @@
-import AdminForm from "@src/components/forms/AdminForm";
-import Heading from "@src/components/shared/Heading";
+import AdminForm from "@components/forms/AdminForm";
+import Heading from "@components/shared/Heading";
 
 const AddAdmin = () => {
   return (
