@@ -24,7 +24,7 @@ export type SortingTableState = {
 };
 
 type Props = {
-  columns: [];
+  columns: any;
   data: [];
   actionButton?: React.ReactNode;
   linkPath?: string;
@@ -139,7 +139,7 @@ const Table = ({
                 row.index % 2 === 0 ? "bg-slate-100" : ""
               }`}
               {...(linkPath && {
-                onClick: () => handleClick(row.original._id!),
+                onClick: () => handleClick(row.original),
               })}
             >
               {row.getVisibleCells().map((cell) => (

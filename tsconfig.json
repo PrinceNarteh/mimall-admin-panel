@@ -26,7 +26,8 @@
       "@utils/*": ["utils/*"]
     },
 
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "downlevelIteration": true
   },
   "include": ["src"]
 }

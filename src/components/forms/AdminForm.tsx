@@ -176,7 +176,9 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
           </div>
 
           <div className="flex flex-col gap-5 items-center md:flex-row md:items-end max-w-lg md:justify-center mx-auto">
-            {preview && <img src={preview} className="rounded-md w-40 h-40" />}
+            {preview && (
+              <img src={preview} className="rounded-md w-40 h-40" alt="" />
+            )}
             <div className="flex-1">
               <CustomFileInput
                 label="Profile Image"
