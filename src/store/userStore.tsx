@@ -1,4 +1,4 @@
-import { User } from "src/custom-types";
+import { User } from "@custom-types/index";
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 

@@ -16,14 +16,14 @@
     "noEmit": true,
 
     /* path alias */
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
-      "@assets/*": ["src/assets/*"],
-      "@components/*": ["src/components/*"],
-      "@custom-types/*": ["src/custom-types/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@types/*": ["src/custom-types/*"],
-      "@pages/*": ["src/pages/*"]
+      "@assets/*": ["assets/*"],
+      "@components/*": ["components/*"],
+      "@custom-types/*": ["custom-types/*"],
+      "@hooks/*": ["hooks/*"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"]
     },
 
     "jsx": "react-jsx"

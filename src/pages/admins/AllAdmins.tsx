@@ -5,8 +5,9 @@ import { User } from "@custom-types/index";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { createColumnHelper } from "@tanstack/react-table";
+import { getImage } from "@utils/getImage";
+import { queryKeys } from "@utils/queryKeys";
 import { Link } from "react-router-dom";
-import { queryKeys } from "src/utils/queryKeys";
 
 const AllAdmins = () => {
   const { data, isLoading } = useGetQuery({
