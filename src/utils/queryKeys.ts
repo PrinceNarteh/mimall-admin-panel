@@ -18,12 +18,26 @@ export const queryKeys = {
     key: ["all-products"],
     url: "/products",
   },
-  GetProducts: {
+  GetProduct: {
     key: (id: string) => ["all-products", id],
     url: (id: string) => `/products/${id}`,
   },
   EditProducts: {
     key: (id: string) => ["all-products", id],
     url: (id: string) => `/products/${id}/edit`,
+  },
+
+  // Roles
+  AllRoles: {
+    key: ["all-roles"],
+    url: "/roles",
+  },
+  GetRole: {
+    key: (id: string) => ["all-roles", id],
+    url: (id: string) => `/roles/${id}`,
+  },
+  EditRoles: {
+    key: (id: string) => ["all-roles", id],
+    url: (id: string) => `/roles/${id}/edit`,
   },
 };

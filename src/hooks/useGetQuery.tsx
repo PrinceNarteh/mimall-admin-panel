@@ -15,7 +15,7 @@ type Props = {
   enable?: boolean;
 };
 
-export const useGetQuery = ({
+export const useGetQuery = <T extends object>({
   queryKey = [],
   method = "GET",
   data,
@@ -28,7 +28,7 @@ export const useGetQuery = ({
 }: Props) => {
   const user = useUser();
 
-  return useQuery({
+  return useQuery<T>({
     queryKey,
     queryFn: async () => {
       const res = await axios(`${baseURL}${url}`, {

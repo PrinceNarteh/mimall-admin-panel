@@ -6,16 +6,13 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type ColumnDef,
+  ColumnSort,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export type SortDirection = "asc" | "desc";
-
-export type ColumnSort = {
-  id: string;
-  desc: boolean;
-};
 
 export type SortingState = ColumnSort[];
 
@@ -23,20 +20,20 @@ export type SortingTableState = {
   sorting: SortingState;
 };
 
-type Props = {
-  columns: any;
-  data: [];
+interface TableProps<T extends object> {
+  columns: ColumnDef<T, unknown>[];
+  data: T[] | undefined;
   actionButton?: React.ReactNode;
   linkPath?: string;
-};
+}
 
-const Table = ({
+const Table = <T extends object>({
   columns = [],
   data = [],
   actionButton = undefined,
   linkPath = undefined,
-}: Props) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
+}: TableProps<T>) => {
+  const [sorting, setSorting] = useState<ColumnSort[]>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
   const memorizedData = useMemo(() => data, [data]);
@@ -138,9 +135,9 @@ const Table = ({
               className={`cursor-pointer hover:bg-blue-100 duration-300 ${
                 row.index % 2 === 0 ? "bg-slate-100" : ""
               }`}
-              {...(linkPath && {
-                onClick: () => handleClick(row.original),
-              })}
+              // {...(linkPath && {
+              //   onClick: () => handleClick(row.original._id),
+              // })}
             >
               {row.getVisibleCells().map((cell) => (
                 <td

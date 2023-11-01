@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useUser } from "./useUser";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
+
 type Props = {
   url: string;
   data: object;

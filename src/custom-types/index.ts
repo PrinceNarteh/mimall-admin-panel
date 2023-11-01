@@ -38,3 +38,10 @@ export type SidebarData = {
   sectionTitle: string;
   navItems: NavItem[];
 };
+
+export type Permission = string;
+export type Role = {
+  _id: string;
+  name: string;
+  permissions: Permission[];
+};

@@ -77,25 +77,27 @@ function SubMenu({ item }: { item: SidebarData }) {
             nav.subNav.length > 0 &&
             nav.subNav.map((subNavItem, index) => (
               <Link
-                className="font-second ml-[18%] text-sm space-y-2 mt-3"
-                to={item.navItems[0].path}
                 key={index}
+                to={subNavItem.path}
+                className={`pl-10 flex py-2 items-center tracking-wider font-ray font-semibold duration-300`}
               >
-                <Link
-                  to={subNavItem.path}
-                  className={`Sidebarlabel flex items-center  space-x-2 tracking-wider mb-3 font-ray font-semibold `}
+                {
+                  <Icon
+                    icon="game-icons:check-mark"
+                    className={`h-3 w-3 mr-2 mt-1 ${
+                      pathname === subNavItem.path
+                        ? "text-white"
+                        : "text-transparent"
+                    } duration-300`}
+                  />
+                }
+                <span
+                  className={`${
+                    pathname.includes(nav.path) ? "text-white" : "text-primary"
+                  } flex items-center`}
                 >
-                  <div
-                    className={`${
-                      pathname.includes(nav.path) ? "text-white" : "text-white"
-                    } flex`}
-                  >
-                    {pathname === subNavItem.path && (
-                      <Icon icon="ep:select" className="h-3 w-3 mr-2 mt-1" />
-                    )}
-                    {subNavItem.title}
-                  </div>
-                </Link>
+                  {subNavItem.title}
+                </span>
               </Link>
             ))}
         </React.Fragment>

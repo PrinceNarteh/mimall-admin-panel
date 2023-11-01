@@ -1,4 +1,4 @@
-import { Admin } from "@custom-types/index";
+import { Admin, Role } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,6 +14,7 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
+import { useGetQuery } from "@hooks/useGetQuery";
 
 const defaultValues = {
   first_name: "",
@@ -37,6 +38,11 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
   const [preview, setPreview] = useState("");
   const formValues = adminResolver(admin);
   type FormValues = z.infer<typeof formValues>;
+  const { data: roles } = useGetQuery<Role[]>({
+    queryKey: queryKeys.AllRoles.key,
+    url: queryKeys.AllRoles.url,
+  });
+
   const methods = useForm<FormValues>({
     defaultValues,
     resolver: zodResolver(adminResolver(admin)),
@@ -50,26 +56,44 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
 
     mutate(
       {
-        url: queryKeys.AllAdmins.url,
+        url: `${queryKeys.AllAdmins.url}/register`,
         data,
       },
       {
-        // async onSuccess() {
-        //   await queryClient.setQueryData(queryKeys.AllAdmins.key, oldData => {
-        //     return (oldData ?? []).map(item => [])
-        //   })
-        // }
+        onSuccess(data) {
+          console.log(data);
+          queryClient.setQueryData<Admin[]>(
+            queryKeys.AllAdmins.key,
+            (oldData) => [data, ...(oldData ?? [])]
+          );
+          toast.dismiss(toastId);
+          toast.success("Admin successfully created");
+        },
+        onError(error: any) {
+          toast.dismiss(toastId);
+          toast.error(error.response.data.message);
+        },
       }
     );
   };
 
   useEffect(() => {
     if (image && image.some((image) => image !== undefined)) {
-      console.log(image);
       methods.setValue("profile_image", image[0]);
       setPreview(URL.createObjectURL(image[0]));
     }
   }, [image, methods]);
+
+  useEffect(() => {
+    if (roles) {
+      const admin = roles.find((role) =>
+        role.name.toLowerCase().startsWith("admin")
+      );
+      if (admin) {
+        methods.setValue("role", admin._id);
+      }
+    }
+  }, [roles, methods]);
 
   console.log(queryClient);
 
@@ -132,10 +156,11 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
           )}
           <div className="form-row">
             <InputField name="address" label="Address" required />
-            <div className="flex-1">
+
+            <div className="flex-1 flex flex-col justify-end">
               <label
                 htmlFor="countries"
-                className="block mb-2 text-sm font-medium text-blue-900"
+                className="mb-1 block text-blue-900 text-md font-semibold leading-loose"
               >
                 Nationality
               </label>
@@ -157,7 +182,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
             <div className="flex-1">
               <label
                 htmlFor="cardType"
-                className="block mb-2 text-sm font-medium text-blue-900"
+                className="mb-1 block text-blue-900 text-md font-semibold leading-loose"
               >
                 Card Type
               </label>

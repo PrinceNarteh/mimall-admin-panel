@@ -1,21 +1,21 @@
 import Heading from "@components/shared/Heading";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
-import { User } from "@custom-types/index";
+import { Admin } from "@custom-types/index";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
-import { createColumnHelper } from "@tanstack/react-table";
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { getImage } from "@utils/getImage";
 import { queryKeys } from "@utils/queryKeys";
 import { Link } from "react-router-dom";
 
 const AllAdmins = () => {
-  const { data, isLoading } = useGetQuery({
+  const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.AllAdmins.key,
     url: queryKeys.AllAdmins.url,
   });
 
-  const columnHelper = createColumnHelper<User>();
+  const columnHelper = createColumnHelper<Admin>();
   const columns = [
     columnHelper.display({
       id: "name",
@@ -44,10 +44,10 @@ const AllAdmins = () => {
         </div>
       ),
     }),
-    columnHelper.accessor("phone_number", {
+    columnHelper.accessor<"phone_number", string>("phone_number", {
       header: "Phone Number",
     }),
-    columnHelper.accessor("active", {
+    columnHelper.accessor<"active", boolean>("active", {
       header: "Status",
       cell: (cell) => <span>{cell.getValue() ? "Active" : "Not Active"}</span>,
     }),
@@ -78,7 +78,7 @@ const AllAdmins = () => {
         </span>
       ),
     }),
-  ];
+  ] as Array<ColumnDef<Admin, unknown>>;
 
   return (
     <div>
