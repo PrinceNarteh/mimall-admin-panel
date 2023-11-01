@@ -20,7 +20,7 @@ const AllAdmins = () => {
     columnHelper.display({
       id: "name",
       header: "No.",
-      cell: () => <span className="pl-2">1</span>,
+      cell: (info) => <span className="pl-2">{info.row.index + 1}</span>,
     }),
     columnHelper.accessor((row) => `${row.first_name} ${row.last_name}`, {
       id: "Admin",

@@ -15,6 +15,7 @@ import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
 import { useGetQuery } from "@hooks/useGetQuery";
+import { useNavigate } from "react-router-dom";
 
 const defaultValues = {
   first_name: "",
@@ -48,6 +49,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
     resolver: zodResolver(adminResolver(admin)),
   });
 
+  const navigate = useNavigate();
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating Admin...");
@@ -58,6 +60,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
       {
         url: `${queryKeys.AllAdmins.url}/register`,
         data,
+        multipart: true,
       },
       {
         onSuccess(data) {
@@ -68,6 +71,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
           );
           toast.dismiss(toastId);
           toast.success("Admin successfully created");
+          navigate("/admins");
         },
         onError(error: any) {
           toast.dismiss(toastId);
@@ -93,8 +97,10 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
         methods.setValue("role", admin._id);
       }
     }
+    methods.setValue("nationality", "Ghanaian");
   }, [roles, methods]);
 
+  console.log(methods.getValues());
   console.log(queryClient);
 
   return (
@@ -165,7 +171,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
                 Nationality
               </label>
               <select
-                defaultValue="Ghanian"
+                defaultValue="Ghanaian"
                 id="countries"
                 className="placeholder:text-slate-400 block bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
               >
