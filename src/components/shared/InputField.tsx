@@ -1,27 +1,37 @@
-import { useFormContext } from "react-hook-form";
+import { InputHTMLAttributes } from "react";
+import {
+  DeepMap,
+  FieldError,
+  FieldValues,
+  Path,
+  RegisterOptions,
+  UseFormRegister,
+} from "react-hook-form";
 
-type Props = {
-  name: string;
-  type?: string;
+type InputFieldProps<TFormValues extends FieldValues = FieldValues> = {
+  name: Path<TFormValues>;
+  rules?: RegisterOptions;
+  register: UseFormRegister<TFormValues>;
+  errors?: Partial<DeepMap<TFormValues, FieldError>>;
   label?: string;
   required?: boolean;
   placeholder?: string;
   errorMessage?: string;
-};
+} & InputHTMLAttributes<HTMLInputElement>;
 
-function InputField({
+const InputField = <TFormValues extends Record<string, unknown>>({
   name,
   label,
+  register,
+  rules,
+  errors,
   required = false,
   placeholder,
   errorMessage = "",
-  type = "text",
-  ...res
-}: Props) {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+  ...props
+}: InputFieldProps<TFormValues>) => {
+  const errorMessages = errors?.[name];
+  const hasError = !!(errors && errorMessages);
 
   return (
     <div className="flex-1">
@@ -34,24 +44,18 @@ function InputField({
         </label>
       )}
       <input
-        type={type}
         placeholder={placeholder}
         className="placeholder:text-slate-400 block bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
-        {...register(name, {
-          required: {
-            value: required,
-            message: errorMessage,
-          },
-        })}
-        {...res}
+        {...register(name, rules)}
+        {...props}
       />
-      {errors[name] && (
+      {hasError && (
         <span className="text-red-500 text-[12px]">
           {errors[name]?.message as string}
         </span>
       )}
     </div>
   );
-}
+};
 
 export default InputField;

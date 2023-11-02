@@ -63,7 +63,7 @@ const AllAdmins = () => {
       header: "Actions",
       cell: (props) => (
         <span className="w-20 flex gap-3">
-          <Link to={`/companies/${props.row.original._id}/edit`}>
+          <Link to={`/admins/${props.row.original._id}/edit`}>
             <Icon
               icon="iconamoon:edit-light"
               className="mt-[0.7rem] h-5 w-5 ml-3"
