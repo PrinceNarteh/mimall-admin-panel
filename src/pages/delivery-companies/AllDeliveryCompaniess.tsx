@@ -1,34 +1,34 @@
 import Heading from "@components/shared/Heading";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
-import { Admin } from "@custom-types/index";
+import { DeliveryCompany } from "@custom-types/index";
+import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import AdminDetails from "./DeliveryCompanyDetails";
-import useConfirm from "@hooks/useConfirm";
+import { useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
+import { Link } from "react-router-dom";
+import DeliveryCompanyDetails from "./DeliveryCompanyDetails";
 
 const AllDeliveryCompanies = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  console.log(ref);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
-  const [admin, setAdmin] = useState<Admin | null>(null);
-  const { data, isLoading } = useGetQuery<Admin[]>({
+  const [deliveryCompany, setDeliveryCompany] =
+    useState<DeliveryCompany | null>(null);
+  const { data, isLoading } = useGetQuery<DeliveryCompany[]>({
     queryKey: queryKeys.AllDeliveryCompanies.key,
     url: queryKeys.AllDeliveryCompanies.url,
   });
+  console.log(data);
 
-  const handleDelete = async (admin: Admin | null) => {
-    if (!admin) return;
+  const handleDelete = async (deliveryCompany: DeliveryCompany | null) => {
+    if (!deliveryCompany) return;
 
     const isConfirmed = await confirm({
       title: "Are You Sure?",
-      message: `Are you sure you want to delete "${admin?.first_name} ${admin?.last_name}"?`,
+      message: `Are you sure you want to delete "${deliveryCompany?.name}"?`,
     });
 
     if (isConfirmed) {
@@ -37,22 +37,22 @@ const AllDeliveryCompanies = () => {
     }
   };
 
-  const columnHelper = createColumnHelper<Admin>();
+  const columnHelper = createColumnHelper<DeliveryCompany>();
   const columns = [
     columnHelper.display({
       id: "name",
       header: "No.",
       cell: (info) => <span className="pl-2">{info.row.index + 1}</span>,
     }),
-    columnHelper.accessor((row) => `${row.first_name} ${row.last_name}`, {
-      id: "Admin",
+    columnHelper.accessor("name", {
+      header: "Delivery Company",
       cell: (props) => (
         <div className="flex items-center">
           <div>
             <img
               src={fetchImage({
-                imageName: props.row.original.profile_image,
-                entity: "admins",
+                imageName: props.row.original.slide_images[0],
+                entity: "delivery-companies",
               })}
               alt=""
               className="h-12 w-12 object-cover rounded-full"
@@ -60,28 +60,28 @@ const AllDeliveryCompanies = () => {
           </div>
           <div className="ml-2">
             <div className=" text-blue-900 text-[15px] font-bold leading-snug">
-              {props.row.original.first_name} {props.row.original.last_name}
+              {props.row.original.name}
             </div>
-            <div className=" text-slate-400 text-sm font-normal leading-tight">
-              {props.row.original.email}
+            <div className=" text-slate-800 text-sm font-normal leading-tight">
+              {props.row.original.ownerFirstName}{" "}
+              {props.row.original.ownerLastName}
             </div>
           </div>
         </div>
       ),
     }),
-    columnHelper.accessor<"phone_number", string>("phone_number", {
+    columnHelper.accessor("phoneNumber", {
       header: "Phone Number",
       cell: (info) => <span>{formatPhoneNumberIntl(info.getValue())}</span>,
     }),
-    columnHelper.accessor<"active", boolean>("active", {
-      header: "Status",
-      cell: (cell) => <span>{cell.getValue() ? "Active" : "Not Active"}</span>,
+    columnHelper.accessor("location", {
+      header: "Location",
     }),
     columnHelper.display({
       header: "Details",
       cell: (props) => (
         <button
-          onClick={() => setAdmin(props.row.original)}
+          onClick={() => setDeliveryCompany(props.row.original)}
           className="text-xs border border-primary px-2 py-1 rounded text-primary"
         >
           Details
@@ -92,7 +92,7 @@ const AllDeliveryCompanies = () => {
       header: "Actions",
       cell: (props) => (
         <span className="w-20 flex gap-3">
-          <Link to={`/admins/${props.row.original._id}/edit`}>
+          <Link to={`/delivery-companies/${props.row.original._id}/edit`}>
             <Icon icon="iconamoon:edit-light" className="text-xl" />
           </Link>
           <button onClick={() => handleDelete(props.row.original)}>
@@ -104,17 +104,17 @@ const AllDeliveryCompanies = () => {
         </span>
       ),
     }),
-  ] as Array<ColumnDef<Admin, unknown>>;
+  ] as Array<ColumnDef<DeliveryCompany, unknown>>;
 
   return (
     <div>
       {isLoading && <Spinner isLoading={isLoading} />}
-      <Heading label="All Administrators" />
+      <Heading label="All Delivery Companies" />
       <Table data={data} columns={columns} />
 
-      <AdminDetails
-        admin={admin}
-        setAdmin={setAdmin}
+      <DeliveryCompanyDetails
+        deliveryCompany={deliveryCompany}
+        setDeliveryCompany={setDeliveryCompany}
         handleDelete={handleDelete}
       />
 

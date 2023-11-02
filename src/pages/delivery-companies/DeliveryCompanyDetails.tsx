@@ -1,36 +1,38 @@
 import DetailsCard from "@components/shared/DetailsCard";
 import DetailsCardItem from "@components/shared/DetailsCardItem";
-import { Admin } from "@custom-types/index";
+import { DeliveryCompany } from "@custom-types/index";
 import { Icon } from "@iconify/react";
 import { fetchImage } from "@utils/fetchImage";
 import React from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type DeliveryCompanyDetailsProps = {
-  admin: Admin | null;
-  setAdmin: React.Dispatch<React.SetStateAction<Admin | null>>;
-  handleDelete: (admin: Admin | null) => Promise<void>;
+  deliveryCompany: DeliveryCompany | null;
+  setDeliveryCompany: React.Dispatch<
+    React.SetStateAction<DeliveryCompany | null>
+  >;
+  handleDelete: (deliveryCompany: DeliveryCompany | null) => Promise<void>;
 };
 
 const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
-  admin = null,
-  setAdmin,
+  deliveryCompany = null,
+  setDeliveryCompany,
   handleDelete,
 }) => {
   return (
     <DetailsCard
-      heading="Admin Details"
-      title={`${admin?.first_name} ${admin?.middle_name} ${admin?.last_name}`}
-      description={`${admin?.email}`}
-      closeDetails={() => setAdmin(null)}
+      heading="Delivery Company Details"
+      title={`${deliveryCompany?.name}`}
+      description={`${deliveryCompany?.email}`}
+      closeDetails={() => setDeliveryCompany(null)}
       image={`${fetchImage({
-        imageName: admin?.profile_image,
-        entity: "admins",
+        imageName: deliveryCompany?.slide_images[0],
+        entity: "delivery-companies",
       })}`}
-      openDetails={!!admin}
-      editLink={`/admins/${admin?._id}/edit`}
+      openDetails={!!deliveryCompany}
+      editLink={`/delivery-companies/${deliveryCompany?._id}/edit`}
       actionButtons={() => (
-        <button onClick={() => handleDelete(admin)}>
+        <button onClick={() => handleDelete(deliveryCompany)}>
           <Icon
             icon="fluent:delete-28-regular"
             className="text-xl text-red-500"
@@ -39,11 +41,11 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
       )}
     >
       <div className="bg-white flex flex-col md:flex-row gap-5 p-5 rounded-md">
-        <div className="shrink-0 md:w-60 md:h-60 mx-auto">
+        <div className="shrink-0 md:w-60 mx-auto">
           <img
             src={`${fetchImage({
-              imageName: admin?.profile_image,
-              entity: "admins",
+              imageName: deliveryCompany?.slide_images[0],
+              entity: "delivery-companies",
             })}`}
             alt=""
             className="rounded-md"
@@ -51,20 +53,32 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
         </div>
         <div className="w-full space-y-2">
           <DetailsCardItem
+            label="Owner's Name"
+            value={`${deliveryCompany?.ownerFirstName} ${deliveryCompany?.ownerLastName}`}
+          />
+          <DetailsCardItem
+            label="Owner's Number"
+            value={formatPhoneNumberIntl(
+              deliveryCompany?.ownerPhoneNumber ?? ""
+            )}
+          />
+          <DetailsCardItem
             label="Phone Number"
-            value={formatPhoneNumberIntl(admin?.phone_number ?? "")}
+            value={formatPhoneNumberIntl(deliveryCompany?.phoneNumber ?? "")}
           />
           <DetailsCardItem
             label="Alternate Phone Number"
-            value={formatPhoneNumberIntl(admin?.alternate_phone_number ?? "")}
+            value={formatPhoneNumberIntl(
+              deliveryCompany?.alternatePhoneNumber ?? ""
+            )}
           />
-          <DetailsCardItem label="Address" value={admin?.address} />
-          <DetailsCardItem label="Nationality" value={admin?.nationality} />
-          <DetailsCardItem label="Role" value={admin?.role.name} />
           <DetailsCardItem
-            label="Status"
-            value={admin?.active ? "Active" : "Not Active"}
+            label="Whatsapp Number"
+            value={formatPhoneNumberIntl(deliveryCompany?.whatsappNumber ?? "")}
           />
+          <DetailsCardItem label="Address" value={deliveryCompany?.location} />
+          <DetailsCardItem label="Location" value={deliveryCompany?.location} />
+          <DetailsCardItem label="Role" value={deliveryCompany?.role.name} />
         </div>
       </div>
     </DetailsCard>
