@@ -7,6 +7,7 @@ import {
   RegisterOptions,
   UseFormRegister,
 } from "react-hook-form";
+import * as _ from "lodash";
 
 type InputFieldProps<TFormValues extends FieldValues = FieldValues> = {
   name: Path<TFormValues>;
@@ -30,7 +31,7 @@ const InputField = <TFormValues extends Record<string, unknown>>({
   errorMessage = "",
   ...props
 }: InputFieldProps<TFormValues>) => {
-  const errorMessages = errors?.[name];
+  const errorMessages = _.get(errors, name);
   const hasError = !!(errors && errorMessages);
 
   return (

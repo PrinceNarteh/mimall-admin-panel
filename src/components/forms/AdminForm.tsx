@@ -7,7 +7,7 @@ import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
 import { adminResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, Path } from "react-hook-form";
 import toast from "react-hot-toast";
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
+import { getImage } from "@utils/getImage";
 
 const defaultValues = {
   first_name: "",
@@ -34,19 +35,25 @@ const defaultValues = {
 };
 
 const AdminForm = ({ admin }: { admin?: Admin }) => {
-  console.log({ admin });
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
-  const formValues = adminResolver(admin);
-  type FormValues = z.infer<typeof formValues>;
+
   const { data: roles } = useGetQuery<Role[]>({
     queryKey: queryKeys.AllRoles.key,
     url: queryKeys.AllRoles.url,
   });
 
-  const { control, register, setValue, handleSubmit } = useForm<FormValues>({
-    defaultValues: admin,
+  const formValues = adminResolver(admin);
+  type FormValues = z.infer<typeof formValues>;
+  const {
+    control,
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: defaultValues,
     resolver: zodResolver(adminResolver(admin)),
   });
 
@@ -57,15 +64,19 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
 
+    console.log(data);
+
     mutate(
       {
-        url: `${queryKeys.AllAdmins.url}/register`,
+        url: admin
+          ? `${queryKeys.AllAdmins.url}/${admin._id}`
+          : `${queryKeys.AllAdmins.url}/register`,
         data,
+        method: admin ? "PATCH" : "POST",
         multipart: true,
       },
       {
         onSuccess(data) {
-          console.log(data);
           queryClient.setQueryData<Admin[]>(
             queryKeys.AllAdmins.key,
             (oldData) => [data, ...(oldData ?? [])]
@@ -83,11 +94,16 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
   };
 
   useEffect(() => {
-    if (image && image.some((image) => image !== undefined)) {
+    if (!admin && image && image.some((image) => image !== undefined)) {
+      setValue("profile_image", image[0]);
+      setPreview(URL.createObjectURL(image[0]));
+    } else if (!image && admin && admin.profile_image) {
+      setPreview(getImage(admin.profile_image, "admins"));
+    } else if (admin && image && image.some((image) => image !== undefined)) {
       setValue("profile_image", image[0]);
       setPreview(URL.createObjectURL(image[0]));
     }
-  }, [image, setValue]);
+  }, [admin, image, setValue]);
 
   useEffect(() => {
     if (roles) {
@@ -100,6 +116,14 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
     }
     setValue("nationality", "Ghanaian");
   }, [roles, setValue]);
+
+  useEffect(() => {
+    if (admin) {
+      Object.entries(admin).forEach((item) =>
+        setValue(item[0] as keyof FormValues, item[1])
+      );
+    }
+  }, [admin, setValue]);
 
   return (
     <div className="p-5 bg-white">
@@ -133,7 +157,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
               rules={{ required: true }}
               className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
             />
-            <ErrorMessage name="phone_number" />
+            <ErrorMessage name="phone_number" errors={errors} />
           </div>
           <div className="flex-1">
             <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
