@@ -26,7 +26,7 @@ const DetailsCard = ({
 }: React.PropsWithChildren<DetailsCardProps>) => {
   return (
     <div
-      className={`flex items-start fixed top-0 right-0 bottom-0 left-72 min-h-screen  p-5 overflow-y-auto  bg-black/80 z-50 transform ${
+      className={`flex items-start lg:items-center fixed top-0 right-0 bottom-0 left-72 min-h-screen  p-5 overflow-y-auto  bg-black/80 z-50 transform ${
         openDetails ? "scale-100 opacity-100" : "scale-0 opacity-0"
       } duration-500`}
     >
@@ -42,7 +42,7 @@ const DetailsCard = ({
             <h3>{heading}</h3>
           </div>
 
-          <div className="absolute -bottom-10 h-20 w-11/12 mx-auto bg-white/75 backdrop-blur-lg  rounded-xl flex justify-between items-center">
+          <div className="absolute -bottom-10 h-20 ml-[2%] w-[96%] mx-auto bg-white/50 backdrop-blur-lg  rounded-xl flex justify-between items-center">
             <div className="flex items-center">
               <img
                 src={image}
@@ -59,7 +59,7 @@ const DetailsCard = ({
               </div>
             </div>
 
-            <div className="flex gap-5 mr-5">
+            <div className="flex gap-5 items-center mr-5">
               {editLink ? (
                 <Link to={editLink}>
                   <Icon

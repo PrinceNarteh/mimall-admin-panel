@@ -1,10 +1,10 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
 type ButtonProps = {
   width?: string;
   variant?: "outline" | "solid";
   children: React.ReactNode;
-};
+} & HTMLAttributes<HTMLButtonElement>;
 
 const Button: React.FC<ButtonProps> = ({
   variant = "solid",

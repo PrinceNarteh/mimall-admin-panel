@@ -7,18 +7,34 @@ import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AdminDetails from "./AdminDetails";
+import useConfirm from "@hooks/useConfirm";
+import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 const AllAdmins = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  console.log(ref);
+  const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.AllAdmins.key,
     url: queryKeys.AllAdmins.url,
   });
 
-  console.log(data);
+  const handleDelete = async (admin: Admin | null) => {
+    if (!admin) return;
+
+    const isConfirmed = await confirm({
+      title: "Are You Sure?",
+      message: `Are you sure you want to delete "${admin?.first_name} ${admin?.last_name}"?`,
+    });
+
+    if (isConfirmed) {
+      console.log(isConfirmed);
+    }
+  };
 
   const columnHelper = createColumnHelper<Admin>();
   const columns = [
@@ -54,6 +70,7 @@ const AllAdmins = () => {
     }),
     columnHelper.accessor<"phone_number", string>("phone_number", {
       header: "Phone Number",
+      cell: (info) => <span>{formatPhoneNumberIntl(info.getValue())}</span>,
     }),
     columnHelper.accessor<"active", boolean>("active", {
       header: "Status",
@@ -75,15 +92,12 @@ const AllAdmins = () => {
       cell: (props) => (
         <span className="w-20 flex gap-3">
           <Link to={`/admins/${props.row.original._id}/edit`}>
-            <Icon
-              icon="iconamoon:edit-light"
-              className="mt-[0.7rem] h-5 w-5 ml-3"
-            />
+            <Icon icon="iconamoon:edit-light" className="text-xl" />
           </Link>
-          <button>
+          <button onClick={() => handleDelete(props.row.original)}>
             <Icon
               icon="fluent:delete-28-regular"
-              className="mt-[0.7rem] h-5 w-5 ml-3 text-red-500"
+              className="text-xl text-red-500"
             />
           </button>
         </span>
@@ -97,7 +111,13 @@ const AllAdmins = () => {
       <Heading label="All Administrators" />
       <Table data={data} columns={columns} />
 
-      <AdminDetails admin={admin} setAdmin={setAdmin} />
+      <AdminDetails
+        admin={admin}
+        setAdmin={setAdmin}
+        handleDelete={handleDelete}
+      />
+
+      <ConfirmationDialog />
     </div>
   );
 };
