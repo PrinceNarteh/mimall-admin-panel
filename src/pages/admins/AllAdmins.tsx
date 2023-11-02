@@ -5,15 +5,20 @@ import { Admin } from "@custom-types/index";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { getImage } from "@utils/getImage";
+import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import AdminDetails from "./AdminDetails";
 
 const AllAdmins = () => {
+  const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.AllAdmins.key,
     url: queryKeys.AllAdmins.url,
   });
+
+  console.log(data);
 
   const columnHelper = createColumnHelper<Admin>();
   const columns = [
@@ -28,7 +33,10 @@ const AllAdmins = () => {
         <div className="flex items-center">
           <div>
             <img
-              src={getImage(props.row.original.profile_image, "admins")}
+              src={fetchImage({
+                imageName: props.row.original.profile_image,
+                entity: "admins",
+              })}
               alt=""
               className="h-12 w-12 object-cover rounded-full"
             />
@@ -53,8 +61,11 @@ const AllAdmins = () => {
     }),
     columnHelper.display({
       header: "Details",
-      cell: () => (
-        <button className="text-xs border border-primary px-2 py-1 rounded text-primary">
+      cell: (props) => (
+        <button
+          onClick={() => setAdmin(props.row.original)}
+          className="text-xs border border-primary px-2 py-1 rounded text-primary"
+        >
           Details
         </button>
       ),
@@ -85,6 +96,8 @@ const AllAdmins = () => {
       {isLoading && <Spinner isLoading={isLoading} />}
       <Heading label="All Administrators" />
       <Table data={data} columns={columns} />
+
+      <AdminDetails admin={admin} setAdmin={setAdmin} />
     </div>
   );
 };

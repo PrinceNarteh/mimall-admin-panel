@@ -4,13 +4,9 @@ export const queryKeys = {
     key: ["all-admins"],
     url: "/admins",
   },
-  GetAdmin: {
+  SingleAdmin: {
     key: (id: string) => ["all-admins", id],
     url: (id: string) => `/admins/${id}`,
-  },
-  EditAdmin: {
-    key: (id: string) => ["all-admins", id],
-    url: (id: string) => `/admins/${id}/edit`,
   },
 
   // Products
@@ -18,13 +14,9 @@ export const queryKeys = {
     key: ["all-products"],
     url: "/products",
   },
-  GetProduct: {
+  SingleProduct: {
     key: (id: string) => ["all-products", id],
     url: (id: string) => `/products/${id}`,
-  },
-  EditProducts: {
-    key: (id: string) => ["all-products", id],
-    url: (id: string) => `/products/${id}/edit`,
   },
 
   // Roles
@@ -32,12 +24,8 @@ export const queryKeys = {
     key: ["all-roles"],
     url: "/roles",
   },
-  GetRole: {
+  SingleRole: {
     key: (id: string) => ["all-roles", id],
     url: (id: string) => `/roles/${id}`,
-  },
-  EditRoles: {
-    key: (id: string) => ["all-roles", id],
-    url: (id: string) => `/roles/${id}/edit`,
   },
 };

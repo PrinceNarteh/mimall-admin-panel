@@ -3,11 +3,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
+import { fetchImage } from "@utils/fetchImage";
 import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
 import { adminResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm, Path } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +17,6 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
-import { getImage } from "@utils/getImage";
 
 const defaultValues = {
   first_name: "",
@@ -26,7 +26,7 @@ const defaultValues = {
   alternate_phone_number: "",
   email: "",
   address: "",
-  nationality: "",
+  nationality: "Ghanaian",
   profile_image: "",
   card_type: "",
   card_number: "",
@@ -69,7 +69,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
     mutate(
       {
         url: admin
-          ? `${queryKeys.AllAdmins.url}/${admin._id}`
+          ? `${queryKeys.SingleAdmin.url(admin._id)}`
           : `${queryKeys.AllAdmins.url}/register`,
         data,
         method: admin ? "PATCH" : "POST",
@@ -79,7 +79,18 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
         onSuccess(data) {
           queryClient.setQueryData<Admin[]>(
             queryKeys.AllAdmins.key,
-            (oldData) => [data, ...(oldData ?? [])]
+            (oldData) => {
+              if (admin) {
+                return (oldData ?? []).map((item) => {
+                  if (item._id === data._id) {
+                    return data;
+                  }
+                  return item;
+                });
+              } else {
+                return [data, ...(oldData ?? [])];
+              }
+            }
           );
           toast.dismiss(toastId);
           toast.success("Admin successfully created");
@@ -98,7 +109,9 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
       setValue("profile_image", image[0]);
       setPreview(URL.createObjectURL(image[0]));
     } else if (!image && admin && admin.profile_image) {
-      setPreview(getImage(admin.profile_image, "admins"));
+      setPreview(
+        fetchImage({ imageName: admin.profile_image, entity: "admins" })
+      );
     } else if (admin && image && image.some((image) => image !== undefined)) {
       setValue("profile_image", image[0]);
       setPreview(URL.createObjectURL(image[0]));
@@ -114,7 +127,6 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
         setValue("role", admin._id);
       }
     }
-    setValue("nationality", "Ghanaian");
   }, [roles, setValue]);
 
   useEffect(() => {

@@ -8,8 +8,8 @@ import { useParams } from "react-router-dom";
 const EditAdmin = () => {
   const { adminId } = useParams();
   const { data } = useGetQuery<Admin>({
-    queryKey: queryKeys.GetAdmin.key(adminId as string),
-    url: queryKeys.GetAdmin.url(adminId as string),
+    queryKey: queryKeys.SingleAdmin.key(adminId as string),
+    url: queryKeys.SingleAdmin.url(adminId as string),
   });
 
   return (

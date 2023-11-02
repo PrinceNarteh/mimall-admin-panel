@@ -1,12 +1,20 @@
+export type Permission = string;
+export type Role = {
+  _id: string;
+  name: string;
+  permissions: Permission[];
+};
+
 interface BaseUser {
   _id: string;
-  role: string;
+  role: Role;
   email: string;
   phone_number: string;
+  alternate_phone_number: string;
   active: boolean;
+  address: string;
   createdAt: string;
   updatedAt: string;
-  address: string;
 }
 
 export interface User extends BaseUser {
@@ -21,10 +29,14 @@ export interface User extends BaseUser {
 }
 
 export interface Admin extends BaseUser {
+  middle_name: string;
   first_name: string;
   last_name: string;
   profile_image: string;
-  updatedAt: string;
+  auth_token: string;
+  card_type: string;
+  card_number: string;
+  nationality: string;
 }
 
 export type SubNav = {
@@ -42,11 +54,4 @@ export type NavItem = {
 export type SidebarData = {
   sectionTitle: string;
   navItems: NavItem[];
-};
-
-export type Permission = string;
-export type Role = {
-  _id: string;
-  name: string;
-  permissions: Permission[];
 };
