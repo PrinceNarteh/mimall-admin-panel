@@ -9,18 +9,18 @@ import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import AdminDetails from "./AdminDetails";
+import AdminDetails from "./DeliveryCompanyDetails";
 import useConfirm from "@hooks/useConfirm";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 
-const AllAdmins = () => {
+const AllDeliveryCompanies = () => {
   const ref = useRef<HTMLDivElement>(null);
   console.log(ref);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
-    queryKey: queryKeys.AllAdmins.key,
-    url: queryKeys.AllAdmins.url,
+    queryKey: queryKeys.AllDeliveryCompanies.key,
+    url: queryKeys.AllDeliveryCompanies.url,
   });
 
   const handleDelete = async (admin: Admin | null) => {
@@ -123,4 +123,4 @@ const AllAdmins = () => {
   );
 };
 
-export default AllAdmins;
+export default AllDeliveryCompanies;

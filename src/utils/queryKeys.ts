@@ -28,4 +28,14 @@ export const queryKeys = {
     key: (id: string) => ["all-roles", id],
     url: (id: string) => `/roles/${id}`,
   },
+
+  // Delivery Companies
+  AllDeliveryCompanies: {
+    key: ["all-delivery-companies"],
+    url: "/delivery-companies",
+  },
+  SingleDeliveryCompany: {
+    key: (id: string) => ["all-delivery-companies", id],
+    url: (id: string) => `/delivery-companies/${id}`,
+  },
 };
