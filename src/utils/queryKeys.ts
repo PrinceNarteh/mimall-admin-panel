@@ -1,51 +1,61 @@
 export const queryKeys = {
   // Administrators
-  AllAdmins: {
+  Admins: {
     key: ["all-admins"],
     url: "/admins",
   },
-  SingleAdmin: {
+  Admin: {
     key: (id: string) => ["all-admins", id],
     url: (id: string) => `/admins/${id}`,
   },
 
   // Products
-  AllProducts: {
+  Products: {
     key: ["all-products"],
     url: "/products",
   },
-  SingleProduct: {
+  Product: {
     key: (id: string) => ["all-products", id],
     url: (id: string) => `/products/${id}`,
   },
 
   // Roles
-  AllRoles: {
+  Roles: {
     key: ["all-roles"],
     url: "/roles",
   },
-  SingleRole: {
+  Role: {
     key: (id: string) => ["all-roles", id],
     url: (id: string) => `/roles/${id}`,
   },
 
   // Delivery Companies
-  AllDeliveryCompanies: {
+  DeliveryCompanies: {
     key: ["all-delivery-companies"],
     url: "/delivery-companies",
   },
-  SingleDeliveryCompany: {
+  DeliveryCompany: {
     key: (id: string) => ["all-delivery-companies", id],
     url: (id: string) => `/delivery-companies/${id}`,
   },
 
   // Shops
-  AllShops: {
+  Shops: {
     key: ["all-shops"],
     url: "/shops",
   },
-  SingleShop: {
+  Shop: {
     key: (id: string) => ["all-shops", id],
     url: (id: string) => `/shops/${id}`,
+  },
+
+  // Shops
+  Users: {
+    key: ["all-users"],
+    url: "/users",
+  },
+  User: {
+    key: (id: string) => ["all-users", id],
+    url: (id: string) => `/users/${id}`,
   },
 };
