@@ -21,7 +21,6 @@ import InputField from "../shared/InputField";
 const defaultValues = {
   _id: "",
   name: "",
-  slug: "",
   email: "",
   phoneNumber: "",
   alternatePhoneNumber: "",
@@ -30,7 +29,6 @@ const defaultValues = {
   ownerFirstName: "",
   ownerLastName: "",
   ownerPhoneNumber: "",
-  role: "",
   slide_images: [],
 };
 
@@ -42,11 +40,6 @@ const DeliveryCompanyForm = ({
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
-
-  const { data: roles } = useGetQuery<Role[]>({
-    queryKey: queryKeys.AllDeliveryCompanies.key,
-    url: queryKeys.AllDeliveryCompanies.url,
-  });
 
   const formValues = deliveryCompanyResolver(deliveryCompany);
   type FormValues = z.infer<typeof formValues>;
@@ -73,8 +66,8 @@ const DeliveryCompanyForm = ({
     mutate(
       {
         url: deliveryCompany
-          ? `${queryKeys.SingleDeliveryCompany.url(deliveryCompany._id)}`
-          : `${queryKeys.SingleDeliveryCompany.url}/register`,
+          ? `${queryKeys.DeliveryCompany.url(deliveryCompany._id)}`
+          : `${queryKeys.DeliveryCompany.url}/register`,
         data,
         method: deliveryCompany ? "PATCH" : "POST",
         multipart: true,
@@ -82,7 +75,7 @@ const DeliveryCompanyForm = ({
       {
         onSuccess(data) {
           queryClient.setQueryData<DeliveryCompany[]>(
-            queryKeys.AllDeliveryCompanies.key,
+            queryKeys.DeliveryCompanies.key,
             (oldData) => {
               if (deliveryCompany) {
                 return (oldData ?? []).map((item) => {
@@ -109,40 +102,29 @@ const DeliveryCompanyForm = ({
   };
 
   useEffect(() => {
-    if (
-      !deliveryCompany &&
-      image &&
-      image.some((image) => image !== undefined)
-    ) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
-    } else if (!image && deliveryCompany && deliveryCompany.profile_image) {
-      setPreview(
-        fetchImage({
-          imageName: deliveryCompany.profile_image,
-          entity: "delivery-companies",
-        })
-      );
-    } else if (
-      deliveryCompany &&
-      image &&
-      image.some((image) => image !== undefined)
-    ) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
-    }
+    // if (
+    //   !deliveryCompany &&
+    //   image &&
+    //   image.some((image) => image !== undefined)
+    // ) {
+    //   setValue("profile_image", image[0]);
+    //   setPreview(URL.createObjectURL(image[0]));
+    // } else if (!image && deliveryCompany && deliveryCompany.profile_image) {
+    //   setPreview(
+    //     fetchImage({
+    //       imageName: deliveryCompany.profile_image,
+    //       entity: "delivery-companies",
+    //     })
+    //   );
+    // } else if (
+    //   deliveryCompany &&
+    //   image &&
+    //   image.some((image) => image !== undefined)
+    // ) {
+    //   setValue("profile_image", image[0]);
+    //   setPreview(URL.createObjectURL(image[0]));
+    // }
   }, [deliveryCompany, image, setValue]);
-
-  useEffect(() => {
-    if (roles) {
-      const deliveryCompany = roles.find((role) =>
-        role.name.toLowerCase().startsWith("deliveryCompany")
-      );
-      if (deliveryCompany) {
-        setValue("role", deliveryCompany._id);
-      }
-    }
-  }, [roles, setValue]);
 
   useEffect(() => {
     if (deliveryCompany) {
@@ -156,21 +138,15 @@ const DeliveryCompanyForm = ({
     <div className="p-5 bg-white">
       <form onSubmit={handleSubmit(submit)}>
         <div className="form-row">
+          <InputField name="name" label="Product Name" register={register} />
           <InputField
-            name="first_name"
-            label="First Name"
+            name="email"
+            type="email"
+            label="Last Name"
             register={register}
           />
-          <InputField name="last_name" label="Last Name" register={register} />
         </div>
-        <div className="form-row">
-          <InputField
-            name="middle_name"
-            label="Middle Name"
-            register={register}
-          />
-          <InputField name="email" label="Email" register={register} />
-        </div>
+
         <div className="form-row">
           <div className="flex-1">
             <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
@@ -220,57 +196,54 @@ const DeliveryCompanyForm = ({
         )}
         <div className="form-row">
           <InputField
-            name="address"
-            label="Address"
+            name="location"
+            label="location"
             required
             register={register}
           />
 
-          <div className="flex-1 flex flex-col justify-end">
-            <label
-              htmlFor="countries"
-              className="mb-1 block text-blue-900 text-md font-semibold leading-loose"
-            >
-              Nationality
+          <div className="flex-1">
+            <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
+              Phone Number
             </label>
-            <select
-              defaultValue="Ghanaian"
-              id="countries"
-              className="placeholder:text-slate-400 block bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
-            >
-              {nationalities.map((nationality, idx) => (
-                <option key={idx} value={nationality}>
-                  {nationality}
-                </option>
-              ))}
-            </select>
+            <PhoneInputWithCountry
+              international
+              defaultCountry="GH"
+              name="whatsappNumber"
+              control={control}
+              rules={{ required: true }}
+              className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
+            />
+            <ErrorMessage name="whatsappNumber" errors={errors} />
           </div>
         </div>
 
         <div className="form-row">
-          <div className="flex-1">
-            <label
-              htmlFor="cardType"
-              className="mb-1 block text-blue-900 text-md font-semibold leading-loose"
-            >
-              Card Type
-            </label>
-            <select
-              id="cardType"
-              className="placeholder:text-slate-400 block bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
-              {...register("card_type")}
-            >
-              <option value="">Select Card</option>
-              <option value="ghana_card">Ghana Card</option>
-              <option value="student_id">Student ID</option>
-              <option value="voters_id">Voters ID</option>
-            </select>
-          </div>
           <InputField
-            name="card_number"
-            label="Card Number"
+            name="ownerFirstName"
+            label="Owner's First Name"
             register={register}
           />
+          <InputField
+            name="ownerLastName"
+            label="Owner's Last Name"
+            register={register}
+          />
+
+          <div className="flex-1">
+            <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
+              Owner's Phone Number
+            </label>
+            <PhoneInputWithCountry
+              international
+              defaultCountry="GH"
+              name="ownerPhoneNumber"
+              control={control}
+              rules={{ required: true }}
+              className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
+            />
+            <ErrorMessage name="ownerPhoneNumber" errors={errors} />
+          </div>
         </div>
 
         <div className="flex flex-col gap-5 items-center md:flex-row md:items-end max-w-lg md:justify-center mx-auto">
