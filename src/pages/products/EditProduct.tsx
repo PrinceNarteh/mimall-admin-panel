@@ -7,10 +7,10 @@ import { queryKeys } from "@utils/queryKeys";
 import { useParams } from "react-router-dom";
 
 const EditProduct = () => {
-  const { adminId } = useParams();
+  const { productId } = useParams();
   const { data, isLoading } = useGetQuery<Product>({
-    queryKey: queryKeys.Product.key(adminId as string),
-    url: queryKeys.Product.url(adminId as string),
+    queryKey: queryKeys.Product.key(productId as string),
+    url: queryKeys.Product.url(productId as string),
   });
 
   return (

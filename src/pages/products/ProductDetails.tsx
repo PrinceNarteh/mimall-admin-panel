@@ -1,36 +1,36 @@
 import DetailsCard from "@components/shared/DetailsCard";
 import DetailsCardItem from "@components/shared/DetailsCardItem";
-import { Admin } from "@custom-types/index";
+import ImageGallery from "@components/shared/ImageGallery";
+import { Product } from "@custom-types/index";
 import { Icon } from "@iconify/react";
 import { fetchImage } from "@utils/fetchImage";
 import React from "react";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
 
-type Product = {
-  admin: Admin | null;
-  setAdmin: React.Dispatch<React.SetStateAction<Admin | null>>;
-  handleDelete: (admin: Admin | null) => Promise<void>;
+type ProductProps = {
+  product: Product | null;
+  setProduct: React.Dispatch<React.SetStateAction<Product | null>>;
+  handleDelete: (product: Product | null) => Promise<void>;
 };
 
-const ProductDetails: React.FC<Product> = ({
-  admin = null,
-  setAdmin,
+const ProductDetails: React.FC<ProductProps> = ({
+  product = null,
+  setProduct,
   handleDelete,
 }) => {
   return (
     <DetailsCard
-      heading="Admin Details"
-      title={`${admin?.first_name} ${admin?.middle_name} ${admin?.last_name}`}
-      description={`${admin?.email}`}
-      closeDetails={() => setAdmin(null)}
+      heading="Product Details"
+      title={`${product?.name}`}
+      description={`${product?.description}`}
+      closeDetails={() => setProduct(null)}
       image={`${fetchImage({
-        imageName: admin?.profile_image,
+        imageName: product?.product_images[0],
         entity: "admins",
       })}`}
-      openDetails={!!admin}
-      editLink={`/admins/${admin?._id}/edit`}
+      openDetails={!!product}
+      editLink={`/admins/${product?._id}/edit`}
       actionButtons={() => (
-        <button onClick={() => handleDelete(admin)}>
+        <button onClick={() => handleDelete(product)}>
           <Icon
             icon="fluent:delete-28-regular"
             className="text-xl text-red-500"
@@ -40,31 +40,18 @@ const ProductDetails: React.FC<Product> = ({
     >
       <div className="bg-white flex flex-col md:flex-row gap-5 p-5 rounded-md">
         <div className="shrink-0 md:w-60 md:h-60 mx-auto">
-          <img
-            src={`${fetchImage({
-              imageName: admin?.profile_image,
-              entity: "admins",
-            })}`}
-            alt=""
-            className="rounded-md"
-          />
+          <ImageGallery images={product?.product_images} entity="products" />
         </div>
         <div className="w-full space-y-2">
+          <DetailsCardItem label="Price" value={product?.price} />
+          <DetailsCardItem label="Stock" value={product?.stock} />
+          <DetailsCardItem label="Brand" value={product?.brand} />
+          <DetailsCardItem label="Category" value={product?.category} />
           <DetailsCardItem
-            label="Phone Number"
-            value={formatPhoneNumberIntl(admin?.phone_number ?? "")}
+            label="Discount Percentage"
+            value={product?.discountPercentage}
           />
-          <DetailsCardItem
-            label="Alternate Phone Number"
-            value={formatPhoneNumberIntl(admin?.alternate_phone_number ?? "")}
-          />
-          <DetailsCardItem label="Address" value={admin?.address} />
-          <DetailsCardItem label="Nationality" value={admin?.nationality} />
-          <DetailsCardItem label="Role" value={admin?.role.name} />
-          <DetailsCardItem
-            label="Status"
-            value={admin?.active ? "Active" : "Not Active"}
-          />
+          <DetailsCardItem label="Rating" value={5} />
         </div>
       </div>
     </DetailsCard>

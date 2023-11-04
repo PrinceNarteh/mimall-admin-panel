@@ -1,3 +1,5 @@
+import { Entity } from "@custom-types/index";
+
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const fetchImage = ({
@@ -5,7 +7,7 @@ export const fetchImage = ({
   entity,
 }: {
   imageName?: string;
-  entity: "admins" | "delivery-companies" | "users" | "shops";
+  entity: Entity;
 }): string => {
   if (!imageName) return "";
   return `${baseUrl}/${entity}/image/${imageName}`;

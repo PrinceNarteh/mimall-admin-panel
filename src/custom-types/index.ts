@@ -1,3 +1,9 @@
+export type Entity =
+  | "admins"
+  | "delivery-companies"
+  | "products"
+  | "users"
+  | "shops";
 export type Permission = string;
 export type Role = {
   _id: string;
@@ -104,8 +110,8 @@ export type Product = {
   stock: number;
   brand: string;
   category: string;
-  rating: number[];
   product_images: string[];
+  rating: number[];
   reviews: number[];
   quickOrderItems: QuickOrderItem[];
   shop: Shop;
