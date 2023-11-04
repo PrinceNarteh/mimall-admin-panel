@@ -4,7 +4,7 @@ import Heading from "@components/shared/Heading";
 const AddDeliveryCompany = () => {
   return (
     <div className="px-5">
-      <Heading label="Add Administrators" />
+      <Heading label="Add Delivery Company" />
       <DeliveryCompanyForm />
     </div>
   );

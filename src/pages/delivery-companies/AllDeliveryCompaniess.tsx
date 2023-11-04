@@ -18,8 +18,8 @@ const AllDeliveryCompanies = () => {
   const [deliveryCompany, setDeliveryCompany] =
     useState<DeliveryCompany | null>(null);
   const { data, isLoading } = useGetQuery<DeliveryCompany[]>({
-    queryKey: queryKeys.AllDeliveryCompanies.key,
-    url: queryKeys.AllDeliveryCompanies.url,
+    queryKey: queryKeys.DeliveryCompanies.key,
+    url: queryKeys.DeliveryCompanies.url,
   });
   console.log(data);
 
