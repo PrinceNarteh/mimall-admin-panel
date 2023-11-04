@@ -63,6 +63,26 @@ export const sidebarData: SidebarData[] = [
           },
         ],
       },
+      {
+        groupTitle: "Users",
+        icon: <Icon icon="ph:users-three-bold" fontSize={"22"} />,
+        path: "/users",
+        subNav: [
+          {
+            title: "All Users",
+            path: "/users",
+          },
+          {
+            title: "Add User",
+            path: "/users/add-user",
+          },
+        ],
+      },
+      {
+        groupTitle: "Roles and Permissions",
+        icon: <Icon icon="mdi:account-lock-outline" fontSize={"22"} />,
+        path: "/roles-and-permissions",
+      },
     ],
   },
 

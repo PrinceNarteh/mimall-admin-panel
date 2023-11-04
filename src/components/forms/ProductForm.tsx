@@ -58,7 +58,7 @@ const ProductForm = ({ product }: { product?: Product }) => {
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating Product...");
     const formData = new FormData();
-    Object.values(data).forEach((item) => formData.append(item[0], item[1]));
+    // Object.values(data).forEach((item) => formData.append(item[0], item[1]));
 
     console.log(data);
 
@@ -101,17 +101,17 @@ const ProductForm = ({ product }: { product?: Product }) => {
   };
 
   useEffect(() => {
-    if (!product && image && image.some((image) => image !== undefined)) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
-    } else if (!image && product && product.profile_image) {
-      setPreview(
-        fetchImage({ imageName: product.profile_image, entity: "admins" })
-      );
-    } else if (product && image && image.some((image) => image !== undefined)) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
-    }
+    // if (!product && image && image.some((image) => image !== undefined)) {
+    //   setValue("profile_image", image[0]);
+    //   setPreview(URL.createObjectURL(image[0]));
+    // } else if (!image && product && product.profile_image) {
+    //   setPreview(
+    //     fetchImage({ imageName: product.profile_image, entity: "admins" })
+    //   );
+    // } else if (product && image && image.some((image) => image !== undefined)) {
+    //   setValue("profile_image", image[0]);
+    //   setPreview(URL.createObjectURL(image[0]));
+    // }
   }, [product, image, setValue]);
 
   useEffect(() => {
