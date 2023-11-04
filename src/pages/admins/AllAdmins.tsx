@@ -91,7 +91,7 @@ const AllAdmins = () => {
     columnHelper.display({
       header: "Actions",
       cell: (props) => (
-        <span className="w-20 flex gap-3">
+        <span className="w-20 flex gap-5">
           <Link to={`/admins/${props.row.original._id}/edit`}>
             <Icon icon="iconamoon:edit-light" className="text-xl" />
           </Link>
