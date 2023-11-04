@@ -1,5 +1,14 @@
-import { Admin, DeliveryCompany } from "@custom-types/index";
+import { Admin, DeliveryCompany, Product } from "@custom-types/index";
 import { z } from "zod";
+
+const image = () =>
+  z
+    .any()
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    );
 
 export const adminResolver = (admin: Admin | undefined) => {
   const schema = z.object({
@@ -114,13 +123,7 @@ export const deliveryCompanyResolver = (
     ownerPhoneNumber: z
       .string({ required_error: "Owner's phone number is required" })
       .min(1, "Owner's phone number is required"),
-    slide_images: z
-      .any()
-      .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-      .refine(
-        (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-        "Only .jpg, .jpeg, .png and .webp formats are supported."
-      ),
+    slide_images: image(),
   });
 
   if (!deliveryCompany) {
@@ -136,4 +139,30 @@ export const deliveryCompanyResolver = (
   }
 
   return schema;
+};
+
+export const productResolver = (product?: Product) => {
+  return z.object({
+    name: z
+      .string({ required_error: "Product name is required" })
+      .min(1, "Product name is required"),
+    description: z
+      .string({ required_error: "Product description is required" })
+      .min(1, "Product description is required"),
+    price: z.number({ required_error: "Product price is required" }),
+    stock: z.number({ required_error: "Product price is required" }),
+    discountPercentage: z.number({
+      required_error: "Product price is required",
+    }),
+    brand: z
+      .string({ required_error: "Product brand must be provided" })
+      .min(1, "Product brand must be provided"),
+    category: z
+      .string({ required_error: "Please kindly select product category" })
+      .min(1, "Please kindly select product category"),
+    product_images: z.array(image()),
+    shop: z
+      .string({ required_error: "First name is required" })
+      .min(1, "First name is required"),
+  });
 };

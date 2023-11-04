@@ -1,4 +1,4 @@
-import { Admin, Role } from "@custom-types/index";
+import { Product, Role } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { fetchImage } from "@utils/fetchImage";
 import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
-import { adminResolver } from "@utils/validators";
+import { productResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -19,22 +19,18 @@ import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
 
 const defaultValues = {
-  first_name: "",
-  last_name: "",
-  middle_name: "",
-  phone_number: "",
-  alternate_phone_number: "",
-  email: "",
-  address: "",
-  nationality: "Ghanaian",
-  profile_image: "",
-  card_type: "",
-  card_number: "",
-  active: true,
-  role: "",
+  name: "",
+  description: "",
+  price: 0,
+  stock: 0,
+  discountPercentage: 0,
+  brand: "",
+  category: "",
+  product_images: [],
+  shop: "",
 };
 
-const ProductForm = ({ admin }: { admin?: Admin }) => {
+const ProductForm = ({ product }: { product?: Product }) => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
@@ -44,7 +40,7 @@ const ProductForm = ({ admin }: { admin?: Admin }) => {
     url: queryKeys.Roles.url,
   });
 
-  const formValues = adminResolver(admin);
+  const formValues = productResolver(product);
   type FormValues = z.infer<typeof formValues>;
   const {
     control,
@@ -54,13 +50,13 @@ const ProductForm = ({ admin }: { admin?: Admin }) => {
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: defaultValues,
-    resolver: zodResolver(adminResolver(admin)),
+    resolver: zodResolver(productResolver(product)),
   });
 
   const navigate = useNavigate();
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
-    const toastId = toast.loading("Creating Admin...");
+    const toastId = toast.loading("Creating Product...");
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
 
@@ -68,29 +64,32 @@ const ProductForm = ({ admin }: { admin?: Admin }) => {
 
     mutate(
       {
-        url: admin
-          ? `${queryKeys.Admin.url(admin._id)}`
+        url: product
+          ? `${queryKeys.Product.url(product._id)}`
           : `${queryKeys.Admins.url}/register`,
         data,
-        method: admin ? "PATCH" : "POST",
+        method: product ? "PATCH" : "POST",
         multipart: true,
       },
       {
         onSuccess(data) {
-          queryClient.setQueryData<Admin[]>(queryKeys.Admins.key, (oldData) => {
-            if (admin) {
-              return (oldData ?? []).map((item) => {
-                if (item._id === data._id) {
-                  return data;
-                }
-                return item;
-              });
-            } else {
-              return [data, ...(oldData ?? [])];
+          queryClient.setQueryData<Product[]>(
+            queryKeys.Admins.key,
+            (oldData) => {
+              if (product) {
+                return (oldData ?? []).map((item) => {
+                  if (item._id === data._id) {
+                    return data;
+                  }
+                  return item;
+                });
+              } else {
+                return [data, ...(oldData ?? [])];
+              }
             }
-          });
+          );
           toast.dismiss(toastId);
-          toast.success("Admin successfully created");
+          toast.success("Product successfully created");
           navigate("/admins");
         },
         onError(error: any) {
@@ -102,37 +101,37 @@ const ProductForm = ({ admin }: { admin?: Admin }) => {
   };
 
   useEffect(() => {
-    if (!admin && image && image.some((image) => image !== undefined)) {
+    if (!product && image && image.some((image) => image !== undefined)) {
       setValue("profile_image", image[0]);
       setPreview(URL.createObjectURL(image[0]));
-    } else if (!image && admin && admin.profile_image) {
+    } else if (!image && product && product.profile_image) {
       setPreview(
-        fetchImage({ imageName: admin.profile_image, entity: "admins" })
+        fetchImage({ imageName: product.profile_image, entity: "admins" })
       );
-    } else if (admin && image && image.some((image) => image !== undefined)) {
+    } else if (product && image && image.some((image) => image !== undefined)) {
       setValue("profile_image", image[0]);
       setPreview(URL.createObjectURL(image[0]));
     }
-  }, [admin, image, setValue]);
+  }, [product, image, setValue]);
 
   useEffect(() => {
     if (roles) {
-      const admin = roles.find((role) =>
-        role.name.toLowerCase().startsWith("admin")
+      const product = roles.find((role) =>
+        role.name.toLowerCase().startsWith("product")
       );
-      if (admin) {
-        setValue("role", admin._id);
+      if (product) {
+        setValue("role", product._id);
       }
     }
   }, [roles, setValue]);
 
   useEffect(() => {
-    if (admin) {
-      Object.entries(admin).forEach((item) =>
+    if (product) {
+      Object.entries(product).forEach((item) =>
         setValue(item[0] as keyof FormValues, item[1])
       );
     }
-  }, [admin, setValue]);
+  }, [product, setValue]);
 
   return (
     <div className="p-5 bg-white">
@@ -182,7 +181,7 @@ const ProductForm = ({ admin }: { admin?: Admin }) => {
             />
           </div>
         </div>
-        {!admin && (
+        {!product && (
           <div className="form-row">
             <InputField
               name="password"
@@ -270,7 +269,7 @@ const ProductForm = ({ admin }: { admin?: Admin }) => {
         </div>
 
         <div className="flex justify-end mt-5">
-          <Button>{`${admin ? "Update" : "Create"} Admin`}</Button>
+          <Button>{`${product ? "Update" : "Create"} Product`}</Button>
         </div>
       </form>
     </div>

@@ -96,7 +96,8 @@ export type Shop = {
 };
 
 export type Product = {
-  title: string;
+  _id: string;
+  name: string;
   description: string;
   price: number;
   discountPercentage: number;

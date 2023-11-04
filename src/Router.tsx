@@ -1,4 +1,8 @@
+import Layout from "@components/layout";
+import AddAdmin from "@pages/admins/AddAdmin";
+import AllAdmins from "@pages/admins/AllAdmins";
 import EditAdmin from "@pages/admins/EditAdmin";
+import DashBoard from "@pages/dashboard";
 import AddDeliveryCompany from "@pages/delivery-companies/AddDeliveryCompany";
 import AllDeliveryCompanies from "@pages/delivery-companies/AllDeliveryCompaniess";
 import EditDeliveryCompany from "@pages/delivery-companies/EditDeliveryCompany";
@@ -13,10 +17,6 @@ import AddUser from "@pages/users/AddUser";
 import AllUsers from "@pages/users/AllUsers";
 import EditUser from "@pages/users/EditUser";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Layout from "./components/layout";
-import AddAdmin from "./pages/admins/AddAdmin";
-import AllAdmins from "./pages/admins/AllAdmins";
-import { DashBoard } from "./pages/dashboard";
 
 export default function Router() {
   return (
