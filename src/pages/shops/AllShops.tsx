@@ -19,8 +19,8 @@ const AllShops = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
-    queryKey: queryKeys.AllShops.key,
-    url: queryKeys.AllShops.url,
+    queryKey: queryKeys.Shops.key,
+    url: queryKeys.Shops.url,
   });
 
   const handleDelete = async (admin: Admin | null) => {

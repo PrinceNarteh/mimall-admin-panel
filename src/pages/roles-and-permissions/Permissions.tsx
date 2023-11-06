@@ -8,9 +8,13 @@ import { Icon } from "@iconify/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@utils/queryKeys";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
+
+type FormValues = {
+  name: string;
+};
 
 const Permissions = ({
   permissions,
@@ -42,7 +46,7 @@ const Permissions = ({
   };
 
   const { mutate } = useMutate(queryKeys.Permissions.key);
-  const submit = (data) => {
+  const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating permission...");
     mutate(
       {

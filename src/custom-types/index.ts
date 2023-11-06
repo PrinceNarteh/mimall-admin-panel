@@ -80,6 +80,7 @@ export type Order = {
 };
 
 export type Shop = {
+  _id: string;
   shopCode: string;
   name: string;
   password: string;

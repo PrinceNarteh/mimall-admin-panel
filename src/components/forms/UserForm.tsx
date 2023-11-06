@@ -40,8 +40,8 @@ const UserForm = ({ admin }: { admin?: Admin }) => {
   const [preview, setPreview] = useState("");
 
   const { data: roles } = useGetQuery<Role[]>({
-    queryKey: queryKeys.AllRoles.key,
-    url: queryKeys.AllRoles.url,
+    queryKey: queryKeys.Roles.key,
+    url: queryKeys.Roles.url,
   });
 
   const formValues = adminResolver(admin);
@@ -69,8 +69,8 @@ const UserForm = ({ admin }: { admin?: Admin }) => {
     mutate(
       {
         url: admin
-          ? `${queryKeys.SingleAdmin.url(admin._id)}`
-          : `${queryKeys.AllAdmins.url}/register`,
+          ? `${queryKeys.Admin.url(admin._id)}`
+          : `${queryKeys.Admins.url}/register`,
         data,
         method: admin ? "PATCH" : "POST",
         multipart: true,
@@ -78,7 +78,7 @@ const UserForm = ({ admin }: { admin?: Admin }) => {
       {
         onSuccess(data) {
           queryClient.setQueryData<Admin[]>(
-            queryKeys.AllAdmins.key,
+            queryKeys.Admins.key,
             (oldData) => {
               if (admin) {
                 return (oldData ?? []).map((item) => {

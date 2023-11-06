@@ -1,4 +1,4 @@
-import { Admin, DeliveryCompany, Product } from "@custom-types/index";
+import { Admin, DeliveryCompany, Product, Shop } from "@custom-types/index";
 import { z } from "zod";
 
 const image = () =>
@@ -166,3 +166,46 @@ export const productResolver = (product?: Product) => {
       .min(1, "First name is required"),
   });
 };
+
+export const shopResolver = (shop?: Shop) =>
+  z.object({
+    name: z
+      .string({ required_error: "Shop name is required" })
+      .min(1, "Shop name is required"),
+    description: z
+      .string({ required_error: "Shop description is required" })
+      .min(1, "Shop description is required"),
+    password: z
+      .string({ required_error: "Password is required" })
+      .min(1, "Password is required"),
+    confirmPassword: z
+      .string({ required_error: "Confirm password is required" })
+      .min(1, "Confirm password is required"),
+    location: z
+      .string({ required_error: "Location is required" })
+      .min(1, "Location is required"),
+    mapDirection: z
+      .string({ required_error: "Map direction is required" })
+      .min(1, "Map direction is required"),
+    phoneNumber: z
+      .string({ required_error: "Phone number is required" })
+      .min(1, "Phone number is required"),
+    alternateNumber: z.string({ required_error: "is required" }),
+    whatsappNumber: z
+      .string({ required_error: "is required" })
+      .min(1, "is required"),
+    instagramHandle: z
+      .string({ required_error: "is required" })
+      .min(1, "is required"),
+    facebookHandle: z
+      .string({ required_error: "is required" })
+      .min(1, "is required"),
+    openingTime: z
+      .string({ required_error: "is required" })
+      .min(1, "is required"),
+    closingTime: z
+      .string({ required_error: "is required" })
+      .min(1, "is required"),
+    image: z.any(),
+    banner: z.any(),
+  });

@@ -19,8 +19,8 @@ const AllAdmins = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
-    queryKey: queryKeys.AllAdmins.key,
-    url: queryKeys.AllAdmins.url,
+    queryKey: queryKeys.Admins.key,
+    url: queryKeys.Admins.url,
   });
 
   const handleDelete = async (admin: Admin | null) => {
