@@ -3,6 +3,7 @@ import InputField from "@components/shared/InputField";
 import Modal from "@components/shared/Modal";
 import { Permission } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useConfirm from "@hooks/useConfirm";
 import useMutate from "@hooks/useMutate";
 import { Icon } from "@iconify/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -22,6 +23,7 @@ const Permissions = ({
   permissions: Permission[] | undefined;
 }) => {
   const queryClient = useQueryClient();
+  const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [permission, setPermission] = useState<Permission | null>(null);
   const [openForm, setOpenForm] = useState(false);
   const {
@@ -44,12 +46,6 @@ const Permissions = ({
     setPermission(permission);
     setOpenForm(true);
   };
-
-  useEffect(() => {
-    if (permission) {
-      setValue("name", permission.name);
-    }
-  }, [permission, setValue]);
 
   const { mutate } = useMutate(queryKeys.Permissions.key);
   const submit: SubmitHandler<FormValues> = (data) => {
@@ -88,6 +84,46 @@ const Permissions = ({
     );
   };
 
+  const handleDelete = async (permission: Permission) => {
+    const isConfirmed = await confirm({
+      title: "Are you sure?",
+      message: `Are you sure you want to delete "${permission.name}"?`,
+    });
+    if (isConfirmed) {
+      const toastId = toast.loading(`Deleting ${permission.name}...`);
+      mutate(
+        {
+          method: "DELETE",
+          url: queryKeys.Permission.url(permission._id),
+        },
+        {
+          onSuccess() {
+            queryClient.setQueryData<Permission[]>(
+              queryKeys.Permissions.key,
+              (oldData) =>
+                (oldData ?? []).filter((item) => item._id !== permission._id)
+            );
+            toast.dismiss(toastId);
+            toast.success("Permission has been deleted successfully");
+          },
+          onError(error: any) {
+            toast.dismiss(toastId);
+            toast.error(error.response.data.message);
+          },
+          onSettled() {
+            setIsOpen(false);
+          },
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (permission) {
+      setValue("name", permission.name);
+    }
+  }, [permission, setValue]);
+
   return (
     <div className="p-5">
       <div className="flex justify-between items-center mb-10 border-b pb-2 border-b-primary">
@@ -110,7 +146,7 @@ const Permissions = ({
                 <button onClick={() => handleEdit(permission)}>
                   <Icon icon="iconamoon:edit-light" className="text-xl" />
                 </button>
-                <button onClick={() => {}}>
+                <button onClick={() => handleDelete(permission)}>
                   <Icon icon="fluent:delete-28-regular" className="text-xl" />
                 </button>
               </div>
@@ -139,6 +175,8 @@ const Permissions = ({
           </div>
         </form>
       </Modal>
+
+      <ConfirmationDialog />
     </div>
   );
 };
