@@ -7,7 +7,7 @@ import {
   RegisterOptions,
   UseFormRegister,
 } from "react-hook-form";
-import * as _ from "lodash";
+import _ from "lodash";
 
 type InputFieldProps<TFormValues extends FieldValues = FieldValues> = {
   name: Path<TFormValues>;

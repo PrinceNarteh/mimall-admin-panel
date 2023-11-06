@@ -7,7 +7,7 @@ import useMutate from "@hooks/useMutate";
 import { Icon } from "@iconify/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@utils/queryKeys";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -25,12 +25,13 @@ const Permissions = ({
   const [permission, setPermission] = useState<Permission | null>(null);
   const [openForm, setOpenForm] = useState(false);
   const {
+    setValue,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: permission ? permission.name : "",
+      name: "",
     },
     resolver: zodResolver(
       z.object({
@@ -42,19 +43,47 @@ const Permissions = ({
   const handleEdit = (permission: Permission) => {
     setPermission(permission);
     setOpenForm(true);
-    console.log({ permission, openForm });
   };
+
+  useEffect(() => {
+    if (permission) {
+      setValue("name", permission.name);
+    }
+  }, [permission, setValue]);
 
   const { mutate } = useMutate(queryKeys.Permissions.key);
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating permission...");
     mutate(
       {
-        url: queryKeys.Permissions.url,
+        url: permission
+          ? queryKeys.Permission.url(permission._id)
+          : queryKeys.Permissions.url,
         data,
+        method: permission ? "PATCH" : "POST",
       },
       {
-        onSuccess() {},
+        onSuccess(data) {
+          queryClient.setQueryData<Permission[]>(
+            queryKeys.Permissions.key,
+            (oldData) =>
+              permission
+                ? (oldData ?? []).map((item) =>
+                    item._id === data._id ? data : item
+                  )
+                : [data, ...(oldData ?? [])]
+          );
+          toast.dismiss(toastId);
+          toast.success(
+            `Permission ${permission ? "updated" : "created"} successfully`
+          );
+          setOpenForm(false);
+        },
+        onError(error: any) {
+          toast.dismiss(toastId);
+          toast.error(error.response.data.message);
+          setOpenForm(false);
+        },
       }
     );
   };
