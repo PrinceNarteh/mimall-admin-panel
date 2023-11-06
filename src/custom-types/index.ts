@@ -4,7 +4,9 @@ export type Entity =
   | "products"
   | "users"
   | "shops";
-export type Permission = string;
+
+export type Permission = { _id: string; name: string };
+
 export type Role = {
   _id: string;
   name: string;

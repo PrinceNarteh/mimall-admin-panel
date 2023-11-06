@@ -28,6 +28,15 @@ export const queryKeys = {
     key: (id: string) => ["all-roles", id],
     url: (id: string) => `/roles/${id}`,
   },
+  // Permissions
+  Permissions: {
+    key: ["all-permissions"],
+    url: "/permissions",
+  },
+  Permission: {
+    key: (id: string) => ["all-permissions", id],
+    url: (id: string) => `/permissions/${id}`,
+  },
 
   // Delivery Companies
   DeliveryCompanies: {

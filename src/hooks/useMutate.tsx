@@ -15,7 +15,7 @@ type Props = {
   };
 };
 
-const useMutate = (mutationKey = []) => {
+const useMutate = (mutationKey: string[] = []) => {
   const user = useUser();
 
   return useMutation({

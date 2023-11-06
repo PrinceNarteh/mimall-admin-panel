@@ -9,7 +9,7 @@ import EditDeliveryCompany from "@pages/delivery-companies/EditDeliveryCompany";
 import AddProduct from "@pages/products/AddProduct";
 import AllProducts from "@pages/products/AllProducts";
 import EditProduct from "@pages/products/EditProduct";
-import RolesAndPermissions from "@pages/roles-and-permissions/RolesAndPermissions";
+import RolesAndPermissions from "@pages/roles-and-permissions/Roles";
 import AddShop from "@pages/shops/AddShop";
 import AllShops from "@pages/shops/AllShops";
 import EditShop from "@pages/shops/EditShop";

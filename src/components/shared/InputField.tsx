@@ -37,7 +37,7 @@ const InputField = <TFormValues extends Record<string, unknown>>({
   return (
     <div className="flex-1">
       {label && (
-        <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
+        <label className="mb-1 block text-primary text-md font-semibold leading-loose">
           {label}{" "}
           {!required && (
             <span className="text-slate-300 text-md">(Optional)</span>
