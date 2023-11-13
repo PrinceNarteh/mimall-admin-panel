@@ -1,10 +1,7 @@
-import { DeliveryCompany, Role } from "@custom-types/index";
+import { DeliveryCompany } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchImage } from "@utils/fetchImage";
-import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
 import { deliveryCompanyResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
@@ -100,31 +97,6 @@ const DeliveryCompanyForm = ({
       }
     );
   };
-
-  useEffect(() => {
-    // if (
-    //   !deliveryCompany &&
-    //   image &&
-    //   image.some((image) => image !== undefined)
-    // ) {
-    //   setValue("profile_image", image[0]);
-    //   setPreview(URL.createObjectURL(image[0]));
-    // } else if (!image && deliveryCompany && deliveryCompany.profile_image) {
-    //   setPreview(
-    //     fetchImage({
-    //       imageName: deliveryCompany.profile_image,
-    //       entity: "delivery-companies",
-    //     })
-    //   );
-    // } else if (
-    //   deliveryCompany &&
-    //   image &&
-    //   image.some((image) => image !== undefined)
-    // ) {
-    //   setValue("profile_image", image[0]);
-    //   setPreview(URL.createObjectURL(image[0]));
-    // }
-  }, [deliveryCompany, image, setValue]);
 
   useEffect(() => {
     if (deliveryCompany) {

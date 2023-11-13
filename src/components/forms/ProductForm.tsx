@@ -3,19 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchImage } from "@utils/fetchImage";
-import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
 import { productResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
-import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
 
 const defaultValues = {

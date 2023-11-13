@@ -2,9 +2,10 @@ import Layout from "@components/layout";
 import AddAdmin from "@pages/admins/AddAdmin";
 import AllAdmins from "@pages/admins/AllAdmins";
 import EditAdmin from "@pages/admins/EditAdmin";
+import Login from "@pages/auth/Login";
 import DashBoard from "@pages/dashboard";
 import AddDeliveryCompany from "@pages/delivery-companies/AddDeliveryCompany";
-import AllDeliveryCompanies from "@pages/delivery-companies/AllDeliveryCompaniess";
+import AllDeliveryCompanies from "@pages/delivery-companies/AllDeliveryCompanies";
 import EditDeliveryCompany from "@pages/delivery-companies/EditDeliveryCompany";
 import AddProduct from "@pages/products/AddProduct";
 import AllProducts from "@pages/products/AllProducts";
@@ -22,6 +23,7 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>
           {/* Dashboard */}
           <Route path="/" element={<DashBoard />} />

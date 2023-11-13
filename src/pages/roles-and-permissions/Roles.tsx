@@ -139,7 +139,7 @@ const RolesAndPermissions = () => {
                       <div className="flex-[5] flex flex-wrap text-blue-900 text-[15px] font-bold leading-snug">
                         {role?.permissions.map((permission, idx) => (
                           <h3 key={idx} className="pr-2">
-                            {permission}
+                            {permission.name}
                             {!(role?.permissions?.length - 1 === idx) && ", "}
                           </h3>
                         ))}
