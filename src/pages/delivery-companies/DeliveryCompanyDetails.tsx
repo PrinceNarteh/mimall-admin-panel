@@ -64,12 +64,12 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
           />
           <DetailsCardItem
             label="Phone Number"
-            value={formatPhoneNumberIntl(deliveryCompany?.phoneNumber ?? "")}
+            value={formatPhoneNumberIntl(deliveryCompany?.phone_number ?? "")}
           />
           <DetailsCardItem
             label="Alternate Phone Number"
             value={formatPhoneNumberIntl(
-              deliveryCompany?.alternatePhoneNumber ?? ""
+              deliveryCompany?.alternate_phone_number ?? ""
             )}
           />
           <DetailsCardItem

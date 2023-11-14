@@ -1,34 +1,70 @@
 import InputField from "@components/shared/InputField";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import useMutate from "@hooks/useMutate";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import useUserStore from "store/userStore";
 import { z } from "zod";
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6, "Password should be at least 6 characters"),
-});
+const schema = (category: "admins" | "delivery-companies" | "shops") => {
+  const schema = z.object({
+    password: z.string().min(6, "Password should be at least 6 characters"),
+  });
 
-type FormValues = z.infer<typeof schema>;
+  if (category === "shops") {
+    return schema.extend({
+      shopCode: z.string().length(12, "Shops should be 12 characters"),
+    });
+  } else {
+    return schema.extend({
+      email: z.string().email(),
+    });
+  }
+};
 
 const Login = () => {
+  const setUser = useUserStore((store) => store.setUser);
   const [category, setCategory] = useState<
     "admins" | "delivery-companies" | "shops"
   >("admins");
+  const formValues = schema(category);
+  type FormValues = z.infer<typeof formValues>;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      email: "",
+      ...(category === "shops" ? { shopCode: "" } : { email: "" }),
       password: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema(category)),
   });
 
+  const { mutate } = useMutate(["login"]);
   const submit: SubmitHandler<FormValues> = (data) => {
-    console.log({ data });
+    const toastId = toast.loading("Logging in...");
+    mutate(
+      {
+        url: `/${category}/login`,
+        data,
+      },
+      {
+        onSuccess(data) {
+          setUser({
+            ...data.data,
+            token: data.token,
+          });
+          toast.dismiss(toastId);
+          toast.success("Login successful");
+        },
+        onError(error: any) {
+          toast.dismiss(toastId);
+          toast.error(error.response.data.message);
+        },
+      }
+    );
   };
 
   return (
@@ -38,7 +74,7 @@ const Login = () => {
           <div className="flex justify-center mb-5">
             <img src="/images/logo.png" alt="" className="h-16" />
           </div>
-          <h3 className="text-3xl font-semibold text-center">
+          <h3 className="text-3xl font-semibold text-center text-slate-800">
             Log in to your Account
           </h3>
           <p className="text-slate-600 mt-1 text-center">
@@ -91,11 +127,12 @@ const Login = () => {
           </div>
           <form onSubmit={handleSubmit(submit)} className="space-y-5">
             <InputField
-              label="Email"
-              name="email"
-              type="email"
+              label={category === "shops" ? "Shop Code" : "Email"}
+              name={category === "shops" ? "shopCode" : "email"}
+              type={category === "shops" ? "text" : "email"}
               register={register}
               errors={errors}
+              required
             />
             <InputField
               label="Password"
@@ -103,6 +140,7 @@ const Login = () => {
               type="password"
               register={register}
               errors={errors}
+              required
             />
             <button className="w-full py-2 rounded-full bg-green-800 text-white">
               Login

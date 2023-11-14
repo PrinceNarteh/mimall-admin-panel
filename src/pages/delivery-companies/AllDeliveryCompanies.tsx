@@ -70,7 +70,7 @@ const AllDeliveryCompanies = () => {
         </div>
       ),
     }),
-    columnHelper.accessor("phoneNumber", {
+    columnHelper.accessor("phone_number", {
       header: "Phone Number",
       cell: (info) => <span>{formatPhoneNumberIntl(info.getValue())}</span>,
     }),

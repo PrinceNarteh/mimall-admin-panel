@@ -35,7 +35,7 @@ const useMutate = (mutationKey: string[] = []) => {
         method,
         data,
         headers: {
-          Authorization: `Bearer ${user?.auth_token}`,
+          Authorization: `Bearer ${user?.token}`,
           // roleid: user?.role._id,
           "Content-Type": multipart
             ? "multipart/form-data"

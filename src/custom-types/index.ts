@@ -23,6 +23,20 @@ interface BaseUser {
   address: string;
   createdAt: string;
   updatedAt: string;
+  token: string;
+}
+
+export interface DeliveryCompany extends BaseUser {
+  name: string;
+  slug: string;
+  whatsappNumber: string;
+  location: string;
+  ownerFirstName: string;
+  ownerLastName: string;
+  ownerPhoneNumber: string;
+  deliveries: Delivery[];
+  quickOrders: QuickOrder[];
+  slide_images: string[];
 }
 
 export interface User extends BaseUser {
@@ -30,7 +44,6 @@ export interface User extends BaseUser {
   first_name: string;
   last_name: string;
   profile_image: string;
-  auth_token: string;
   card_type: string;
   card_number: string;
   nationality: string;
@@ -41,7 +54,6 @@ export interface Admin extends BaseUser {
   first_name: string;
   last_name: string;
   profile_image: string;
-  auth_token: string;
   card_type: string;
   card_number: string;
   nationality: string;
@@ -79,7 +91,7 @@ export type Order = {
   items: OrderItem[];
 };
 
-export type Shop = {
+export interface Shop extends BaseUser {
   _id: string;
   shopCode: string;
   name: string;
@@ -102,7 +114,7 @@ export type Shop = {
   products: Product[];
   orders: OrderItem[];
   quickOrderItems: QuickOrderItem[];
-};
+}
 
 export type Product = {
   _id: string;
@@ -151,22 +163,4 @@ export type QuickOrder = {
   phoneNumber: string;
   alternatePhoneNumber: string;
   items: QuickOrderItem[];
-};
-
-export type DeliveryCompany = {
-  _id: string;
-  name: string;
-  slug: string;
-  email: string;
-  phoneNumber: string;
-  alternatePhoneNumber: string;
-  whatsappNumber: string;
-  location: string;
-  ownerFirstName: string;
-  ownerLastName: string;
-  ownerPhoneNumber: string;
-  role: Role;
-  deliveries: Delivery[];
-  quickOrders: QuickOrder[];
-  slide_images: string[];
 };

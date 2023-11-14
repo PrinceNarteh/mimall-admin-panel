@@ -1,9 +1,9 @@
-import { User } from "@custom-types/index";
+import { Admin, DeliveryCompany, User } from "@custom-types/index";
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
 type UserState = {
-  user: User | null;
+  user: User | Admin | DeliveryCompany | null;
   setUser: (user: User) => void;
 };
 

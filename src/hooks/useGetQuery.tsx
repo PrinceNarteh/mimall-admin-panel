@@ -35,8 +35,7 @@ export const useGetQuery = <T extends object>({
         data,
         method,
         headers: {
-          Authorization: `Bearer ${user?.auth_token}`,
-          // roleid: user?.role._id,
+          Authorization: `Bearer ${user?.token}`,
           ...options.headers,
         },
         params: {
