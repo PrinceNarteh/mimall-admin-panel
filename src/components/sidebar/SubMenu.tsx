@@ -81,16 +81,17 @@ function SubMenu({ item }: { item: SidebarData }) {
                 to={subNavItem.path}
                 className={`pl-10 flex py-2 items-center tracking-wider font-ray font-semibold duration-300`}
               >
-                {
+                {pathname === subNavItem.path ? (
                   <Icon
                     icon="game-icons:check-mark"
-                    className={`h-3 w-3 mr-2 mt-1 ${
-                      pathname === subNavItem.path
-                        ? "text-white"
-                        : "text-transparent"
-                    } duration-300`}
+                    className={`w-3 mr-2 mt-1 text-white`}
                   />
-                }
+                ) : (
+                  <Icon
+                    icon="ph:dot-duotone"
+                    className={`w-3 mr-2 mt-1 text-white`}
+                  />
+                )}
                 <span
                   className={`${
                     pathname.includes(nav.path) ? "text-white" : "text-primary"
