@@ -34,7 +34,7 @@ const CustomFileInput: React.FC<CustomFileInputProps> = ({
   };
 
   return (
-    <div>
+    <div className="w-full">
       {label && (
         <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
           {label}{" "}

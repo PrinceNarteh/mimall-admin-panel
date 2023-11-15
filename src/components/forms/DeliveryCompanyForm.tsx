@@ -110,11 +110,16 @@ const DeliveryCompanyForm = ({
     <div className="p-5 bg-white">
       <form onSubmit={handleSubmit(submit)}>
         <div className="form-row">
-          <InputField name="name" label="Product Name" register={register} />
+          <InputField
+            name="name"
+            label="Company Name"
+            register={register}
+            required
+          />
           <InputField
             name="email"
             type="email"
-            label="Last Name"
+            label="Company Email"
             register={register}
           />
         </div>
@@ -169,14 +174,14 @@ const DeliveryCompanyForm = ({
         <div className="form-row">
           <InputField
             name="location"
-            label="location"
+            label="Location"
             required
             register={register}
           />
 
           <div className="flex-1">
             <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
-              Phone Number
+              Whatsapp Number
             </label>
             <PhoneInputWithCountry
               international
@@ -195,11 +200,13 @@ const DeliveryCompanyForm = ({
             name="ownerFirstName"
             label="Owner's First Name"
             register={register}
+            required
           />
           <InputField
             name="ownerLastName"
             label="Owner's Last Name"
             register={register}
+            required
           />
 
           <div className="flex-1">
@@ -218,17 +225,31 @@ const DeliveryCompanyForm = ({
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 items-center md:flex-row md:items-end max-w-lg md:justify-center mx-auto">
-          {preview && (
-            <img src={preview} className="rounded-md w-40 h-40" alt="" />
-          )}
-          <div className="flex-1">
+        <div className="form-row gap-10">
+          <div className="flex-1 flex flex-col gap-5 items-center">
+            {preview && (
+              <img src={preview} className="rounded-md w-40 h-40" alt="" />
+            )}
             <CustomFileInput
-              label="Profile Image"
+              label="Company Logo"
               placeholder="Drop your profile image here"
               required
               onChange={setImage}
             />
+          </div>
+
+          <div className="flex-1">
+            <div className="flex flex-col gap-5 items-center">
+              {preview && (
+                <img src={preview} className="rounded-md w-40 h-40" alt="" />
+              )}
+              <CustomFileInput
+                label="Company Images"
+                placeholder="Drop your profile image here"
+                required
+                onChange={setImage}
+              />
+            </div>
           </div>
         </div>
 
