@@ -4,6 +4,7 @@ import useMutate from "@hooks/useMutate";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 import useUserStore from "store/userStore";
 import { z } from "zod";
 
@@ -42,6 +43,8 @@ const Login = () => {
     resolver: zodResolver(schema(category)),
   });
 
+  const navigate = useNavigate();
+  const state = useLocation().state;
   const { mutate } = useMutate(["login"]);
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Logging in...");
@@ -58,6 +61,7 @@ const Login = () => {
           });
           toast.dismiss(toastId);
           toast.success("Login successful");
+          navigate(state?.from ? state.from : "/");
         },
         onError(error: any) {
           toast.dismiss(toastId);

@@ -88,8 +88,9 @@ function SubMenu({ item }: { item: SidebarData }) {
                   />
                 ) : (
                   <Icon
-                    icon="ph:dot-duotone"
+                    icon="ci:dot-03-m"
                     className={`w-3 mr-2 mt-1 text-white`}
+                    fontSize={20}
                   />
                 )}
                 <span
