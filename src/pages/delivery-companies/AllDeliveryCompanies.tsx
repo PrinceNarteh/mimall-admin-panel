@@ -63,8 +63,8 @@ const AllDeliveryCompanies = () => {
               {props.row.original.name}
             </div>
             <div className=" text-slate-800 text-sm font-normal leading-tight">
-              {props.row.original.ownerFirstName}{" "}
-              {props.row.original.ownerLastName}
+              {props.row.original.owner_first_name}{" "}
+              {props.row.original.owner_last_name}
             </div>
           </div>
         </div>

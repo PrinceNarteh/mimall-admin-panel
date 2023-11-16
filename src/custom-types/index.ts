@@ -1,3 +1,15 @@
+export type NavItem = {
+  groupTitle: string;
+  path: string;
+  icon: React.JSX.Element;
+  subNav?: SubNav[];
+};
+
+export type SidebarData = {
+  sectionTitle: string;
+  navItems: NavItem[];
+};
+
 export type Entity =
   | "admins"
   | "delivery-companies"
@@ -29,13 +41,13 @@ interface BaseUser {
 export interface DeliveryCompany extends BaseUser {
   name: string;
   slug: string;
-  whatsappNumber: string;
+  whatsapp_number: string;
   location: string;
-  ownerFirstName: string;
-  ownerLastName: string;
-  ownerPhoneNumber: string;
+  owner_first_name: string;
+  owner_last_name: string;
+  owner_phone_number: string;
   deliveries: Delivery[];
-  quickOrders: QuickOrder[];
+  quick_orders: QuickOrder[];
   slide_images: string[];
 }
 
@@ -50,8 +62,8 @@ export interface User extends BaseUser {
 }
 
 export interface Admin extends BaseUser {
-  middle_name: string;
   first_name: string;
+  middle_name: string;
   last_name: string;
   profile_image: string;
   card_type: string;
@@ -62,18 +74,6 @@ export interface Admin extends BaseUser {
 export type SubNav = {
   title: string;
   path: string;
-};
-
-export type NavItem = {
-  groupTitle: string;
-  path: string;
-  icon: React.JSX.Element;
-  subNav?: SubNav[];
-};
-
-export type SidebarData = {
-  sectionTitle: string;
-  navItems: NavItem[];
 };
 
 export type OrderItem = {
@@ -100,27 +100,25 @@ export interface Shop extends BaseUser {
   createdAt: string;
   updatedAt: string;
   token: string;
-  shopCode: string;
+  shop_code: string;
   name: string;
   password: string;
-  plainPassword: string;
+  plain_password: string;
   description: string;
   location: string;
-  mapDirection: string;
-  phoneNumber: string;
-  alternateNumber: string;
-  whatsappNumber: string;
-  instagramHandle: string;
-  facebookHandle: string;
-  twitterHandle: string;
-  tiktokHandle: string;
-  openingTime: string;
-  closingTime: string;
+  map_direction: string;
+  whatsapp_number: string;
+  instagram_handle: string;
+  facebook_handle: string;
+  twitter_handle: string;
+  tiktok_handle: string;
+  opening_time: string;
+  closing_time: string;
   image: string;
   banner: string;
   products: Product[];
   orders: OrderItem[];
-  quickOrderItems: QuickOrderItem[];
+  quick_order_items: QuickOrderItem[];
 }
 
 export type Product = {
@@ -128,14 +126,14 @@ export type Product = {
   name: string;
   description: string;
   price: number;
-  discountPercentage: number;
+  discount_percentage: number;
   stock: number;
   brand: string;
   category: string;
   product_images: string[];
   rating: number[];
   reviews: number[];
-  quickOrderItems: QuickOrderItem[];
+  quick_order_items: QuickOrderItem[];
   shop: Shop;
 };
 
@@ -164,10 +162,10 @@ export type QuickOrderItem = {
 export type QuickOrder = {
   orderId: string;
   amount: number;
-  deliveryCompany: "DeliveryCompany";
-  deliveryCharge: number;
-  fullName: string;
-  phoneNumber: string;
-  alternatePhoneNumber: string;
+  delivery_company: DeliveryCompany;
+  delivery_charge: number;
+  full_name: string;
+  phone_number: string;
+  alternate_phone_number: string;
   items: QuickOrderItem[];
 };

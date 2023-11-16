@@ -54,12 +54,12 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
         <div className="w-full space-y-2">
           <DetailsCardItem
             label="Owner's Name"
-            value={`${deliveryCompany?.ownerFirstName} ${deliveryCompany?.ownerLastName}`}
+            value={`${deliveryCompany?.owner_first_name} ${deliveryCompany?.owner_last_name}`}
           />
           <DetailsCardItem
             label="Owner's Number"
             value={formatPhoneNumberIntl(
-              deliveryCompany?.ownerPhoneNumber ?? ""
+              deliveryCompany?.owner_phone_number ?? ""
             )}
           />
           <DetailsCardItem
@@ -74,7 +74,7 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
           />
           <DetailsCardItem
             label="Whatsapp Number"
-            value={formatPhoneNumberIntl(deliveryCompany?.whatsappNumber ?? "")}
+            value={formatPhoneNumberIntl(deliveryCompany?.whatsapp_number ?? "")}
           />
           <DetailsCardItem label="Address" value={deliveryCompany?.location} />
           <DetailsCardItem label="Location" value={deliveryCompany?.location} />

@@ -49,7 +49,7 @@ const ProductDetails: React.FC<ProductProps> = ({
           <DetailsCardItem label="Category" value={product?.category} />
           <DetailsCardItem
             label="Discount Percentage"
-            value={product?.discountPercentage}
+            value={product?.discount_percentage}
           />
           <DetailsCardItem label="Rating" value={5} />
         </div>
