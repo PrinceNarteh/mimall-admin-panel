@@ -197,13 +197,13 @@ const DeliveryCompanyForm = ({
 
         <div className="form-row">
           <InputField
-            name="ownerFirstName"
+            name="owner_first_name"
             label="Owner's First Name"
             register={register}
             required
           />
           <InputField
-            name="ownerLastName"
+            name="owner_last_name"
             label="Owner's Last Name"
             register={register}
             required

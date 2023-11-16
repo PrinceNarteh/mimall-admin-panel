@@ -142,16 +142,23 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
             name="first_name"
             label="First Name"
             register={register}
+            required
           />
-          <InputField name="last_name" label="Last Name" register={register} />
+          <InputField
+            name="last_name"
+            label="Last Name"
+            register={register}
+            required
+          />
         </div>
         <div className="form-row">
           <InputField
             name="middle_name"
             label="Middle Name"
             register={register}
+            required
           />
-          <InputField name="email" label="Email" register={register} />
+          <InputField name="email" label="Email" register={register} required />
         </div>
         <div className="form-row">
           <div className="flex-1">
@@ -201,12 +208,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
           </div>
         )}
         <div className="form-row">
-          <InputField
-            name="address"
-            label="Address"
-            required
-            register={register}
-          />
+          <InputField name="address" label="Address" register={register} />
 
           <div className="flex-1 flex flex-col justify-end">
             <label

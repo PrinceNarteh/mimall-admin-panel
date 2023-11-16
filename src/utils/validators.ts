@@ -114,13 +114,13 @@ export const deliveryCompanyResolver = (
     location: z
       .string({ required_error: "Location is required" })
       .min(1, "Location is required"),
-    ownerFirstName: z
+    owner_first_name: z
       .string({ required_error: "Owner's first name is required" })
       .min(1, "Owner's first name is required"),
-    ownerLastName: z
+    owner_last_name: z
       .string({ required_error: "Owner's last name is required" })
       .min(1, "Owner's last name is required"),
-    ownerPhoneNumber: z
+    owner_phone_number: z
       .string({ required_error: "Owner's phone number is required" })
       .min(1, "Owner's phone number is required"),
     slide_images: image(),
@@ -151,7 +151,7 @@ export const productResolver = (product?: Product) => {
       .min(1, "Product description is required"),
     price: z.number({ required_error: "Product price is required" }),
     stock: z.number({ required_error: "Product price is required" }),
-    discountPercentage: z.number({
+    discount_percentage: z.number({
       required_error: "Product price is required",
     }),
     brand: z
@@ -178,32 +178,30 @@ export const shopResolver = (shop?: Shop) =>
     password: z
       .string({ required_error: "Password is required" })
       .min(1, "Password is required"),
-    confirmPassword: z
+    confirm_password: z
       .string({ required_error: "Confirm password is required" })
       .min(1, "Confirm password is required"),
     location: z
       .string({ required_error: "Location is required" })
       .min(1, "Location is required"),
-    mapDirection: z
+    map_direction: z
       .string({ required_error: "Map direction is required" })
       .min(1, "Map direction is required"),
-    phoneNumber: z
+    phone_number: z
       .string({ required_error: "Phone number is required" })
       .min(1, "Phone number is required"),
-    alternateNumber: z.string({ required_error: "is required" }),
-    whatsappNumber: z
+    alternate_phone_number: z.string({ required_error: "is required" }),
+    whatsapp_number: z
       .string({ required_error: "is required" })
       .min(1, "is required"),
-    instagramHandle: z
+    instagram_handle: z.string({ required_error: "is required" }).optional(),
+    facebook_handle: z.string({ required_error: "is required" }).optional(),
+    twitter_handle: z.string({ required_error: "is required" }).optional(),
+    tiktok_handle: z.string({ required_error: "is required" }).optional(),
+    opening_time: z
       .string({ required_error: "is required" })
       .min(1, "is required"),
-    facebookHandle: z
-      .string({ required_error: "is required" })
-      .min(1, "is required"),
-    openingTime: z
-      .string({ required_error: "is required" })
-      .min(1, "is required"),
-    closingTime: z
+    closing_time: z
       .string({ required_error: "is required" })
       .min(1, "is required"),
     image: z.any(),

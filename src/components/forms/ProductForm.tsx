@@ -146,7 +146,7 @@ const ProductForm = ({ product }: { product?: Product }) => {
 
         <div className="form-row">
           <InputField
-            name="discountPercentage"
+            name="discount_percentage"
             label="Discount Percentage"
             required
             register={register}

@@ -148,7 +148,7 @@ const ShopForm = ({ shop }: { shop?: Shop }) => {
               register={register}
             />
             <InputField
-              name="confirmPassword"
+              name="confirm_password"
               type="password"
               label="Confirm Password"
               required
@@ -159,7 +159,7 @@ const ShopForm = ({ shop }: { shop?: Shop }) => {
         <div className="form-row">
           <InputField name="location" label="Location" register={register} />
           <InputField
-            name="mapDirection"
+            name="map_direction"
             label="Map Direction"
             register={register}
           />
@@ -172,12 +172,12 @@ const ShopForm = ({ shop }: { shop?: Shop }) => {
             <PhoneInputWithCountry
               international
               defaultCountry="GH"
-              name="phoneNumber"
+              name="phone_number"
               control={control}
               rules={{ required: true }}
               className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
             />
-            <ErrorMessage name="phoneNumber" errors={errors} />
+            <ErrorMessage name="phone_number" errors={errors} />
           </div>
           <div className="flex-1">
             <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
@@ -187,7 +187,7 @@ const ShopForm = ({ shop }: { shop?: Shop }) => {
             <PhoneInputWithCountry
               international
               defaultCountry="GH"
-              name="alternatePhoneNumber"
+              name="alternate_phone_number"
               control={control}
               className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
             />
@@ -202,12 +202,12 @@ const ShopForm = ({ shop }: { shop?: Shop }) => {
             <PhoneInputWithCountry
               international
               defaultCountry="GH"
-              name="whatsappNumber"
+              name="whatsapp_number"
               control={control}
               rules={{ required: true }}
               className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
             />
-            <ErrorMessage name="whatsappNumber" errors={errors} />
+            <ErrorMessage name="whatsapp_number" errors={errors} />
           </div>
 
           <InputField
