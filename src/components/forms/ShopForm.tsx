@@ -22,16 +22,18 @@ const defaultValues = {
   name: "",
   description: "",
   password: "",
-  confirmPassword: "",
+  confirm_password: "",
   location: "",
-  mapDirection: "",
-  phoneNumber: "",
-  alternatePhoneNumber: "",
-  whatsappNumber: "",
-  instagramHandle: "",
-  facebookHandle: "",
-  openingTime: "",
-  closingTime: "",
+  map_direction: "",
+  phone_number: "",
+  alternate_phone_number: "",
+  whatsapp_number: "",
+  instagram_handle: "",
+  facebook_handle: "",
+  twitter_handle: "",
+  tiktok_handle: "",
+  opening_time: "",
+  closing_time: "",
   image: z.any(),
   banner: z.any(),
 };
@@ -209,7 +211,7 @@ const ShopForm = ({ shop }: { shop?: Shop }) => {
           </div>
 
           <InputField
-            name="instagramHandle"
+            name="instagram_handle"
             label="Instagram Handle"
             register={register}
           />
@@ -217,13 +219,21 @@ const ShopForm = ({ shop }: { shop?: Shop }) => {
 
         <div className="form-row">
           <InputField
-            name="facebookHandle"
+            name="facebook_handle"
             label="Facebook Handle"
             register={register}
           />
           <InputField
-            name="facebookHandle"
-            label="Facebook Handle"
+            name="twitter_handle"
+            label="Twitter Handle"
+            register={register}
+          />
+        </div>
+
+        <div className="form-row">
+          <InputField
+            name="tiktok_handle"
+            label="TikTok Handle"
             register={register}
           />
         </div>

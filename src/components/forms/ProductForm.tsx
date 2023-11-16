@@ -19,7 +19,7 @@ const defaultValues = {
   description: "",
   price: 0,
   stock: 0,
-  discountPercentage: 0,
+  discount_percentage: 0,
   brand: "",
   category: "",
   product_images: [],
