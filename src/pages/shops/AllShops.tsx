@@ -13,9 +13,38 @@ import AdminDetails from "./ShopDetails";
 import useConfirm from "@hooks/useConfirm";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 
+  // _id: string;
+  // role: Role;
+  // phone_number: string;
+  // alternate_phone_number: string;
+  // active: boolean;
+  // createdAt: string;
+  // updatedAt: string;
+  // token: string;
+  // shopCode: string;
+  // name: string;
+  // password: string;
+  // plainPassword: string;
+  // description: string;
+  // location: string;
+  // mapDirection: string;
+  // phoneNumber: string;
+  // alternateNumber: string;
+  // whatsappNumber: string;
+  // instagramHandle: string;
+  // facebookHandle: string;
+  // twitterHandle: string;
+  // tiktokHandle: string;
+  // openingTime: string;
+  // closingTime: string;
+  // image: string;
+  // banner: string;
+  // products: Product[];
+  // orders: OrderItem[];
+  // quickOrderItems: QuickOrderItem[];
+
 const AllShops = () => {
   const ref = useRef<HTMLDivElement>(null);
-  console.log(ref);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
@@ -40,7 +69,7 @@ const AllShops = () => {
   const columnHelper = createColumnHelper<Admin>();
   const columns = [
     columnHelper.display({
-      id: "name",
+      id: "Index",
       header: "No.",
       cell: (info) => <span className="pl-2">{info.row.index + 1}</span>,
     }),

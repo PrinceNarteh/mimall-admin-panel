@@ -93,6 +93,13 @@ export type Order = {
 
 export interface Shop extends BaseUser {
   _id: string;
+  role: Role;
+  phone_number: string;
+  alternate_phone_number: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  token: string;
   shopCode: string;
   name: string;
   password: string;
