@@ -1,8 +1,8 @@
 import { Icon } from "@iconify/react";
-import React from "react";
+import React, { useId } from "react";
 
 type CustomFileInputProps = {
-  onChange: React.Dispatch<React.SetStateAction<File[] | null>>;
+  onChange: any;
   label: string;
   required?: boolean;
   multiple?: boolean;
@@ -10,14 +10,15 @@ type CustomFileInputProps = {
   placeholder?: string;
 };
 
-const CustomFileInput: React.FC<CustomFileInputProps> = ({
+const CustomFileInput = ({
   onChange,
   label = "",
   required = false,
   multiple = false,
   height = "h-40",
   placeholder = "Drop your logo here",
-}) => {
+}: CustomFileInputProps) => {
+  const inputId = useId();
   const setInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
@@ -29,7 +30,7 @@ const CustomFileInput: React.FC<CustomFileInputProps> = ({
       }
       onChange(imagesArr);
     } else {
-      onChange([e.target.files[0]]);
+      onChange(e.target.files[0]);
     }
   };
 
@@ -44,7 +45,7 @@ const CustomFileInput: React.FC<CustomFileInputProps> = ({
         </label>
       )}
       <label
-        htmlFor="dropzone-file"
+        htmlFor={`file${inputId}upload`}
         className={`flex-1 w-full flex items-center justify-center  border-2 border-primary bg-[#F4F6FB] border-dashed rounded-lg cursor-pointer p-2 ${height}`}
       >
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -65,7 +66,7 @@ const CustomFileInput: React.FC<CustomFileInputProps> = ({
           </p>
         </div>
         <input
-          id="dropzone-file"
+          id={`file${inputId}upload`}
           type="file"
           className="hidden"
           onChange={(e) => setInput(e)}

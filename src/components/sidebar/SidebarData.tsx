@@ -43,7 +43,7 @@ export const sidebarData: SidebarData[] = [
             path: "/delivery-companies",
           },
           {
-            title: "Add Delivery Companies",
+            title: "Add Delivery Company",
             path: "/delivery-companies/add-delivery-company",
           },
         ],

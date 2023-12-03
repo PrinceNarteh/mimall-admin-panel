@@ -35,8 +35,10 @@ const DeliveryCompanyForm = ({
   deliveryCompany?: DeliveryCompany;
 }) => {
   const queryClient = useQueryClient();
-  const [image, setImage] = useState<File[] | null>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
+  const [slideImages, setSlideImages] = useState<File[] | null>([]);
+  const [slideImagesPreview, setSlideImagesPreview] = useState<string[]>([]);
 
   const formValues = deliveryCompanyResolver(deliveryCompany);
   type FormValues = z.infer<typeof formValues>;
@@ -57,8 +59,6 @@ const DeliveryCompanyForm = ({
     const toastId = toast.loading("Creating Admin...");
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
-
-    console.log(data);
 
     mutate(
       {
@@ -99,12 +99,29 @@ const DeliveryCompanyForm = ({
   };
 
   useEffect(() => {
+    if (image) {
+      setPreview(URL.createObjectURL(image));
+    }
+  }, [image]);
+
+  useEffect(() => {
+    console.log(slideImages);
+    if (slideImages) {
+      setSlideImagesPreview(
+        slideImages.map((image) => URL.createObjectURL(image))
+      );
+    }
+  }, [slideImages]);
+
+  useEffect(() => {
     if (deliveryCompany) {
       Object.entries(deliveryCompany).forEach((item) =>
         setValue(item[0] as keyof FormValues, item[1])
       );
     }
   }, [deliveryCompany, setValue]);
+
+  console.log(slideImages);
 
   return (
     <div className="p-5 bg-white">
@@ -225,11 +242,13 @@ const DeliveryCompanyForm = ({
           </div>
         </div>
 
-        <div className="form-row gap-10">
+        <div className="flex gap-10 mt-10 flex-col md:flex-row">
           <div className="flex-1 flex flex-col gap-5 items-center">
-            {preview && (
-              <img src={preview} className="rounded-md w-40 h-40" alt="" />
-            )}
+            <div className="flex">
+              {preview && (
+                <img src={preview} className="rounded-md w-40 h-40" alt="" />
+              )}
+            </div>
             <CustomFileInput
               label="Company Logo"
               placeholder="Drop your profile image here"
@@ -238,18 +257,19 @@ const DeliveryCompanyForm = ({
             />
           </div>
 
-          <div className="flex-1">
-            <div className="flex flex-col gap-5 items-center">
-              {preview && (
-                <img src={preview} className="rounded-md w-40 h-40" alt="" />
-              )}
-              <CustomFileInput
-                label="Company Images"
-                placeholder="Drop your profile image here"
-                required
-                onChange={setImage}
-              />
+          <div className="flex-[2] flex flex-col gap-5 items-center">
+            <div className="flex gap-5 items-center overflow-x-scroll">
+              {slideImagesPreview.map((image) => (
+                <img src={image} className="rounded-md w-40 h-40" alt="" />
+              ))}
             </div>
+            <CustomFileInput
+              label="Company Slide Images"
+              placeholder="Drop your profile image here"
+              required
+              onChange={setSlideImages}
+              multiple={true}
+            />
           </div>
         </div>
 

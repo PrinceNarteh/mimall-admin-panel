@@ -6,13 +6,18 @@
   width: 0px;
 }
 
+::-webkit-scrollbar:horizontal {
+  height: 7px;
+  padding-top: 5px;
+}
+
 ::-webkit-scrollbar-track {
   background: rgb(255, 255, 255);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: white;
-  border-radius: 0px;
+  background: #165474;
+  border-radius: 10px;
 }
 
 .scroll ::-webkit-scrollbar {
