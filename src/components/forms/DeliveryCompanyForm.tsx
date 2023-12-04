@@ -7,16 +7,16 @@ import { deliveryCompanyResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
+
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
+import { PhoneInput } from "@components/shared/PhoneInput";
 
 const defaultValues = {
-  _id: "",
   name: "",
   email: "",
   phone_umber: "",
@@ -60,56 +60,58 @@ const DeliveryCompanyForm = ({
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
 
-    mutate(
-      {
-        url: deliveryCompany
-          ? `${queryKeys.DeliveryCompany.url(deliveryCompany._id)}`
-          : `${queryKeys.DeliveryCompany.url}/register`,
-        data,
-        method: deliveryCompany ? "PATCH" : "POST",
-        multipart: true,
-      },
-      {
-        onSuccess(data) {
-          queryClient.setQueryData<DeliveryCompany[]>(
-            queryKeys.DeliveryCompanies.key,
-            (oldData) => {
-              if (deliveryCompany) {
-                return (oldData ?? []).map((item) => {
-                  if (item._id === data._id) {
-                    return data;
-                  }
-                  return item;
-                });
-              } else {
-                return [data, ...(oldData ?? [])];
-              }
-            }
-          );
-          toast.dismiss(toastId);
-          toast.success("Admin successfully created");
-          navigate("/admins");
-        },
-        onError(error: any) {
-          toast.dismiss(toastId);
-          toast.error(error.response.data.message);
-        },
-      }
-    );
+    console.log(data);
+
+    // mutate(
+    //   {
+    //     url: deliveryCompany
+    //       ? `${queryKeys.DeliveryCompany.url(deliveryCompany._id)}`
+    //       : `${queryKeys.DeliveryCompany.url}/register`,
+    //     data,
+    //     method: deliveryCompany ? "PATCH" : "POST",
+    //     multipart: true,
+    //   },
+    //   {
+    //     onSuccess(data) {
+    //       queryClient.setQueryData<DeliveryCompany[]>(
+    //         queryKeys.DeliveryCompanies.key,
+    //         (oldData) => {
+    //           if (deliveryCompany) {
+    //             return (oldData ?? []).map((item) => {
+    //               if (item._id === data._id) {
+    //                 return data;
+    //               }
+    //               return item;
+    //             });
+    //           } else {
+    //             return [data, ...(oldData ?? [])];
+    //           }
+    //         }
+    //       );
+    //       toast.dismiss(toastId);
+    //       toast.success("Admin successfully created");
+    //       navigate("/admins");
+    //     },
+    //     onError(error: any) {
+    //       toast.dismiss(toastId);
+    //       toast.error(error.response.data.message);
+    //     },
+    //   }
+    // );
   };
 
   useEffect(() => {
     if (image) {
       setPreview(URL.createObjectURL(image));
+      setValue("logo", image);
     }
   }, [image]);
 
   useEffect(() => {
-    console.log(slideImages);
     if (slideImages) {
-      setSlideImagesPreview(
-        slideImages.map((image) => URL.createObjectURL(image))
-      );
+      const images = slideImages.map((image) => URL.createObjectURL(image));
+      setSlideImagesPreview(images);
+      setValue("slide_images", images);
     }
   }, [slideImages]);
 
@@ -121,7 +123,7 @@ const DeliveryCompanyForm = ({
     }
   }, [deliveryCompany, setValue]);
 
-  console.log(slideImages);
+  console.log(errors);
 
   return (
     <div className="p-5 bg-white">
@@ -142,33 +144,18 @@ const DeliveryCompanyForm = ({
         </div>
 
         <div className="form-row">
-          <div className="flex-1">
-            <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
-              Phone Number
-            </label>
-            <PhoneInputWithCountry
-              international
-              defaultCountry="GH"
-              name="phone_number"
-              control={control}
-              rules={{ required: true }}
-              className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
-            />
-            <ErrorMessage name="phone_number" errors={errors} />
-          </div>
-          <div className="flex-1">
-            <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
-              Alternate Phone Number
-              <span className="text-slate-300 text-md">(Optional)</span>
-            </label>
-            <PhoneInputWithCountry
-              international
-              defaultCountry="GH"
-              name="alternate_phone_number"
-              control={control}
-              className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
-            />
-          </div>
+          <PhoneInput
+            label="Phone Number"
+            control={control}
+            errors={errors}
+            name="phone_number"
+          />
+          <PhoneInput
+            label="Alternate Phone Number"
+            control={control}
+            errors={errors}
+            name="alternate_phone_number"
+          />
         </div>
         {!deliveryCompany && (
           <div className="form-row">
@@ -196,20 +183,12 @@ const DeliveryCompanyForm = ({
             register={register}
           />
 
-          <div className="flex-1">
-            <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
-              Whatsapp Number
-            </label>
-            <PhoneInputWithCountry
-              international
-              defaultCountry="GH"
-              name="whatsappNumber"
-              control={control}
-              rules={{ required: true }}
-              className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
-            />
-            <ErrorMessage name="whatsappNumber" errors={errors} />
-          </div>
+          <PhoneInput
+            label="Whatsapp Number"
+            control={control}
+            errors={errors}
+            name="whatsapp_number"
+          />
         </div>
 
         <div className="form-row">
@@ -226,20 +205,12 @@ const DeliveryCompanyForm = ({
             required
           />
 
-          <div className="flex-1">
-            <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
-              Owner's Phone Number
-            </label>
-            <PhoneInputWithCountry
-              international
-              defaultCountry="GH"
-              name="ownerPhoneNumber"
-              control={control}
-              rules={{ required: true }}
-              className="placeholder:text-slate-400 bg-white w-full outline-none border border-slate-400 shadow-md rounded-md p-3 sm:text-sm"
-            />
-            <ErrorMessage name="ownerPhoneNumber" errors={errors} />
-          </div>
+          <PhoneInput
+            label="Owner's Phone Number"
+            control={control}
+            errors={errors}
+            name="owner_phone_number"
+          />
         </div>
 
         <div className="flex gap-10 mt-10 flex-col md:flex-row">
@@ -259,8 +230,13 @@ const DeliveryCompanyForm = ({
 
           <div className="flex-[2] flex flex-col gap-5 items-center">
             <div className="flex gap-5 items-center overflow-x-scroll">
-              {slideImagesPreview.map((image) => (
-                <img src={image} className="rounded-md w-40 h-40" alt="" />
+              {slideImagesPreview.map((image, idx) => (
+                <img
+                  key={idx}
+                  src={image}
+                  className="rounded-md w-40 h-40"
+                  alt=""
+                />
               ))}
             </div>
             <CustomFileInput
