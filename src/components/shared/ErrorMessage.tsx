@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { DeepMap, FieldErrors, Path } from "react-hook-form";
+import { FieldErrors, Path } from "react-hook-form";
 
 type ErrorMessageProps<TFormValues> = {
   name: Path<TFormValues>;

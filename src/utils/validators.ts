@@ -1,14 +1,30 @@
 import { Admin, DeliveryCompany, Product, Shop } from "@custom-types/index";
 import { z } from "zod";
 
-const image = () =>
-  z
-    .any()
-    .refine((file) => file?.size >= MAX_FILE_SIZE, `Max image size is 5MB.`)
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    );
+const MAX_FILE_SIZE = 500000;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
+const image = (path: string) =>
+  z.any().superRefine((val, ctx) => {
+    if (val?.size >= MAX_FILE_SIZE) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Max image size is 5MB.",
+        path: [path],
+      });
+    }
+  });
+
+// .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+//   .refine(
+//     (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+//     "Only .jpg, .jpeg, .png and .webp formats are supported."
+//   )
 
 export const adminResolver = (admin: Admin | undefined) => {
   const schema = z.object({
@@ -81,32 +97,20 @@ export const adminResolver = (admin: Admin | undefined) => {
     }
   });
 };
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
+
 export const deliveryCompanyResolver = (
   deliveryCompany: DeliveryCompany | undefined
 ) => {
   const schema = z.object({
     name: z
-      .string({ required_error: "First name is required" })
-      .min(1, "First name is required"),
+      .string({ required_error: "Company's name is required" })
+      .min(1, "Company's name is required"),
     email: z.string().email("Please enter a valid email"),
     phone_number: z
       .string({ required_error: "Phone number is required" })
       .min(10, "Please enter a valid phone number")
       .max(13, "Please enter a valid phone number"),
-    alternate_phone_number: z.union([
-      z
-        .string({ required_error: "Phone number is required" })
-        .min(10, "Please enter a valid phone number")
-        .max(13, "Please enter a valid phone number"),
-      z.undefined(),
-    ]),
+    alternate_phone_number: z.string().optional(),
     whatsapp_number: z
       .string({ required_error: "Whatsapp number is required" })
       .min(10, "Please enter a valid phone number")
@@ -123,8 +127,10 @@ export const deliveryCompanyResolver = (
     owner_phone_number: z
       .string({ required_error: "Owner's phone number is required" })
       .min(1, "Owner's phone number is required"),
-    slide_images: z.array(image()).min(1, "Please provide at least on image"),
-    logo: image(),
+    slide_images: z
+      .array(image("slide_images"))
+      .min(1, "Please provide at least one image"),
+    logo: image("logo"),
   });
 
   if (!deliveryCompany) {
@@ -133,9 +139,33 @@ export const deliveryCompanyResolver = (
         password: z.string().min(6, "Passwords must be at least 6 characters"),
         confirmPassword: z.string().min(6, "Please confirm your password"),
       })
-      .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords don't match",
-        path: ["confirmPassword"], // path of error
+      .superRefine((val, ctx) => {
+        if (val.password !== val.confirmPassword) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Passwords do not match",
+            path: ["confirm_password"],
+          });
+        }
+
+        if (val.phone_number.length !== 13) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Please enter a valid phone number",
+            path: ["phone_number"],
+          });
+        }
+
+        if (
+          val.alternate_phone_number &&
+          val.alternate_phone_number.length !== 13
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Please enter a valid phone number",
+            path: ["alternate_phone_number"],
+          });
+        }
       });
   }
 

@@ -2,19 +2,18 @@ import { DeliveryCompany } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@utils/queryKeys";
 import { deliveryCompanyResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+import { PhoneInput } from "@components/shared/PhoneInput";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
-import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
-import { PhoneInput } from "@components/shared/PhoneInput";
+import ErrorMessage from "@components/shared/ErrorMessage";
 
 const defaultValues = {
   name: "",
@@ -27,6 +26,7 @@ const defaultValues = {
   owner_last_name: "",
   owner_phone_number: "",
   slide_images: [],
+  logo: "",
 };
 
 const DeliveryCompanyForm = ({
@@ -46,6 +46,7 @@ const DeliveryCompanyForm = ({
     control,
     register,
     setValue,
+    clearErrors,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
@@ -112,6 +113,7 @@ const DeliveryCompanyForm = ({
       const images = slideImages.map((image) => URL.createObjectURL(image));
       setSlideImagesPreview(images);
       setValue("slide_images", images);
+      clearErrors("slide_images");
     }
   }, [slideImages]);
 
@@ -134,27 +136,30 @@ const DeliveryCompanyForm = ({
             label="Company Name"
             register={register}
             required
+            errors={errors}
           />
           <InputField
             name="email"
             type="email"
             label="Company Email"
             register={register}
+            errors={errors}
+            required
           />
         </div>
 
         <div className="form-row">
           <PhoneInput
+            name="phone_number"
             label="Phone Number"
             control={control}
             errors={errors}
-            name="phone_number"
           />
           <PhoneInput
+            name="alternate_phone_number"
             label="Alternate Phone Number"
             control={control}
             errors={errors}
-            name="alternate_phone_number"
           />
         </div>
         {!deliveryCompany && (
@@ -165,6 +170,7 @@ const DeliveryCompanyForm = ({
               label="Password"
               required
               register={register}
+              errors={errors}
             />
             <InputField
               name="confirmPassword"
@@ -172,6 +178,7 @@ const DeliveryCompanyForm = ({
               label="Confirm Password"
               required
               register={register}
+              errors={errors}
             />
           </div>
         )}
@@ -181,6 +188,7 @@ const DeliveryCompanyForm = ({
             label="Location"
             required
             register={register}
+            errors={errors}
           />
 
           <PhoneInput
@@ -197,12 +205,14 @@ const DeliveryCompanyForm = ({
             label="Owner's First Name"
             register={register}
             required
+            errors={errors}
           />
           <InputField
             name="owner_last_name"
             label="Owner's Last Name"
             register={register}
             required
+            errors={errors}
           />
 
           <PhoneInput
@@ -239,13 +249,16 @@ const DeliveryCompanyForm = ({
                 />
               ))}
             </div>
-            <CustomFileInput
-              label="Company Slide Images"
-              placeholder="Drop your profile image here"
-              required
-              onChange={setSlideImages}
-              multiple={true}
-            />
+            <div>
+              <CustomFileInput
+                label="Company Slide Images"
+                placeholder="Drop your profile image here"
+                required
+                onChange={setSlideImages}
+                multiple={true}
+              />
+              <ErrorMessage name="slide_images" errors={errors} />
+            </div>
           </div>
         </div>
 
