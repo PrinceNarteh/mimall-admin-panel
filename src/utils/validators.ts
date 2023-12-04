@@ -191,7 +191,7 @@ export const productResolver = (product?: Product) => {
     category: z
       .string({ required_error: "Please kindly select product category" })
       .min(1, "Please kindly select product category"),
-    product_images: z.array(image()),
+    product_images: z.array(image("product_images")),
     shop: z
       .string({ required_error: "First name is required" })
       .min(1, "First name is required"),

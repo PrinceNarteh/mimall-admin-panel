@@ -13,7 +13,7 @@ type InputFieldProps<TFormValues extends FieldValues = FieldValues> = {
   name: Path<TFormValues>;
   rules?: RegisterOptions;
   register: UseFormRegister<TFormValues>;
-  errors?: Partial<DeepMap<TFormValues, FieldError>>;
+  errors?: any;
   label?: string;
   required?: boolean;
   placeholder?: string;
