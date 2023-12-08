@@ -14,6 +14,7 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
 import ErrorMessage from "@components/shared/ErrorMessage";
+import { queryKeys } from "@utils/queryKeys";
 
 const defaultValues = {
   name: "",
@@ -61,44 +62,42 @@ const DeliveryCompanyForm = ({
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
 
-    console.log(data);
-
-    // mutate(
-    //   {
-    //     url: deliveryCompany
-    //       ? `${queryKeys.DeliveryCompany.url(deliveryCompany._id)}`
-    //       : `${queryKeys.DeliveryCompany.url}/register`,
-    //     data,
-    //     method: deliveryCompany ? "PATCH" : "POST",
-    //     multipart: true,
-    //   },
-    //   {
-    //     onSuccess(data) {
-    //       queryClient.setQueryData<DeliveryCompany[]>(
-    //         queryKeys.DeliveryCompanies.key,
-    //         (oldData) => {
-    //           if (deliveryCompany) {
-    //             return (oldData ?? []).map((item) => {
-    //               if (item._id === data._id) {
-    //                 return data;
-    //               }
-    //               return item;
-    //             });
-    //           } else {
-    //             return [data, ...(oldData ?? [])];
-    //           }
-    //         }
-    //       );
-    //       toast.dismiss(toastId);
-    //       toast.success("Admin successfully created");
-    //       navigate("/admins");
-    //     },
-    //     onError(error: any) {
-    //       toast.dismiss(toastId);
-    //       toast.error(error.response.data.message);
-    //     },
-    //   }
-    // );
+    mutate(
+      {
+        url: deliveryCompany
+          ? `${queryKeys.DeliveryCompany.url(deliveryCompany._id)}`
+          : `${queryKeys.DeliveryCompany.url}/register`,
+        data,
+        method: deliveryCompany ? "PATCH" : "POST",
+        multipart: true,
+      },
+      {
+        onSuccess(data) {
+          queryClient.setQueryData<DeliveryCompany[]>(
+            queryKeys.DeliveryCompanies.key,
+            (oldData) => {
+              if (deliveryCompany) {
+                return (oldData ?? []).map((item) => {
+                  if (item._id === data._id) {
+                    return data;
+                  }
+                  return item;
+                });
+              } else {
+                return [data, ...(oldData ?? [])];
+              }
+            }
+          );
+          toast.dismiss(toastId);
+          toast.success("Admin successfully created");
+          navigate("/admins");
+        },
+        onError(error: any) {
+          toast.dismiss(toastId);
+          toast.error(error.response.data.message);
+        },
+      }
+    );
   };
 
   useEffect(() => {
