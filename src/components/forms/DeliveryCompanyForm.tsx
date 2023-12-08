@@ -15,6 +15,7 @@ import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
 import ErrorMessage from "@components/shared/ErrorMessage";
 import { queryKeys } from "@utils/queryKeys";
+import { useSetQueryData } from "@hooks/useSetQueryData";
 
 const defaultValues = {
   name: "",
@@ -35,7 +36,7 @@ const DeliveryCompanyForm = ({
 }: {
   deliveryCompany?: DeliveryCompany;
 }) => {
-  const queryClient = useQueryClient();
+  const { setOrUpdateQueryData } = useSetQueryData();
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [slideImages, setSlideImages] = useState<File[] | null>([]);
@@ -73,21 +74,11 @@ const DeliveryCompanyForm = ({
       },
       {
         onSuccess(data) {
-          queryClient.setQueryData<DeliveryCompany[]>(
-            queryKeys.DeliveryCompanies.key,
-            (oldData) => {
-              if (deliveryCompany) {
-                return (oldData ?? []).map((item) => {
-                  if (item._id === data._id) {
-                    return data;
-                  }
-                  return item;
-                });
-              } else {
-                return [data, ...(oldData ?? [])];
-              }
-            }
-          );
+          setOrUpdateQueryData({
+            queryKeys: queryKeys.DeliveryCompanies.key,
+            dataId: deliveryCompany?._id,
+            data,
+          });
           toast.dismiss(toastId);
           toast.success("Admin successfully created");
           navigate("/admins");
