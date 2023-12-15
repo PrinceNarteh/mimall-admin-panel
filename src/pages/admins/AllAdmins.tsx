@@ -12,12 +12,14 @@ import { Link } from "react-router-dom";
 import AdminDetails from "./AdminDetails";
 import useConfirm from "@hooks/useConfirm";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
+import AdminForm from "@components/forms/AdminForm";
+import Modal from "@components/shared/Modal";
 
 const AllAdmins = () => {
   const ref = useRef<HTMLDivElement>(null);
-  console.log(ref);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [admin, setAdmin] = useState<Admin | null>(null);
+  const [openForm, setOpenForm] = useState(false);
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.Admins.key,
     url: queryKeys.Admins.url,
@@ -110,7 +112,19 @@ const AllAdmins = () => {
     <div>
       {isLoading && <Spinner isLoading={isLoading} />}
       <Heading label="All Administrators" />
-      <Table data={data} columns={columns} />
+      <Table
+        data={data}
+        columns={columns}
+        actionButton={() => (
+          <button
+            onClick={() => setOpenForm(true)}
+            className="text-xs py-1 px-3 bg-primary rounded text-white flex items-center gap-1"
+          >
+            <Icon icon="ic:baseline-add-circle-outline" />
+            Add
+          </button>
+        )}
+      />
 
       <AdminDetails
         admin={admin}
@@ -119,6 +133,15 @@ const AllAdmins = () => {
       />
 
       <ConfirmationDialog />
+
+      <Modal
+        start
+        width="max-w-3xl"
+        openModal={openForm}
+        closeModal={setOpenForm}
+      >
+        <AdminForm />
+      </Modal>
     </div>
   );
 };

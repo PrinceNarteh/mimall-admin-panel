@@ -9,7 +9,7 @@ import {
   type ColumnDef,
   ColumnSort,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export type SortDirection = "asc" | "desc";
@@ -23,7 +23,7 @@ export type SortingTableState = {
 interface TableProps<T extends object> {
   columns: ColumnDef<T, unknown>[];
   data: T[] | undefined;
-  actionButton?: React.ReactNode;
+  actionButton?: () => React.JSX;
   linkPath?: string;
 }
 
@@ -76,7 +76,7 @@ const Table = <T extends object>({
           />
         </div>
 
-        {actionButton && actionButton}
+        {actionButton && actionButton()}
       </div>
 
       <table className="w-full p-2">

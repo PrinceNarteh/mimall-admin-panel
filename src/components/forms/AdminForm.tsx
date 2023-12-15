@@ -17,6 +17,7 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
+import Heading from "@components/shared/Heading";
 
 const defaultValues = {
   first_name: "",
@@ -136,6 +137,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
 
   return (
     <div className="p-5 bg-white">
+      <Heading label={`${admin ? "Update" : "Add"} Admin`} />
       <form onSubmit={handleSubmit(submit)}>
         <div className="form-row">
           <InputField
