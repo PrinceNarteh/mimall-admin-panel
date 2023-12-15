@@ -1,5 +1,5 @@
 import { Admin, DeliveryCompany, Product, Shop } from "@custom-types/index";
-import { z } from "zod";
+import { ZodIssueCode, z } from "zod";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -10,7 +10,7 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 const image = (path: string) =>
-  z.any().superRefine((val, ctx) => {
+  z.instanceof(File).superRefine((val, ctx) => {
     if (val?.size >= MAX_FILE_SIZE) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -100,77 +100,71 @@ export const adminResolver = (admin: Admin | undefined) => {
 
 export const deliveryCompanyResolver = (
   deliveryCompany: DeliveryCompany | undefined
-) => {
-  const schema = z.object({
-    name: z
-      .string({ required_error: "Company's name is required" })
-      .min(1, "Company's name is required"),
-    email: z.string().email("Please enter a valid email"),
-    phone_number: z
-      .string({ required_error: "Phone number is required" })
-      .min(10, "Please enter a valid phone number")
-      .max(13, "Please enter a valid phone number"),
-    alternate_phone_number: z.string().optional(),
-    whatsapp_number: z
-      .string({ required_error: "Whatsapp number is required" })
-      .min(10, "Please enter a valid phone number")
-      .max(13, "Please enter a valid phone number"),
-    location: z
-      .string({ required_error: "Location is required" })
-      .min(1, "Location is required"),
-    owner_first_name: z
-      .string({ required_error: "Owner's first name is required" })
-      .min(1, "Owner's first name is required"),
-    owner_last_name: z
-      .string({ required_error: "Owner's last name is required" })
-      .min(1, "Owner's last name is required"),
-    owner_phone_number: z
-      .string({ required_error: "Owner's phone number is required" })
-      .min(1, "Owner's phone number is required"),
-    slide_images: z
-      .array(image("slide_images"))
-      .min(1, "Please provide at least one image"),
-    logo: image("logo"),
-  });
-
-  if (!deliveryCompany) {
-    return schema
-      .extend({
+) =>
+  z
+    .object({
+      name: z
+        .string({ required_error: "Company's name is required" })
+        .min(1, "Company's name is required"),
+      email: z.string().email("Please enter a valid email"),
+      phone_number: z
+        .string({ required_error: "Phone number is required" })
+        .min(10, "Please enter a valid phone number")
+        .max(13, "Please enter a valid phone number"),
+      alternate_phone_number: z.string().optional(),
+      whatsapp_number: z
+        .string({ required_error: "Whatsapp number is required" })
+        .min(10, "Please enter a valid phone number")
+        .max(13, "Please enter a valid phone number"),
+      location: z
+        .string({ required_error: "Location is required" })
+        .min(1, "Location is required"),
+      owner_first_name: z
+        .string({ required_error: "Owner's first name is required" })
+        .min(1, "Owner's first name is required"),
+      owner_last_name: z
+        .string({ required_error: "Owner's last name is required" })
+        .min(1, "Owner's last name is required"),
+      owner_phone_number: z
+        .string({ required_error: "Owner's phone number is required" })
+        .min(1, "Owner's phone number is required"),
+      slide_images: z
+        .array(image("slide_images"))
+        .min(1, "Please provide at least one image"),
+      logo: z.union([image("logo"), z.string(), z.undefined()]),
+      ...(!deliveryCompany && {
         password: z.string().min(6, "Passwords must be at least 6 characters"),
-        confirmPassword: z.string().min(6, "Please confirm your password"),
-      })
-      .superRefine((val, ctx) => {
-        if (val.password !== val.confirmPassword) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Passwords do not match",
-            path: ["confirm_password"],
-          });
-        }
+        confirm_password: z.string().min(6, "Please confirm your password"),
+      }),
+    })
+    .superRefine((val, ctx) => {
+      if (val.password !== val.confirm_password) {
+        ctx.addIssue({
+          code: ZodIssueCode.custom,
+          message: "Passwords do not match",
+          path: ["confirm_password"],
+        });
+      }
 
-        if (val.phone_number.length !== 13) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Please enter a valid phone number",
-            path: ["phone_number"],
-          });
-        }
+      if (val.phone_number.length !== 13) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Please enter a valid phone number",
+          path: ["phone_number"],
+        });
+      }
 
-        if (
-          val.alternate_phone_number &&
-          val.alternate_phone_number.length !== 13
-        ) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Please enter a valid phone number",
-            path: ["alternate_phone_number"],
-          });
-        }
-      });
-  }
-
-  return schema;
-};
+      if (
+        val.alternate_phone_number &&
+        val.alternate_phone_number.length !== 13
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Please enter a valid phone number",
+          path: ["alternate_phone_number"],
+        });
+      }
+    });
 
 export const productResolver = (product?: Product) => {
   return z.object({

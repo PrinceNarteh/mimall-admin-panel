@@ -1,13 +1,11 @@
+import _ from "lodash";
 import { InputHTMLAttributes } from "react";
 import {
-  DeepMap,
-  FieldError,
   FieldValues,
   Path,
   RegisterOptions,
   UseFormRegister,
 } from "react-hook-form";
-import _ from "lodash";
 
 type InputFieldProps<TFormValues extends FieldValues = FieldValues> = {
   name: Path<TFormValues>;
@@ -32,7 +30,7 @@ const InputField = <TFormValues extends Record<string, unknown>>({
   ...props
 }: InputFieldProps<TFormValues>) => {
   const errorMessages = _.get(errors, name);
-  const hasError = !!(errors && errorMessages);
+  const hasError = Boolean(errors && errorMessages);
 
   return (
     <div className="flex-1">

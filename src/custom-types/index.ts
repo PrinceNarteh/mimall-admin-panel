@@ -49,6 +49,7 @@ export interface DeliveryCompany extends BaseUser {
   deliveries: Delivery[];
   quick_orders: QuickOrder[];
   slide_images: string[];
+  logo?: string;
 }
 
 export interface User extends BaseUser {

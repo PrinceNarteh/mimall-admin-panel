@@ -1,35 +1,20 @@
 import { DeliveryCompany } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useMutate from "@hooks/useMutate";
-import { useQueryClient } from "@tanstack/react-query";
 import { deliveryCompanyResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, Resolver } from "react-hook-form";
 import toast from "react-hot-toast";
-
-import { PhoneInput } from "@components/shared/PhoneInput";
-import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+
+import ErrorMessage from "@components/shared/ErrorMessage";
+import { PhoneInput } from "@components/shared/PhoneInput";
+import { useSetQueryData } from "@hooks/useSetQueryData";
+import { queryKeys } from "@utils/queryKeys";
+import { useNavigate } from "react-router-dom";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
-import ErrorMessage from "@components/shared/ErrorMessage";
-import { queryKeys } from "@utils/queryKeys";
-import { useSetQueryData } from "@hooks/useSetQueryData";
-
-const defaultValues = {
-  name: "",
-  email: "",
-  phone_umber: "",
-  alternate_phone_number: "",
-  whatsapp_number: "",
-  location: "",
-  owner_first_name: "",
-  owner_last_name: "",
-  owner_phone_number: "",
-  slide_images: [],
-  logo: "",
-};
 
 const DeliveryCompanyForm = ({
   deliveryCompany,
@@ -52,22 +37,36 @@ const DeliveryCompanyForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: defaultValues,
+    defaultValues: {
+      alternate_phone_number: deliveryCompany?.alternate_phone_number || "",
+      email: deliveryCompany?.email || "",
+      location: deliveryCompany?.location || "",
+      logo: deliveryCompany?.logo || undefined,
+      name: deliveryCompany?.name || "",
+      owner_first_name: deliveryCompany?.owner_first_name || "",
+      owner_last_name: deliveryCompany?.owner_last_name || "",
+      owner_phone_number: deliveryCompany?.owner_phone_number || "",
+      password: "",
+      confirm_password: "",
+      phone_number: deliveryCompany?.phone_number || "",
+      slide_images: [],
+      whatsapp_number: deliveryCompany?.whatsapp_number || "",
+    },
     resolver: zodResolver(deliveryCompanyResolver(deliveryCompany)),
   });
 
   const navigate = useNavigate();
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
-    const toastId = toast.loading("Creating Admin...");
+    const toastId = toast.loading("Creating Delivery company...");
     const formData = new FormData();
-    Object.values(data).forEach((item) => formData.append(item[0], item[1]));
+    Object.entries(data).forEach((item) => formData.append(...item));
 
     mutate(
       {
         url: deliveryCompany
           ? `${queryKeys.DeliveryCompany.url(deliveryCompany._id)}`
-          : `${queryKeys.DeliveryCompany.url}/register`,
+          : `${queryKeys.DeliveryCompanies.url}/register`,
         data,
         method: deliveryCompany ? "PATCH" : "POST",
         multipart: true,
@@ -84,6 +83,7 @@ const DeliveryCompanyForm = ({
           navigate("/admins");
         },
         onError(error: any) {
+          console.log(error);
           toast.dismiss(toastId);
           toast.error(error.response.data.message);
         },
@@ -102,20 +102,10 @@ const DeliveryCompanyForm = ({
     if (slideImages) {
       const images = slideImages.map((image) => URL.createObjectURL(image));
       setSlideImagesPreview(images);
-      setValue("slide_images", images);
+      setValue("slide_images", slideImages);
       clearErrors("slide_images");
     }
   }, [slideImages]);
-
-  useEffect(() => {
-    if (deliveryCompany) {
-      Object.entries(deliveryCompany).forEach((item) =>
-        setValue(item[0] as keyof FormValues, item[1])
-      );
-    }
-  }, [deliveryCompany, setValue]);
-
-  console.log(errors);
 
   return (
     <div className="p-5 bg-white">
@@ -163,7 +153,7 @@ const DeliveryCompanyForm = ({
               errors={errors}
             />
             <InputField
-              name="confirmPassword"
+              name="confirm_password"
               type="password"
               label="Confirm Password"
               required
