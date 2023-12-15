@@ -12,16 +12,30 @@ import { useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 import { Link } from "react-router-dom";
 import DeliveryCompanyDetails from "./DeliveryCompanyDetails";
+import Modal from "@components/shared/Modal";
+import DeliveryCompanyForm from "@components/forms/DeliveryCompanyForm";
 
 const AllDeliveryCompanies = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
+  const [openForm, setOpenForm] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   const [deliveryCompany, setDeliveryCompany] =
     useState<DeliveryCompany | null>(null);
+
   const { data, isLoading } = useGetQuery<DeliveryCompany[]>({
     queryKey: queryKeys.DeliveryCompanies.key,
     url: queryKeys.DeliveryCompanies.url,
   });
-  console.log(data);
+
+  const handleDetails = (deliveryCompany: DeliveryCompany) => {
+    setDeliveryCompany(deliveryCompany);
+    setOpenDetails(true);
+  };
+
+  const handleEdit = (deliveryCompany: DeliveryCompany) => {
+    setDeliveryCompany(deliveryCompany);
+    setOpenForm(true);
+  };
 
   const handleDelete = async (deliveryCompany: DeliveryCompany | null) => {
     if (!deliveryCompany) return;
@@ -92,9 +106,9 @@ const AllDeliveryCompanies = () => {
       header: "Actions",
       cell: (props) => (
         <span className="w-20 flex gap-3">
-          <Link to={`/delivery-companies/${props.row.original._id}/edit`}>
+          <button onClick={() => handleEdit(props.row.original)}>
             <Icon icon="iconamoon:edit-light" className="text-xl" />
-          </Link>
+          </button>
           <button onClick={() => handleDelete(props.row.original)}>
             <Icon
               icon="fluent:delete-28-regular"
@@ -117,6 +131,15 @@ const AllDeliveryCompanies = () => {
         setDeliveryCompany={setDeliveryCompany}
         handleDelete={handleDelete}
       />
+
+      <Modal
+        start
+        width="max-w-3xl"
+        openModal={openForm}
+        closeModal={setOpenForm}
+      >
+        <DeliveryCompanyForm deliveryCompany={deliveryCompany} />
+      </Modal>
 
       <ConfirmationDialog />
     </div>

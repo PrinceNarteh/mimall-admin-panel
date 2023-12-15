@@ -34,7 +34,7 @@ const defaultValues = {
   role: "",
 };
 
-const UserForm = ({ admin }: { admin?: Admin }) => {
+const UserForm = ({ admin }: { admin: Admin | null }) => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
@@ -77,21 +77,18 @@ const UserForm = ({ admin }: { admin?: Admin }) => {
       },
       {
         onSuccess(data) {
-          queryClient.setQueryData<Admin[]>(
-            queryKeys.Admins.key,
-            (oldData) => {
-              if (admin) {
-                return (oldData ?? []).map((item) => {
-                  if (item._id === data._id) {
-                    return data;
-                  }
-                  return item;
-                });
-              } else {
-                return [data, ...(oldData ?? [])];
-              }
+          queryClient.setQueryData<Admin[]>(queryKeys.Admins.key, (oldData) => {
+            if (admin) {
+              return (oldData ?? []).map((item) => {
+                if (item._id === data._id) {
+                  return data;
+                }
+                return item;
+              });
+            } else {
+              return [data, ...(oldData ?? [])];
             }
-          );
+          });
           toast.dismiss(toastId);
           toast.success("Admin successfully created");
           navigate("/admins");

@@ -1,22 +1,12 @@
 import Layout from "@components/layout";
-import AddAdmin from "@pages/admins/AddAdmin";
 import AllAdmins from "@pages/admins/AllAdmins";
-import EditAdmin from "@pages/admins/EditAdmin";
 import Login from "@pages/auth/Login";
 import DashBoard from "@pages/dashboard";
-import AddDeliveryCompany from "@pages/delivery-companies/AddDeliveryCompany";
 import AllDeliveryCompanies from "@pages/delivery-companies/AllDeliveryCompanies";
-import EditDeliveryCompany from "@pages/delivery-companies/EditDeliveryCompany";
-import AddProduct from "@pages/products/AddProduct";
 import AllProducts from "@pages/products/AllProducts";
-import EditProduct from "@pages/products/EditProduct";
 import RolesAndPermissions from "@pages/roles-and-permissions/Roles";
-import AddShop from "@pages/shops/AddShop";
 import AllShops from "@pages/shops/AllShops";
-import EditShop from "@pages/shops/EditShop";
-import AddUser from "@pages/users/AddUser";
 import AllUsers from "@pages/users/AllUsers";
-import EditUser from "@pages/users/EditUser";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 export default function Router() {
@@ -29,31 +19,16 @@ export default function Router() {
           <Route path="/" element={<DashBoard />} />
 
           {/* Admins */}
-          <Route path="/admins">
-            <Route index element={<AllAdmins />} />
-            <Route path="add-admin" element={<AddAdmin />} />
-            <Route path=":adminId/edit" element={<EditAdmin />} />
-          </Route>
+          <Route path="/admins" element={<AllAdmins />} />
 
           {/* Delivery Companies */}
-          <Route path="/delivery-companies">
-            <Route index element={<AllDeliveryCompanies />} />
-            <Route
-              path="add-delivery-company"
-              element={<AddDeliveryCompany />}
-            />
-            <Route
-              path=":deliveryCompanyId/edit"
-              element={<EditDeliveryCompany />}
-            />
-          </Route>
+          <Route
+            path="/delivery-companies"
+            element={<AllDeliveryCompanies />}
+          />
 
           {/* Products */}
-          <Route path="/products">
-            <Route index element={<AllProducts />} />
-            <Route path="add-product" element={<AddProduct />} />
-            <Route path=":productId/edit" element={<EditProduct />} />
-          </Route>
+          <Route path="/products" element={<AllProducts />} />
 
           {/* Roles and Permissions */}
           <Route
@@ -62,18 +37,10 @@ export default function Router() {
           />
 
           {/* Shops */}
-          <Route path="/shops">
-            <Route index element={<AllShops />} />
-            <Route path="add-shop" element={<AddShop />} />
-            <Route path=":shopId/edit" element={<EditShop />} />
-          </Route>
+          <Route path="/shops" element={<AllShops />} />
 
           {/* Users */}
-          <Route path="/users">
-            <Route index element={<AllUsers />} />
-            <Route path="add-user" element={<AddUser />} />
-            <Route path=":userId/edit" element={<EditUser />} />
-          </Route>
+          <Route path="/users" element={<AllUsers />} />
         </Route>
       </Routes>
     </BrowserRouter>
