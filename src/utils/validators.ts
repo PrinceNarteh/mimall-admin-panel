@@ -216,7 +216,7 @@ export const productResolver = (product?: Product) => {
   });
 };
 
-export const shopResolver = (shop?: Shop) =>
+export const shopResolver = (shop: Shop | null) =>
   z.object({
     name: z
       .string({ required_error: "Shop name is required" })

@@ -38,7 +38,7 @@ const defaultValues = {
   banner: z.any(),
 };
 
-const ShopForm = ({ shop }: { shop?: Shop }) => {
+const ShopForm = ({ shop }: { shop: Shop | null }) => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");

@@ -1,7 +1,7 @@
 import Heading from "@components/shared/Heading";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
-import { Admin } from "@custom-types/index";
+import { Admin, Shop } from "@custom-types/index";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
@@ -12,40 +12,45 @@ import { Link } from "react-router-dom";
 import AdminDetails from "./ShopDetails";
 import useConfirm from "@hooks/useConfirm";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
+import Modal from "@components/shared/Modal";
+import ShopForm from "@components/forms/ShopForm";
 
-  // _id: string;
-  // role: Role;
-  // phone_number: string;
-  // alternate_phone_number: string;
-  // active: boolean;
-  // createdAt: string;
-  // updatedAt: string;
-  // token: string;
-  // shopCode: string;
-  // name: string;
-  // password: string;
-  // plainPassword: string;
-  // description: string;
-  // location: string;
-  // mapDirection: string;
-  // phoneNumber: string;
-  // alternateNumber: string;
-  // whatsappNumber: string;
-  // instagramHandle: string;
-  // facebookHandle: string;
-  // twitterHandle: string;
-  // tiktokHandle: string;
-  // openingTime: string;
-  // closingTime: string;
-  // image: string;
-  // banner: string;
-  // products: Product[];
-  // orders: OrderItem[];
-  // quickOrderItems: QuickOrderItem[];
+// _id: string;
+// role: Role;
+// phone_number: string;
+// alternate_phone_number: string;
+// active: boolean;
+// createdAt: string;
+// updatedAt: string;
+// token: string;
+// shopCode: string;
+// name: string;
+// password: string;
+// plainPassword: string;
+// description: string;
+// location: string;
+// mapDirection: string;
+// phoneNumber: string;
+// alternateNumber: string;
+// whatsappNumber: string;
+// instagramHandle: string;
+// facebookHandle: string;
+// twitterHandle: string;
+// tiktokHandle: string;
+// openingTime: string;
+// closingTime: string;
+// image: string;
+// banner: string;
+// products: Product[];
+// orders: OrderItem[];
+// quickOrderItems: QuickOrderItem[];
 
 const AllShops = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
+  const [shop, setShop] = useState<Shop | null>(null);
+  const [openForm, setOpenForm] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.Shops.key,
@@ -146,6 +151,16 @@ const AllShops = () => {
         setAdmin={setAdmin}
         handleDelete={handleDelete}
       />
+
+      <Modal
+        start
+        disableOutsideClick
+        width="max-w-3xl"
+        openModal={openForm}
+        closeModal={setOpenForm}
+      >
+        <ShopForm shop={shop} />
+      </Modal>
 
       <ConfirmationDialog />
     </div>

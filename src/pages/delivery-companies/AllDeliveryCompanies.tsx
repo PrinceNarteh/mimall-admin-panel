@@ -124,7 +124,19 @@ const AllDeliveryCompanies = () => {
     <div>
       {isLoading && <Spinner isLoading={isLoading} />}
       <Heading label="All Delivery Companies" />
-      <Table data={data} columns={columns} />
+      <Table
+        data={data}
+        columns={columns}
+        actionButton={() => (
+          <button
+            onClick={() => setOpenForm(true)}
+            className="text-xs py-1.5 px-4 bg-primary rounded text-white flex items-center gap-1"
+          >
+            <Icon icon="ic:baseline-add-circle-outline" />
+            Add Delivery Company
+          </button>
+        )}
+      />
 
       <DeliveryCompanyDetails
         deliveryCompany={deliveryCompany}
@@ -134,6 +146,7 @@ const AllDeliveryCompanies = () => {
 
       <Modal
         start
+        disableOutsideClick
         width="max-w-3xl"
         openModal={openForm}
         closeModal={setOpenForm}
