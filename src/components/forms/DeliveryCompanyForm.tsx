@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useMutate from "@hooks/useMutate";
 import { deliveryCompanyResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm, Resolver } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
@@ -19,7 +19,7 @@ import InputField from "../shared/InputField";
 const DeliveryCompanyForm = ({
   deliveryCompany,
 }: {
-  deliveryCompany?: DeliveryCompany;
+  deliveryCompany: DeliveryCompany | null;
 }) => {
   const { setOrUpdateQueryData } = useSetQueryData();
   const [image, setImage] = useState<File | null>(null);
@@ -29,6 +29,20 @@ const DeliveryCompanyForm = ({
 
   const formValues = deliveryCompanyResolver(deliveryCompany);
   type FormValues = z.infer<typeof formValues>;
+  const defaultValues: FormValues = {
+    alternate_phone_number: "",
+    email: "",
+    location: "",
+    logo: undefined,
+    name: "",
+    owner_first_name: "",
+    owner_last_name: "",
+    owner_phone_number: "",
+    phone_number: "",
+    slide_images: [],
+    whatsapp_number: "",
+  };
+
   const {
     control,
     register,
@@ -37,21 +51,7 @@ const DeliveryCompanyForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: {
-      alternate_phone_number: deliveryCompany?.alternate_phone_number || "",
-      email: deliveryCompany?.email || "",
-      location: deliveryCompany?.location || "",
-      logo: deliveryCompany?.logo || undefined,
-      name: deliveryCompany?.name || "",
-      owner_first_name: deliveryCompany?.owner_first_name || "",
-      owner_last_name: deliveryCompany?.owner_last_name || "",
-      owner_phone_number: deliveryCompany?.owner_phone_number || "",
-      password: "",
-      confirm_password: "",
-      phone_number: deliveryCompany?.phone_number || "",
-      slide_images: [],
-      whatsapp_number: deliveryCompany?.whatsapp_number || "",
-    },
+    defaultValues: deliveryCompany ? deliveryCompany : defaultValues,
     resolver: zodResolver(deliveryCompanyResolver(deliveryCompany)),
   });
 
@@ -60,7 +60,22 @@ const DeliveryCompanyForm = ({
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating Delivery company...");
     const formData = new FormData();
-    Object.entries(data).forEach((item) => formData.append(...item));
+
+    formData.append("email", data.email);
+    formData.append("location", data.location);
+    formData.append("name", data.name);
+    formData.append("owner_first_name", data.owner_first_name);
+    formData.append("owner_last_name", data.owner_last_name);
+    formData.append("owner_phone_number", data.owner_phone_number);
+    formData.append("phone_number", data.phone_number);
+    formData.append("whatsapp_number", data.whatsapp_number);
+    // if ( )
+    data?.logo && formData.append("logo", data.logo);
+    data?.alternate_phone_number &&
+      formData.append("alternate_phone_number", data.alternate_phone_number);
+    for (let image of data.slide_images) {
+      formData.append("slide_images", image);
+    }
 
     mutate(
       {
@@ -142,7 +157,7 @@ const DeliveryCompanyForm = ({
             errors={errors}
           />
         </div>
-        {!deliveryCompany && (
+        {!deliveryCompany ? (
           <div className="form-row">
             <InputField
               name="password"
@@ -161,7 +176,7 @@ const DeliveryCompanyForm = ({
               errors={errors}
             />
           </div>
-        )}
+        ) : null}
         <div className="form-row">
           <InputField
             name="location"

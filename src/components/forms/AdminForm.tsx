@@ -36,7 +36,6 @@ const defaultValues = {
 };
 
 const AdminForm = ({ admin }: { admin: Admin | null }) => {
-  console.log(admin);
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
@@ -70,8 +69,6 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
     const toastId = toast.loading("Creating Admin...");
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
-
-    console.log(data);
 
     mutate(
       {

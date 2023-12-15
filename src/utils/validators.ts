@@ -99,72 +99,96 @@ export const adminResolver = (admin: Admin | null) => {
 };
 
 export const deliveryCompanyResolver = (
-  deliveryCompany: DeliveryCompany | undefined
-) =>
-  z
-    .object({
-      name: z
-        .string({ required_error: "Company's name is required" })
-        .min(1, "Company's name is required"),
-      email: z.string().email("Please enter a valid email"),
-      phone_number: z
-        .string({ required_error: "Phone number is required" })
-        .min(10, "Please enter a valid phone number")
-        .max(13, "Please enter a valid phone number"),
-      alternate_phone_number: z.string().optional(),
-      whatsapp_number: z
-        .string({ required_error: "Whatsapp number is required" })
-        .min(10, "Please enter a valid phone number")
-        .max(13, "Please enter a valid phone number"),
-      location: z
-        .string({ required_error: "Location is required" })
-        .min(1, "Location is required"),
-      owner_first_name: z
-        .string({ required_error: "Owner's first name is required" })
-        .min(1, "Owner's first name is required"),
-      owner_last_name: z
-        .string({ required_error: "Owner's last name is required" })
-        .min(1, "Owner's last name is required"),
-      owner_phone_number: z
-        .string({ required_error: "Owner's phone number is required" })
-        .min(1, "Owner's phone number is required"),
-      slide_images: z
+  deliveryCompany: DeliveryCompany | null
+) => {
+  const schema = z.object({
+    name: z
+      .string({ required_error: "Company's name is required" })
+      .min(1, "Company's name is required"),
+    email: z.string().email("Please enter a valid email"),
+    phone_number: z
+      .string({ required_error: "Phone number is required" })
+      .min(10, "Please enter a valid phone number")
+      .max(13, "Please enter a valid phone number"),
+    alternate_phone_number: z.string().optional(),
+    whatsapp_number: z
+      .string({ required_error: "Whatsapp number is required" })
+      .min(10, "Please enter a valid phone number")
+      .max(13, "Please enter a valid phone number"),
+    location: z
+      .string({ required_error: "Location is required" })
+      .min(1, "Location is required"),
+    owner_first_name: z
+      .string({ required_error: "Owner's first name is required" })
+      .min(1, "Owner's first name is required"),
+    owner_last_name: z
+      .string({ required_error: "Owner's last name is required" })
+      .min(1, "Owner's last name is required"),
+    owner_phone_number: z
+      .string({ required_error: "Owner's phone number is required" })
+      .min(1, "Owner's phone number is required"),
+    slide_images: z.union([
+      z
         .array(image("slide_images"))
         .min(1, "Please provide at least one image"),
-      logo: z.union([image("logo"), z.string(), z.undefined()]),
-      ...(!deliveryCompany && {
+      z.string().array(),
+    ]),
+    logo: z.union([image("logo"), z.string(), z.undefined()]),
+  });
+
+  if (!deliveryCompany) {
+    return schema
+      .extend({
         password: z.string().min(6, "Passwords must be at least 6 characters"),
         confirm_password: z.string().min(6, "Please confirm your password"),
-      }),
-    })
-    .superRefine((val, ctx) => {
-      if (val.password !== val.confirm_password) {
-        ctx.addIssue({
-          code: ZodIssueCode.custom,
-          message: "Passwords do not match",
-          path: ["confirm_password"],
-        });
-      }
+      })
+      .refine((data) => data.password === data.confirm_password, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"], // path of error
+      })
+      .superRefine((val, ctx) => {
+        if (val.phone_number.length !== 13) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Please enter a valid phone number",
+            path: ["phone_number"],
+          });
+        }
 
-      if (val.phone_number.length !== 13) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Please enter a valid phone number",
-          path: ["phone_number"],
-        });
-      }
+        if (
+          val.alternate_phone_number &&
+          val.alternate_phone_number.length !== 13
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Please enter a valid phone number",
+            path: ["alternate_phone_number"],
+          });
+        }
+      });
+  }
 
-      if (
-        val.alternate_phone_number &&
-        val.alternate_phone_number.length !== 13
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Please enter a valid phone number",
-          path: ["alternate_phone_number"],
-        });
-      }
-    });
+  return schema.superRefine((val, ctx) => {
+    if (val.phone_number.length !== 13) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please enter a valid phone number",
+        path: ["phone_number"],
+      });
+    }
+
+    if (
+      val.alternate_phone_number &&
+      val.alternate_phone_number.length !== 13
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please enter a valid phone number",
+        path: ["alternate_phone_number"],
+      });
+    }
+  });
+};
 
 export const productResolver = (product?: Product) => {
   return z.object({
