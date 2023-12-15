@@ -8,8 +8,8 @@ export const sidebarData: SidebarData[] = [
     navItems: [
       {
         groupTitle: "Dashboard",
+        icon: <Icon icon="radix-icons:dashboard" fontSize={"20"} />,
         path: "/",
-        icon: <Icon icon="radix-icons:dashboard" />,
       },
     ],
   },
@@ -63,8 +63,7 @@ export const sidebarData: SidebarData[] = [
             className="h-6 w-6"
           />
         ),
-        path: "/payment/estimate",
-        subNav: [],
+        path: "/orders",
       },
     ],
   },

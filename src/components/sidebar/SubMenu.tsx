@@ -1,6 +1,4 @@
 import { SidebarData } from "@custom-types/index";
-import { Icon } from "@iconify/react";
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 function SubMenu({ item }: { item: SidebarData }) {
@@ -10,56 +8,40 @@ function SubMenu({ item }: { item: SidebarData }) {
   return (
     <div className="">
       {item.sectionTitle && (
-        <div className="mt-10 ml-5 mb-4 text-neutral-200 font-bold text-[14px]">
+        <div className=" ml-5 mt-7 line-clamp-1 text-neutral-200 font-bold text-[14px] invisible md:visible duration-500">
           {item.sectionTitle}
         </div>
       )}
       {item.navItems.map((nav, idx) => (
-        <React.Fragment key={idx}>
-          <div className={`flex justify-between items-center`}>
-            <div
-              className={`sidebarLink w-full space-y-4 flex text-black font-bold justify-between items-center list-none h-12 font-second text-md mx-4 cursor-pointer rounded-lg  ${
-                pathname === nav.path ? "bg-white text-primary" : ""
-              }`}
+        <div key={idx} className={`flex justify-between items-center`}>
+          <div
+            className={`w-full space-y-4 flex text-black font-bold justify-between items-center list-none h-12 font-second text-md mx-4 cursor-pointer rounded-lg  ${
+              pathname === nav.path ? "bg-white text-primary" : ""
+            }`}
+          >
+            <Link
+              to={nav.path}
+              className={`w-full flex justify-between items-center p-3 rounded-lg`}
             >
-              <Link
-                to={nav.path}
-                className={`w-full flex justify-between items-center p-3 rounded-lg`}
-              >
-                <div className="flex items-center">
-                  <div
-                    className={`mr-2 mb-1 ${
-                      pathname === nav.path ? "text-primary" : "text-white"
-                    }`}
-                  >
-                    {nav.icon}
-                  </div>
-                  <div
-                    className={`font-ray SidebarLabel font-semibold line-clamp-1 ${
-                      pathname === nav.path ? "text-primary" : "text-white"
-                    }`}
-                  >
-                    {nav.groupTitle}
-                  </div>
-                </div>
+              <div className="flex items-center gap-2">
                 <div
                   className={`${
                     pathname === nav.path ? "text-primary" : "text-white"
                   }`}
                 >
-                  {nav.subNav && nav.subNav.length > 0 && (
-                    <Icon
-                      icon="ic:baseline-keyboard-arrow-right"
-                      className={`transform ${
-                        pathname.includes(nav.path) ? "rotate-90" : "rotate-0"
-                      } duration-300`}
-                    />
-                  )}
+                  {nav.icon}
                 </div>
-              </Link>
-            </div>
+                <div
+                  className={`font-ray font-semibold line-clamp-1 hidden md:block ${
+                    pathname === nav.path ? "text-primary" : "text-white"
+                  }`}
+                >
+                  {nav.groupTitle}
+                </div>
+              </div>
+            </Link>
           </div>
-        </React.Fragment>
+        </div>
       ))}
     </div>
   );

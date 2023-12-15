@@ -27,16 +27,16 @@ export default function Sidebar() {
   // });
 
   return (
-    <div className="z-30 h-screen bg-primary w-72 fixed flex flex-col left-0 top-0 overflow-y-scroll cursor-pointer">
+    <div className="z-30 h-screen bg-primary w-20 duration-500 md:w-72 fixed flex flex-col left-0 top-0 overflow-y-scroll cursor-pointer">
       <div className=" top h-[30px] flex items-center justify-center ">
         <Link to="/">
           <div className="flex justify-center items-center mt-20 p-2 bg-primary border-b border-white border-opacity-50">
             <img
               src={"/images/logo.png"}
               alt=""
-              className="w-20 h-15 ml-3 rounded-full"
+              className="w-10 h-8 md:w-20 md:h-16 duration-500 ml-3 rounded-full"
             />
-            <h3 className="text-md w-32 ml-4 text-white font-bold font-ray">
+            <h3 className="text-md w-32 ml-4 text-white font-bold font-ray hidden md:block">
               MiMall
             </h3>
           </div>

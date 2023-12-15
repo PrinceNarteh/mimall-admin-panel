@@ -29,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({
     <>
       <div
         className={`min-h-screen fixed top-0 right-0 bottom-0 ${
-          fullWidth ? "left-0" : "left-72"
+          fullWidth ? "left-0" : "left-20 md:left-72"
         } h-screen grid grid-cols-1 ${
           start ? "place-content-start" : "place-content-center"
         } p-10 overflow-y-auto  bg-neutral-700/70 z-50 ${className}
