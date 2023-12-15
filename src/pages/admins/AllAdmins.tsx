@@ -137,6 +137,7 @@ const AllAdmins = () => {
       <Modal
         start
         width="max-w-3xl"
+        disableOutsideClick
         openModal={openForm}
         closeModal={setOpenForm}
       >

@@ -138,6 +138,7 @@ const AdminForm = ({ admin }: { admin?: Admin }) => {
   return (
     <div className="p-5 bg-white">
       <Heading label={`${admin ? "Update" : "Add"} Admin`} />
+      <p></p>
       <form onSubmit={handleSubmit(submit)}>
         <div className="form-row">
           <InputField

@@ -10,6 +10,7 @@ type ModalProps = {
   className?: string;
   fullWidth?: boolean;
   start?: boolean;
+  disableOutsideClick?: boolean;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -20,6 +21,7 @@ const Modal: React.FC<ModalProps> = ({
   className = "",
   fullWidth = false,
   start = false,
+  disableOutsideClick = false,
 }) => {
   const modalRef = useClickedOutside(() => closeModal(false));
 
@@ -34,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({
           } p-10 overflow-y-auto  bg-neutral-700/30 z-50 ${className}`}
         >
           <div
-            ref={modalRef}
+            ref={disableOutsideClick ? null : modalRef}
             className={`relative p-5 bg-white rounded-xl w-full mx-auto ${width}`}
           >
             <Icon
