@@ -27,27 +27,28 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <>
-      {openModal ? (
+      <div
+        className={`min-h-screen fixed top-0 right-0 bottom-0 ${
+          fullWidth ? "left-0" : "left-72"
+        } h-screen grid grid-cols-1 ${
+          start ? "place-content-start" : "place-content-center"
+        } p-10 overflow-y-auto  bg-neutral-700/70 z-50 ${className}
+          ${
+            openModal ? "scale-100 opacity-100" : "scale-0 opacity-0"
+          } duration-500`}
+      >
         <div
-          className={`min-h-screen fixed top-0 right-0 bottom-0 ${
-            fullWidth ? "left-0" : "left-72"
-          } h-screen grid grid-cols-1 ${
-            start ? "place-content-start" : "place-content-center"
-          } p-10 overflow-y-auto  bg-neutral-700/30 z-50 ${className}`}
+          ref={disableOutsideClick ? null : modalRef}
+          className={`relative p-5 bg-white rounded-xl w-full mx-auto ${width}`}
         >
-          <div
-            ref={disableOutsideClick ? null : modalRef}
-            className={`relative p-5 bg-white rounded-xl w-full mx-auto ${width}`}
-          >
-            <Icon
-              onClick={() => closeModal(false)}
-              icon="line-md:close-circle-twotone"
-              className="absolute -right-4 -top-4 text-4xl text-primary cursor-pointer"
-            />
-            {children}
-          </div>
+          <Icon
+            onClick={() => closeModal(false)}
+            icon="line-md:close-circle-twotone"
+            className="absolute -right-4 -top-4 text-4xl text-primary cursor-pointer"
+          />
+          {children}
         </div>
-      ) : null}
+      </div>
     </>
   );
 };

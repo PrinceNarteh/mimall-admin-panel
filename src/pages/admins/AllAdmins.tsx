@@ -1,19 +1,18 @@
+import AdminForm from "@components/forms/AdminForm";
 import Heading from "@components/shared/Heading";
+import Modal from "@components/shared/Modal";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
 import { Admin } from "@custom-types/index";
+import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import AdminDetails from "./AdminDetails";
-import useConfirm from "@hooks/useConfirm";
+import { useEffect, useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
-import AdminForm from "@components/forms/AdminForm";
-import Modal from "@components/shared/Modal";
+import AdminDetails from "./AdminDetails";
 
 const AllAdmins = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
@@ -30,7 +29,7 @@ const AllAdmins = () => {
     setOpenDetails(true);
   };
 
-  const handleEdit = (admin: Admin) => {
+  const handleEdit = (admin: Admin | null) => {
     setAdmin(admin);
     setOpenForm(true);
   };
@@ -121,11 +120,11 @@ const AllAdmins = () => {
     }),
   ] as Array<ColumnDef<Admin, unknown>>;
 
-  useEffect(() => {
-    if (!openDetails && !openForm) {
-      setAdmin(null);
-    }
-  }, [openDetails, openForm]);
+  // useEffect(() => {
+  //   if (!openDetails && !openForm) {
+  //     setAdmin(null);
+  //   }
+  // }, [openForm, openDetails]);
 
   return (
     <div>
@@ -137,10 +136,10 @@ const AllAdmins = () => {
         actionButton={() => (
           <button
             onClick={() => setOpenForm(true)}
-            className="text-xs py-1 px-3 bg-primary rounded text-white flex items-center gap-1"
+            className="text-xs py-1.5 px-4 bg-primary rounded text-white flex items-center gap-1"
           >
             <Icon icon="ic:baseline-add-circle-outline" />
-            Add
+            Add Admin
           </button>
         )}
       />
@@ -148,8 +147,12 @@ const AllAdmins = () => {
       <AdminDetails
         admin={admin}
         openDetails={openDetails}
+        handleEdit={handleEdit}
         handleDelete={handleDelete}
-        closeDetails={setOpenDetails}
+        closeDetails={() => {
+          setAdmin(null);
+          setOpenDetails(false);
+        }}
       />
 
       <ConfirmationDialog />

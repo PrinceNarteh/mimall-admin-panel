@@ -9,22 +9,29 @@ import { formatPhoneNumberIntl } from "react-phone-number-input";
 type AdminDetailsProps = {
   admin: Admin | null;
   openDetails: boolean;
+  handleEdit: (admin: Admin | null) => void;
   handleDelete: (admin: Admin | null) => Promise<void>;
-  closeDetails: React.Dispatch<React.SetStateAction<boolean>>;
+  closeDetails: () => void;
 };
 
 const AdminDetails: React.FC<AdminDetailsProps> = ({
   admin = null,
   openDetails,
   closeDetails,
+  handleEdit,
   handleDelete,
 }) => {
+  const edit = () => {
+    closeDetails();
+    handleEdit(admin);
+  };
+
   return (
     <DetailsCard
       heading="Admin Details"
       title={`${admin?.first_name} ${admin?.middle_name} ${admin?.last_name}`}
       description={`${admin?.email}`}
-      closeDetails={() => closeDetails(false)}
+      closeDetails={() => closeDetails()}
       image={`${fetchImage({
         imageName: admin?.profile_image,
         entity: "admins",
@@ -32,7 +39,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({
       openDetails={openDetails}
       actionButtons={() => (
         <>
-          <button onClick={() => handleDelete(admin)}>
+          <button onClick={() => edit()}>
             <Icon
               icon="iconamoon:edit-light"
               className="text-xl text-primary"

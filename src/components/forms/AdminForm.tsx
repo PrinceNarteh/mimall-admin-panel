@@ -36,6 +36,7 @@ const defaultValues = {
 };
 
 const AdminForm = ({ admin }: { admin: Admin | null }) => {
+  console.log(admin);
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
@@ -54,7 +55,12 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: defaultValues,
+    defaultValues: admin
+      ? {
+          ...admin,
+          role: admin.role._id,
+        }
+      : defaultValues,
     resolver: zodResolver(adminResolver(admin)),
   });
 
@@ -192,7 +198,7 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
             />
           </div>
         </div>
-        {!admin && (
+        {!admin ? (
           <div className="form-row">
             <InputField
               name="password"
@@ -209,7 +215,7 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
               register={register}
             />
           </div>
-        )}
+        ) : null}
         <div className="form-row">
           <InputField name="address" label="Address" register={register} />
 
