@@ -26,7 +26,7 @@ const image = (path: string) =>
 //     "Only .jpg, .jpeg, .png and .webp formats are supported."
 //   )
 
-export const adminResolver = (admin: Admin | undefined) => {
+export const adminResolver = (admin: Admin | null) => {
   const schema = z.object({
     first_name: z
       .string({ required_error: "First name is required" })

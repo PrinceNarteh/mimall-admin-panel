@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AdminDetails from "./AdminDetails";
 import useConfirm from "@hooks/useConfirm";
@@ -16,14 +16,24 @@ import AdminForm from "@components/forms/AdminForm";
 import Modal from "@components/shared/Modal";
 
 const AllAdmins = () => {
-  const ref = useRef<HTMLDivElement>(null);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [admin, setAdmin] = useState<Admin | null>(null);
   const [openForm, setOpenForm] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.Admins.key,
     url: queryKeys.Admins.url,
   });
+
+  const handleDetails = (admin: Admin) => {
+    setAdmin(admin);
+    setOpenDetails(true);
+  };
+
+  const handleEdit = (admin: Admin) => {
+    setAdmin(admin);
+    setOpenForm(true);
+  };
 
   const handleDelete = async (admin: Admin | null) => {
     if (!admin) return;
@@ -83,7 +93,7 @@ const AllAdmins = () => {
       header: "Details",
       cell: (props) => (
         <button
-          onClick={() => setAdmin(props.row.original)}
+          onClick={() => handleDetails(props.row.original)}
           className="text-xs border border-primary px-2 py-1 rounded text-primary"
         >
           Details
@@ -94,9 +104,12 @@ const AllAdmins = () => {
       header: "Actions",
       cell: (props) => (
         <span className="w-20 flex gap-5">
-          <Link to={`/admins/${props.row.original._id}/edit`}>
-            <Icon icon="iconamoon:edit-light" className="text-xl" />
-          </Link>
+          <button onClick={() => handleEdit(props.row.original)}>
+            <Icon
+              icon="iconamoon:edit-light"
+              className="text-xl text-primary"
+            />
+          </button>
           <button onClick={() => handleDelete(props.row.original)}>
             <Icon
               icon="fluent:delete-28-regular"
@@ -107,6 +120,12 @@ const AllAdmins = () => {
       ),
     }),
   ] as Array<ColumnDef<Admin, unknown>>;
+
+  useEffect(() => {
+    if (!openDetails && !openForm) {
+      setAdmin(null);
+    }
+  }, [openDetails, openForm]);
 
   return (
     <div>
@@ -128,8 +147,9 @@ const AllAdmins = () => {
 
       <AdminDetails
         admin={admin}
-        setAdmin={setAdmin}
+        openDetails={openDetails}
         handleDelete={handleDelete}
+        closeDetails={setOpenDetails}
       />
 
       <ConfirmationDialog />
@@ -141,7 +161,7 @@ const AllAdmins = () => {
         openModal={openForm}
         closeModal={setOpenForm}
       >
-        <AdminForm />
+        <AdminForm admin={admin} />
       </Modal>
     </div>
   );

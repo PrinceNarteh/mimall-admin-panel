@@ -35,7 +35,7 @@ const defaultValues = {
   role: "",
 };
 
-const AdminForm = ({ admin }: { admin?: Admin }) => {
+const AdminForm = ({ admin }: { admin: Admin | null }) => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");

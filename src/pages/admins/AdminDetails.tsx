@@ -8,13 +8,15 @@ import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type AdminDetailsProps = {
   admin: Admin | null;
-  setAdmin: React.Dispatch<React.SetStateAction<Admin | null>>;
+  openDetails: boolean;
   handleDelete: (admin: Admin | null) => Promise<void>;
+  closeDetails: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AdminDetails: React.FC<AdminDetailsProps> = ({
   admin = null,
-  setAdmin,
+  openDetails,
+  closeDetails,
   handleDelete,
 }) => {
   return (
@@ -22,20 +24,27 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({
       heading="Admin Details"
       title={`${admin?.first_name} ${admin?.middle_name} ${admin?.last_name}`}
       description={`${admin?.email}`}
-      closeDetails={() => setAdmin(null)}
+      closeDetails={() => closeDetails(false)}
       image={`${fetchImage({
         imageName: admin?.profile_image,
         entity: "admins",
       })}`}
-      openDetails={!!admin}
-      editLink={`/admins/${admin?._id}/edit`}
+      openDetails={openDetails}
       actionButtons={() => (
-        <button onClick={() => handleDelete(admin)}>
-          <Icon
-            icon="fluent:delete-28-regular"
-            className="text-xl text-red-500"
-          />
-        </button>
+        <>
+          <button onClick={() => handleDelete(admin)}>
+            <Icon
+              icon="iconamoon:edit-light"
+              className="text-xl text-primary"
+            />
+          </button>
+          <button onClick={() => handleDelete(admin)}>
+            <Icon
+              icon="fluent:delete-28-regular"
+              className="text-xl text-[red]"
+            />
+          </button>
+        </>
       )}
     >
       <div className="bg-white flex flex-col md:flex-row gap-5 p-5 rounded-md">
