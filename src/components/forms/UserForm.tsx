@@ -1,4 +1,4 @@
-import { Admin, Role } from "@custom-types/index";
+import { Admin, Client, Role } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
@@ -34,7 +34,13 @@ const defaultValues = {
   role: "",
 };
 
-const UserForm = ({ admin }: { admin: Admin | null }) => {
+type UserFormProps = {
+  client: Client | null;
+  setClient: React.Dispatch<React.SetStateAction<Client | null>>;
+  handleDelete: (client: Client | null) => Promise<void>;
+};
+
+const UserForm = ({ client }: UserFormProps) => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
@@ -44,7 +50,7 @@ const UserForm = ({ admin }: { admin: Admin | null }) => {
     url: queryKeys.Roles.url,
   });
 
-  const formValues = adminResolver(admin);
+  const formValues = adminResolver(client);
   type FormValues = z.infer<typeof formValues>;
   const {
     control,
@@ -54,7 +60,7 @@ const UserForm = ({ admin }: { admin: Admin | null }) => {
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: defaultValues,
-    resolver: zodResolver(adminResolver(admin)),
+    resolver: zodResolver(adminResolver(client)),
   });
 
   const navigate = useNavigate();
@@ -68,17 +74,17 @@ const UserForm = ({ admin }: { admin: Admin | null }) => {
 
     mutate(
       {
-        url: admin
-          ? `${queryKeys.Admin.url(admin._id)}`
+        url: client
+          ? `${queryKeys.Admin.url(client._id)}`
           : `${queryKeys.Admins.url}/register`,
         data,
-        method: admin ? "PATCH" : "POST",
+        method: client ? "PATCH" : "POST",
         multipart: true,
       },
       {
         onSuccess(data) {
           queryClient.setQueryData<Admin[]>(queryKeys.Admins.key, (oldData) => {
-            if (admin) {
+            if (client) {
               return (oldData ?? []).map((item) => {
                 if (item._id === data._id) {
                   return data;
@@ -101,38 +107,38 @@ const UserForm = ({ admin }: { admin: Admin | null }) => {
     );
   };
 
-  useEffect(() => {
-    if (!admin && image && image.some((image) => image !== undefined)) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
-    } else if (!image && admin && admin.profile_image) {
-      setPreview(
-        fetchImage({ imageName: admin.profile_image, entity: "admins" })
-      );
-    } else if (admin && image && image.some((image) => image !== undefined)) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
-    }
-  }, [admin, image, setValue]);
+  // useEffect(() => {
+  //   if (!client && image && image.some((image) => image !== undefined)) {
+  //     setValue("profile_image", image[0]);
+  //     setPreview(URL.createObjectURL(image[0]));
+  //   } else if (!image && client && client.profile_image) {
+  //     setPreview(
+  //       fetchImage({ imageName: client.profile_image, entity: "admins" })
+  //     );
+  //   } else if (client && image && image.some((image) => image !== undefined)) {
+  //     setValue("profile_image", image[0]);
+  //     setPreview(URL.createObjectURL(image[0]));
+  //   }
+  // }, [client, image, setValue]);
+
+  // useEffect(() => {
+  //   if (roles) {
+  //     const admin = roles.find((role) =>
+  //       role.name.toLowerCase().startsWith("admin")
+  //     );
+  //     if (admin) {
+  //       setValue("role", admin._id);
+  //     }
+  //   }
+  // }, [roles, setValue]);
 
   useEffect(() => {
-    if (roles) {
-      const admin = roles.find((role) =>
-        role.name.toLowerCase().startsWith("admin")
-      );
-      if (admin) {
-        setValue("role", admin._id);
-      }
-    }
-  }, [roles, setValue]);
-
-  useEffect(() => {
-    if (admin) {
-      Object.entries(admin).forEach((item) =>
+    if (client) {
+      Object.entries(client).forEach((item) =>
         setValue(item[0] as keyof FormValues, item[1])
       );
     }
-  }, [admin, setValue]);
+  }, [client, setValue]);
 
   return (
     <div className="p-5 bg-white">
@@ -182,7 +188,7 @@ const UserForm = ({ admin }: { admin: Admin | null }) => {
             />
           </div>
         </div>
-        {!admin && (
+        {!client && (
           <div className="form-row">
             <InputField
               name="password"
@@ -270,7 +276,7 @@ const UserForm = ({ admin }: { admin: Admin | null }) => {
         </div>
 
         <div className="flex justify-end mt-5">
-          <Button>{`${admin ? "Update" : "Create"} Admin`}</Button>
+          <Button>{`${client ? "Update" : "Create"} Admin`}</Button>
         </div>
       </form>
     </div>

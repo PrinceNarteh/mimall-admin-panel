@@ -38,6 +38,19 @@ interface BaseUser {
   token: string;
 }
 
+export interface Client extends BaseUser {
+  first_name: string;
+  last_name: string;
+  middle_name: string;
+  nationality: string;
+  password: string;
+  profile_image: string;
+  card_type: string;
+  card_number: string;
+  orders: Order[];
+  reviews: string[];
+}
+
 export interface DeliveryCompany extends BaseUser {
   name: string;
   slug: string;

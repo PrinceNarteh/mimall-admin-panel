@@ -144,7 +144,19 @@ const AllShops = () => {
     <div>
       {isLoading && <Spinner isLoading={isLoading} />}
       <Heading label="All Administrators" />
-      <Table data={data} columns={columns} />
+      <Table
+        data={data}
+        columns={columns}
+        actionButton={() => (
+          <button
+            onClick={() => setOpenForm(true)}
+            className="text-xs py-1.5 px-4 bg-primary rounded text-white flex items-center gap-1"
+          >
+            <Icon icon="ic:baseline-add-circle-outline" />
+            Add Shop
+          </button>
+        )}
+      />
 
       <AdminDetails
         admin={admin}

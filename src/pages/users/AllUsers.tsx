@@ -1,29 +1,29 @@
+import UserForm from "@components/forms/UserForm";
 import Heading from "@components/shared/Heading";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
-import { Admin } from "@custom-types/index";
+import { Client } from "@custom-types/index";
+import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import AdminDetails from "./UserDetails";
-import useConfirm from "@hooks/useConfirm";
+import { useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
+import { Link } from "react-router-dom";
 
 const AllUsers = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  console.log(ref);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
-  const [admin, setAdmin] = useState<Admin | null>(null);
-  const { data, isLoading } = useGetQuery<Admin[]>({
+  const [openForm, setOpenForm] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [client, setClient] = useState<Client | null>(null);
+  const { data, isLoading } = useGetQuery<Client[]>({
     queryKey: queryKeys.Users.key,
     url: queryKeys.Users.url,
   });
 
-  const handleDelete = async (admin: Admin | null) => {
+  const handleDelete = async (admin: Client | null) => {
     if (!admin) return;
 
     const isConfirmed = await confirm({
@@ -37,7 +37,7 @@ const AllUsers = () => {
     }
   };
 
-  const columnHelper = createColumnHelper<Admin>();
+  const columnHelper = createColumnHelper<Client>();
   const columns = [
     columnHelper.display({
       id: "name",
@@ -81,7 +81,7 @@ const AllUsers = () => {
       header: "Details",
       cell: (props) => (
         <button
-          onClick={() => setAdmin(props.row.original)}
+          onClick={() => setClient(props.row.original)}
           className="text-xs border border-primary px-2 py-1 rounded text-primary"
         >
           Details
@@ -104,17 +104,29 @@ const AllUsers = () => {
         </span>
       ),
     }),
-  ] as Array<ColumnDef<Admin, unknown>>;
+  ] as Array<ColumnDef<Client, unknown>>;
 
   return (
     <div>
       {isLoading && <Spinner isLoading={isLoading} />}
       <Heading label="All Administrators" />
-      <Table data={data} columns={columns} />
+      <Table
+        data={data}
+        columns={columns}
+        actionButton={() => (
+          <button
+            onClick={() => setOpenForm(true)}
+            className="text-xs py-1.5 px-4 bg-primary rounded text-white flex items-center gap-1"
+          >
+            <Icon icon="ic:baseline-add-circle-outline" />
+            Add Shop
+          </button>
+        )}
+      />
 
-      <AdminDetails
-        admin={admin}
-        setAdmin={setAdmin}
+      <UserForm
+        client={client}
+        setClient={setClient}
         handleDelete={handleDelete}
       />
 
