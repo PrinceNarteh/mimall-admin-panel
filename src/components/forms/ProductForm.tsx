@@ -26,7 +26,13 @@ const defaultValues = {
   shop: "",
 };
 
-const ProductForm = ({ product }: { product?: Product }) => {
+type ProductFormProps = {
+  product: Product | null;
+  setProduct: React.Dispatch<React.SetStateAction<Product | null>>;
+  handleDelete: (product: Product | null) => Promise<void>;
+};
+
+const ProductForm = ({ product }: ProductFormProps) => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");

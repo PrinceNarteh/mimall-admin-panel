@@ -2,22 +2,22 @@ import Heading from "@components/shared/Heading";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
 import { Product } from "@custom-types/index";
+import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import AdminDetails from "./ProductDetails";
-import useConfirm from "@hooks/useConfirm";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
 import ProductDetails from "./ProductDetails";
+import ProductForm from "@components/forms/ProductForm";
+import Modal from "@components/shared/Modal";
 
 const AllProducts = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  console.log(ref);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
+  const [openForm, setOpenForm] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const { data, isLoading } = useGetQuery<Product[]>({
     queryKey: queryKeys.Products.key,
@@ -108,14 +108,40 @@ const AllProducts = () => {
   return (
     <div>
       {isLoading && <Spinner isLoading={isLoading} />}
-      <Heading label="All Administrators" />
-      <Table data={data} columns={columns} />
+      <Heading label="All Products" />
+      <Table
+        data={data}
+        columns={columns}
+        actionButton={() => (
+          <button
+            onClick={() => setOpenForm(true)}
+            className="text-xs py-1.5 px-4 bg-primary rounded text-white flex items-center gap-1"
+          >
+            <Icon icon="ic:baseline-add-circle-outline" />
+            Add Product
+          </button>
+        )}
+      />
 
       <ProductDetails
         product={product}
         setProduct={setProduct}
         handleDelete={handleDelete}
       />
+
+      <Modal
+        start
+        disableOutsideClick
+        width="max-w-3xl"
+        openModal={openForm}
+        closeModal={setOpenForm}
+      >
+        <ProductForm
+          product={product}
+          setProduct={setProduct}
+          handleDelete={handleDelete}
+        />
+      </Modal>
 
       <ConfirmationDialog />
     </div>

@@ -190,7 +190,7 @@ export const deliveryCompanyResolver = (
   });
 };
 
-export const productResolver = (product?: Product) => {
+export const productResolver = (product: Product | null) => {
   return z.object({
     name: z
       .string({ required_error: "Product name is required" })
