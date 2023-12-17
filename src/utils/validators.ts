@@ -192,7 +192,7 @@ export const deliveryCompanyResolver = (
 
 export const productResolver = (product: Product | null) => {
   return z.object({
-    name: z
+    title: z
       .string({ required_error: "Product name is required" })
       .min(1, "Product name is required"),
     description: z
@@ -209,7 +209,10 @@ export const productResolver = (product: Product | null) => {
     category: z
       .string({ required_error: "Please kindly select product category" })
       .min(1, "Please kindly select product category"),
-    product_images: z.array(image("product_images")),
+    product_images: z.union([
+      z.array(image("product_images")),
+      z.string().array(),
+    ]),
     shop: z
       .string({ required_error: "First name is required" })
       .min(1, "First name is required"),
