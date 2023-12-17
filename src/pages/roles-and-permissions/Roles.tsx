@@ -11,6 +11,7 @@ import Permissions from "./Permissions";
 import useConfirm from "@hooks/useConfirm";
 import useMutate from "@hooks/useMutate";
 import Spinner from "@components/shared/Spinner";
+import RoleForm from "@components/forms/RoleForm";
 
 const RolesAndPermissions = () => {
   const queryClient = useQueryClient();
@@ -67,8 +68,6 @@ const RolesAndPermissions = () => {
       );
     }
   };
-
-  console.log(roles);
 
   return (
     <div>
@@ -143,12 +142,12 @@ const RolesAndPermissions = () => {
                         <Icon
                           onClick={() => handleEdit(role)}
                           icon="iconamoon:edit-light"
-                          className="text-2xl"
+                          className="text-2xl text-primary"
                         />
                         <button onClick={() => handleDelete(role)}>
                           <Icon
                             icon="fluent:delete-28-regular"
-                            className="text-xl"
+                            className="text-xl text-red-500"
                           />
                         </button>
                       </div>
@@ -160,6 +159,16 @@ const RolesAndPermissions = () => {
           )}
         </div>
       </div>
+
+      <Modal
+        start
+        openModal={openModal}
+        disableOutsideClick
+        closeModal={setOpenModal}
+      >
+        <RoleForm role={role} setOpenModal={setOpenModal} />
+      </Modal>
+
       <Modal
         openModal={openPermissions}
         closeModal={() => {}}

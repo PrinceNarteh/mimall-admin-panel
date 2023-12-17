@@ -22,7 +22,7 @@ export type Permission = { _id: string; name: string };
 export type Role = {
   _id: string;
   name: string;
-  permissions: Permission[];
+  permissions: string[];
 };
 
 interface BaseUser {

@@ -16,24 +16,19 @@ import Chip from "@components/shared/Chip";
 const schema = z.object({
   _id: z.string().optional(),
   name: z.string().min(1, "Role name is required"),
-  permissions: z.array(
-    z.object({
-      _id: z.string().optional(),
-      name: z.string().min(1, "Role name is required"),
-    })
-  ),
+  permissions: z.array(z.string()),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 type RoleFormProps = {
-  role: Role;
+  role: Role | null;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const initialState: {
   name: string;
-  permissions: Permission[];
+  permissions: string[];
 } = {
   name: "",
   permissions: [],
@@ -50,14 +45,14 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
     defaultValues: initialState,
     resolver: zodResolver(schema),
   });
-  const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [permissions, setPermissions] = useState<string[]>([]);
 
   const { data, isLoading } = useGetQuery<Permission[]>({
     queryKey: queryKeys.Permissions.key,
     url: "/permissions",
   });
 
-  const handleChange = (incomingPermission: Permission) => {
+  const handleChange = (incomingPermission: string) => {
     if (permissions.includes(incomingPermission)) {
       setPermissions(
         permissions.filter((permission) => permission !== incomingPermission)
@@ -69,43 +64,42 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
 
   const removePermission = (permissionName: string) =>
     setPermissions(
-      permissions.filter((permission) => permission.name !== permissionName)
+      permissions.filter((permission) => permission !== permissionName)
     );
 
   const { mutate } = useMutate(queryKeys.Roles.key);
   const submitHandler: SubmitHandler<FormValues> = async (data) => {
     const toastId = toast.loading(`${role ? "Creating" : "Updating"} role...`);
 
+    console.log(data);
+
     mutate(
       {
-        url: `/role/${role ? "update" : "create"}`,
+        url: role ? `/roles/${role._id}` : "/roles",
         data,
         method: role ? "PATCH" : "POST",
       },
       {
         onSuccess: async (data) => {
-          await queryClient.setQueryData<Role[]>(
-            [queryKeys.Roles],
-            (oldData) => {
-              if (role) {
-                return (oldData ?? []).map((item) => {
-                  if (item._id === data.role_id) {
-                    return data;
-                  }
-                  return item;
-                });
-              } else {
-                return [data, ...(oldData ?? [])];
-              }
+          queryClient.setQueryData<Role[]>([queryKeys.Roles], (oldData) => {
+            if (role) {
+              return (oldData ?? []).map((item) => {
+                if (item._id === data.role_id) {
+                  return data;
+                }
+                return item;
+              });
+            } else {
+              return [data, ...(oldData ?? [])];
             }
-          );
+          });
           toast.dismiss(toastId);
           toast.success(`Role ${role ? "updated" : "created"} successfully`);
           setOpenModal(false);
         },
-        onError: (error) => {
+        onError: (error: any) => {
           toast.dismiss(toastId);
-          toast.error("Error creating role");
+          toast.error(error.response.data.message);
         },
       }
     );
@@ -129,11 +123,11 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
         <h3>Add Role & Permission</h3>
       </div>
 
-      <div className=" text-slate-400 text-[15px] font-normal mt-2 mb-6">
+      <div className=" text-slate-400 text-[15px] font-normal mt-2">
         Add permissions to create role below.
       </div>
 
-      <div className=" bg-white rounded-lg pt-10">
+      <div className=" bg-white rounded-lg pt-5">
         <div className="min-h-fit space-y-10 flex flex-col justify-center items-center p-">
           <form onSubmit={handleSubmit(submitHandler)} className="w-full">
             <div className="space-y-5">
@@ -152,8 +146,8 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
                 {permissions.map((permission, index) => (
                   <Chip
                     key={index}
-                    label={permission.name}
-                    onClick={() => removePermission(permission.name)}
+                    label={permission}
+                    onClick={() => removePermission(permission)}
                   />
                 ))}
               </div>
@@ -181,8 +175,8 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
                           id="permissions"
                           name="permissions"
                           className="accent-orange-700 "
-                          onChange={() => handleChange(module)}
-                          checked={permissions.includes(module)}
+                          onChange={() => handleChange(module.name)}
+                          checked={permissions.includes(module.name)}
                         />
                         <span>{module.name}</span>
                       </label>
@@ -196,7 +190,7 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
                 )}
               </div>
               <div className="flex justify-end">
-                <button className="px-6 py-2 w-48 bg-gradient-to-r from-primary to-secondary rounded-lg shadow justify-center items-center gap-2.5 flex mt-6 text-white text-md font-bold leading-loose ">
+                <button className="px-10 py-2 bg-primary rounded-lg shadow justify-center items-center gap-2.5 flex mt-6 text-white text-md font-bold leading-loose ">
                   Add role
                 </button>
               </div>
