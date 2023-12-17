@@ -241,7 +241,7 @@ const DeliveryCompanyForm = ({
           </div>
 
           <div className="flex-[2] flex flex-col gap-5 items-center">
-            <div className="flex overflow-auto">
+            <div className="flex overflow-auto gap-5">
               {previewSlideImages && (
                 <>
                   {previewSlideImages.map((image, key) => (

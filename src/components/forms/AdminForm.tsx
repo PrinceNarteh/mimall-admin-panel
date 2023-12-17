@@ -37,7 +37,7 @@ const defaultValues = {
 
 const AdminForm = ({ admin }: { admin: Admin | null }) => {
   const queryClient = useQueryClient();
-  const [image, setImage] = useState<File[] | null>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
 
   const { data: roles } = useGetQuery<Role[]>({
@@ -69,6 +69,8 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
     const toastId = toast.loading("Creating Admin...");
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
+
+    console.log(roles);
 
     mutate(
       {
@@ -106,16 +108,9 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
   };
 
   useEffect(() => {
-    if (!admin && image && image.some((image) => image !== undefined)) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
-    } else if (!image && admin && admin.profile_image) {
-      setPreview(
-        fetchImage({ imageName: admin.profile_image, entity: "admins" })
-      );
-    } else if (admin && image && image.some((image) => image !== undefined)) {
-      setValue("profile_image", image[0]);
-      setPreview(URL.createObjectURL(image[0]));
+    if (image) {
+      setPreview(URL.createObjectURL(image));
+      setValue("profile_image", image);
     }
   }, [admin, image, setValue]);
 
