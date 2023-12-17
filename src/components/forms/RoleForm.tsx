@@ -16,7 +16,10 @@ import Chip from "@components/shared/Chip";
 const schema = z.object({
   _id: z.string().optional(),
   name: z.string().min(1, "Role name is required"),
-  permissions: z.array(z.string()),
+  permissions: z
+    .string()
+    .array()
+    .min(1, "Role should have at least one permission"),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -81,10 +84,10 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
       },
       {
         onSuccess: async (data) => {
-          queryClient.setQueryData<Role[]>([queryKeys.Roles], (oldData) => {
+          queryClient.setQueryData<Role[]>(queryKeys.Roles.key, (oldData) => {
             if (role) {
               return (oldData ?? []).map((item) => {
-                if (item._id === data.role_id) {
+                if (item._id === data._id) {
                   return data;
                 }
                 return item;
@@ -107,6 +110,8 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
 
   useEffect(() => {
     if (role) {
+      setValue("name", role.name);
+      setValue("permissions", role.permissions);
       setPermissions(role.permissions);
     }
   }, [role]);
