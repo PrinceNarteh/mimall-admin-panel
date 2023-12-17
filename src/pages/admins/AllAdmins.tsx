@@ -13,6 +13,9 @@ import { queryKeys } from "@utils/queryKeys";
 import { useEffect, useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 import AdminDetails from "./AdminDetails";
+import useMutate from "@hooks/useMutate";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const AllAdmins = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
@@ -34,17 +37,40 @@ const AllAdmins = () => {
     setOpenForm(true);
   };
 
+  const queryClient = useQueryClient();
+  const { mutate } = useMutate(["delete-admin"]);
   const handleDelete = async (admin: Admin | null) => {
-    if (!admin) return;
-
     const isConfirmed = await confirm({
       title: "Are You Sure?",
       message: `Are you sure you want to delete "${admin?.first_name} ${admin?.last_name}"?`,
     });
 
     if (isConfirmed) {
-      console.log(isConfirmed);
-      setIsOpen(false);
+      const toastId = toast.loading(
+        `Deleting ${admin?.first_name} ${admin?.last_name}...`
+      );
+      mutate(
+        {
+          url: `/admins/${admin?._id}`,
+          method: "DELETE",
+        },
+        {
+          onSuccess(data) {
+            queryClient.setQueryData<Admin[]>(queryKeys.Admins.key, (oldData) =>
+              (oldData ?? []).filter((item) => item._id !== admin?._id)
+            );
+            toast.dismiss(toastId);
+            toast.success(
+              `${admin?.first_name} ${admin?.last_name} deleted successfully!`
+            );
+            setIsOpen(false);
+          },
+          onError(error: any) {
+            toast.dismiss(toastId);
+            toast.error(error.response.data.message);
+          },
+        }
+      );
     }
   };
 
@@ -120,11 +146,11 @@ const AllAdmins = () => {
     }),
   ] as Array<ColumnDef<Admin, unknown>>;
 
-  // useEffect(() => {
-  //   if (!openDetails && !openForm) {
-  //     setAdmin(null);
-  //   }
-  // }, [openForm, openDetails]);
+  useEffect(() => {
+    if (!openDetails && !openForm) {
+      setAdmin(null);
+    }
+  }, [openForm, openDetails]);
 
   return (
     <div>
@@ -164,7 +190,7 @@ const AllAdmins = () => {
         openModal={openForm}
         closeModal={setOpenForm}
       >
-        <AdminForm admin={admin} />
+        <AdminForm admin={admin} setOpenForm={setOpenForm} />
       </Modal>
     </div>
   );

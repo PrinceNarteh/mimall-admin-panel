@@ -1,9 +1,9 @@
+import Heading from "@components/shared/Heading";
 import { Admin, Role } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchImage } from "@utils/fetchImage";
 import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
 import { adminResolver } from "@utils/validators";
@@ -11,13 +11,11 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
-import Heading from "@components/shared/Heading";
 
 const defaultValues = {
   first_name: "",
@@ -35,7 +33,13 @@ const defaultValues = {
   role: "",
 };
 
-const AdminForm = ({ admin }: { admin: Admin | null }) => {
+const AdminForm = ({
+  admin,
+  setOpenForm,
+}: {
+  admin: Admin | null;
+  setOpenForm: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
@@ -48,29 +52,22 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
   const formValues = adminResolver(admin);
   type FormValues = z.infer<typeof formValues>;
   const {
+    reset,
     control,
     register,
     setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: admin
-      ? {
-          ...admin,
-          role: admin.role._id,
-        }
-      : defaultValues,
+    defaultValues,
     resolver: zodResolver(adminResolver(admin)),
   });
 
-  const navigate = useNavigate();
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating Admin...");
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
-
-    console.log(roles);
 
     mutate(
       {
@@ -97,7 +94,7 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
           });
           toast.dismiss(toastId);
           toast.success("Admin successfully created");
-          navigate("/admins");
+          setOpenForm(false);
         },
         onError(error: any) {
           toast.dismiss(toastId);
@@ -132,6 +129,12 @@ const AdminForm = ({ admin }: { admin: Admin | null }) => {
       );
     }
   }, [admin, setValue]);
+
+  useEffect(() => {
+    if (!admin) {
+      reset();
+    }
+  }, [admin]);
 
   return (
     <div className="p-5 bg-white">
