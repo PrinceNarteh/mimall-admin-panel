@@ -75,41 +75,39 @@ const ShopForm = ({ shop }: ShopFormProps) => {
     const formData = new FormData();
     Object.values(data).forEach((item) => formData.append(item[0], item[1]));
 
-    console.log(data);
-
-    // mutate(
-    //   {
-    //     url: shop
-    //       ? `${queryKeys.Shop.url(shop._id)}`
-    //       : `${queryKeys.Shops.url}/register`,
-    //     data,
-    //     method: shop ? "PATCH" : "POST",
-    //     multipart: true,
-    //   },
-    //   {
-    //     onSuccess(data) {
-    //       queryClient.setQueryData<Shop[]>(queryKeys.Admins.key, (oldData) => {
-    //         if (shop) {
-    //           return (oldData ?? []).map((item) => {
-    //             if (item._id === data._id) {
-    //               return data;
-    //             }
-    //             return item;
-    //           });
-    //         } else {
-    //           return [data, ...(oldData ?? [])];
-    //         }
-    //       });
-    //       toast.dismiss(toastId);
-    //       toast.success("Shop successfully created");
-    //       navigate("/admins");
-    //     },
-    //     onError(error: any) {
-    //       toast.dismiss(toastId);
-    //       toast.error(error.response.data.message);
-    //     },
-    //   }
-    // );
+    mutate(
+      {
+        url: shop
+          ? `${queryKeys.Shop.url(shop._id)}`
+          : `${queryKeys.Shops.url}/register`,
+        data,
+        method: shop ? "PATCH" : "POST",
+        multipart: true,
+      },
+      {
+        onSuccess(data) {
+          queryClient.setQueryData<Shop[]>(queryKeys.Admins.key, (oldData) => {
+            if (shop) {
+              return (oldData ?? []).map((item) => {
+                if (item._id === data._id) {
+                  return data;
+                }
+                return item;
+              });
+            } else {
+              return [data, ...(oldData ?? [])];
+            }
+          });
+          toast.dismiss(toastId);
+          toast.success("Shop successfully created");
+          navigate("/admins");
+        },
+        onError(error: any) {
+          toast.dismiss(toastId);
+          toast.error(error.response.data.message);
+        },
+      }
+    );
   };
 
   useEffect(() => {

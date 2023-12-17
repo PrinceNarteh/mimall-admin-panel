@@ -26,7 +26,7 @@ const DeliveryCompanyForm = ({
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [slideImages, setSlideImages] = useState<File[] | null>([]);
-  const [slideImagesPreview, setSlideImagesPreview] = useState<string[]>([]);
+  const [previewSlideImages, setPreviewSlideImages] = useState<string[]>([]);
 
   const formValues = deliveryCompanyResolver(deliveryCompany);
   type FormValues = z.infer<typeof formValues>;
@@ -78,6 +78,8 @@ const DeliveryCompanyForm = ({
       formData.append("slide_images", image);
     }
 
+    console.log(data);
+
     mutate(
       {
         url: deliveryCompany
@@ -116,12 +118,15 @@ const DeliveryCompanyForm = ({
 
   useEffect(() => {
     if (slideImages) {
-      const images = slideImages.map((image) => URL.createObjectURL(image));
-      setSlideImagesPreview(images);
+      setPreviewSlideImages(
+        slideImages.map((item) => URL.createObjectURL(item))
+      );
       setValue("slide_images", slideImages);
       clearErrors("slide_images");
     }
   }, [slideImages]);
+
+  console.log(previewSlideImages);
 
   return (
     <div className="p-5 bg-white">
@@ -220,8 +225,8 @@ const DeliveryCompanyForm = ({
           />
         </div>
 
-        <div className="flex mt-10 flex-col md:flex-row">
-          <div className="flex-1 flex flex-col gap-5 items-center">
+        <div className="flex mt-10 gap-5 flex-col md:flex-row">
+          <div className="flex-1 shrink-0 flex flex-col gap-5 items-center">
             <div className="flex">
               {preview && (
                 <img src={preview} className="rounded-md w-40 h-40" alt="" />
@@ -229,23 +234,34 @@ const DeliveryCompanyForm = ({
             </div>
             <CustomFileInput
               label="Company Logo"
-              placeholder="Drop your profile image here"
+              placeholder="Drop logo here"
               required
               onChange={setImage}
             />
           </div>
 
-          <div className="flex-[2] flex flex-col gap-5 items-center bg-red-500">
-            <div className="flex-1">
-              <CustomFileInput
-                label="Company Slide Images"
-                placeholder="Drop your profile image here"
-                required
-                onChange={setSlideImages}
-                multiple={true}
-              />
-              <ErrorMessage name="slide_images" errors={errors} />
+          <div className="flex-[2] flex flex-col gap-5 items-center">
+            <div className="flex overflow-auto">
+              {previewSlideImages && (
+                <>
+                  {previewSlideImages.map((image, key) => (
+                    <img
+                      key={key}
+                      src={image}
+                      className="rounded-md w-40 h-40"
+                      alt=""
+                    />
+                  ))}
+                </>
+              )}
             </div>
+            <CustomFileInput
+              label="Slide Images"
+              placeholder="Drop slide images here"
+              required
+              onChange={setSlideImages}
+              multiple
+            />
           </div>
         </div>
 
