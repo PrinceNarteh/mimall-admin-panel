@@ -17,12 +17,11 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
+import Heading from "@components/shared/Heading";
 
 const defaultValues = {
   name: "",
   description: "",
-  password: "",
-  confirm_password: "",
   location: "",
   map_direction: "",
   phone_number: "",
@@ -34,14 +33,22 @@ const defaultValues = {
   tiktok_handle: "",
   opening_time: "",
   closing_time: "",
-  image: z.any(),
-  banner: z.any(),
+  profile_image: "",
+  banner: "",
 };
 
-const ShopForm = ({ shop }: { shop: Shop | null }) => {
+type ShopFormProps = {
+  shop: Shop | null;
+};
+
+const ShopForm = ({ shop }: ShopFormProps) => {
   const queryClient = useQueryClient();
-  const [image, setImage] = useState<File[] | null>(null);
-  const [preview, setPreview] = useState("");
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewProfileImage, setPreviewProfileImage] = useState<string | null>(
+    null
+  );
+  const [banner, setBanner] = useState<File | null>(null);
+  const [previewBanner, setPreviewBanner] = useState<string | null>(null);
 
   const { data: roles } = useGetQuery<Role[]>({
     queryKey: queryKeys.Roles.key,
@@ -70,54 +77,54 @@ const ShopForm = ({ shop }: { shop: Shop | null }) => {
 
     console.log(data);
 
-    mutate(
-      {
-        url: shop
-          ? `${queryKeys.Admin.url(shop._id)}`
-          : `${queryKeys.Admins.url}/register`,
-        data,
-        method: shop ? "PATCH" : "POST",
-        multipart: true,
-      },
-      {
-        onSuccess(data) {
-          queryClient.setQueryData<Shop[]>(queryKeys.Admins.key, (oldData) => {
-            if (shop) {
-              return (oldData ?? []).map((item) => {
-                if (item._id === data._id) {
-                  return data;
-                }
-                return item;
-              });
-            } else {
-              return [data, ...(oldData ?? [])];
-            }
-          });
-          toast.dismiss(toastId);
-          toast.success("Shop successfully created");
-          navigate("/admins");
-        },
-        onError(error: any) {
-          toast.dismiss(toastId);
-          toast.error(error.response.data.message);
-        },
-      }
-    );
+    // mutate(
+    //   {
+    //     url: shop
+    //       ? `${queryKeys.Shop.url(shop._id)}`
+    //       : `${queryKeys.Shops.url}/register`,
+    //     data,
+    //     method: shop ? "PATCH" : "POST",
+    //     multipart: true,
+    //   },
+    //   {
+    //     onSuccess(data) {
+    //       queryClient.setQueryData<Shop[]>(queryKeys.Admins.key, (oldData) => {
+    //         if (shop) {
+    //           return (oldData ?? []).map((item) => {
+    //             if (item._id === data._id) {
+    //               return data;
+    //             }
+    //             return item;
+    //           });
+    //         } else {
+    //           return [data, ...(oldData ?? [])];
+    //         }
+    //       });
+    //       toast.dismiss(toastId);
+    //       toast.success("Shop successfully created");
+    //       navigate("/admins");
+    //     },
+    //     onError(error: any) {
+    //       toast.dismiss(toastId);
+    //       toast.error(error.response.data.message);
+    //     },
+    //   }
+    // );
   };
 
-  // useEffect(() => {
-  //   if (!shop && image && image.some((image) => image !== undefined)) {
-  //     setValue("profile_image", image[0]);
-  //     setPreview(URL.createObjectURL(image[0]));
-  //   } else if (!image && shop && shop.profile_image) {
-  //     setPreview(
-  //       fetchImage({ imageName: shop.profile_image, entity: "admins" })
-  //     );
-  //   } else if (shop && image && image.some((image) => image !== undefined)) {
-  //     setValue("profile_image", image[0]);
-  //     setPreview(URL.createObjectURL(image[0]));
-  //   }
-  // }, [shop, image, setValue]);
+  useEffect(() => {
+    if (profileImage) {
+      setValue("profile_image", profileImage);
+      setPreviewProfileImage(URL.createObjectURL(profileImage));
+    }
+  }, [profileImage]);
+
+  useEffect(() => {
+    if (banner) {
+      setValue("banner", banner);
+      setPreviewBanner(URL.createObjectURL(banner));
+    }
+  }, [banner]);
 
   useEffect(() => {
     if (shop) {
@@ -127,41 +134,38 @@ const ShopForm = ({ shop }: { shop: Shop | null }) => {
     }
   }, [shop, setValue]);
 
+  console.log({ errors });
+
   return (
     <div className="p-5 bg-white">
+      <Heading label={`${shop ? "Edit" : "Add"} Shop`} />
       <form onSubmit={handleSubmit(submit)}>
         <div className="form-row">
-          <InputField name="name" label="Shop Name" register={register} />
+          <InputField
+            name="name"
+            label="Shop Name"
+            register={register}
+            required
+          />
           <InputField
             name="description"
             label="Shop Description"
             register={register}
+            required
           />
         </div>
-        {!shop && (
-          <div className="form-row">
-            <InputField
-              name="password"
-              type="password"
-              label="Password"
-              required
-              register={register}
-            />
-            <InputField
-              name="confirm_password"
-              type="password"
-              label="Confirm Password"
-              required
-              register={register}
-            />
-          </div>
-        )}
         <div className="form-row">
-          <InputField name="location" label="Location" register={register} />
+          <InputField
+            name="location"
+            label="Location"
+            register={register}
+            required
+          />
           <InputField
             name="map_direction"
             label="Map Direction"
             register={register}
+            required
           />
         </div>
         <div className="form-row">
@@ -181,7 +185,7 @@ const ShopForm = ({ shop }: { shop: Shop | null }) => {
           </div>
           <div className="flex-1">
             <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
-              Alternate Phone Number
+              Alternate Number
               <span className="text-slate-300 text-md">(Optional)</span>
             </label>
             <PhoneInputWithCountry
@@ -195,9 +199,27 @@ const ShopForm = ({ shop }: { shop: Shop | null }) => {
         </div>
 
         <div className="form-row">
+          <InputField
+            type="time"
+            name="opening_time"
+            label="Opening Time"
+            register={register}
+            required
+          />
+          <InputField
+            type="time"
+            name="closing_time"
+            label="Closing Time"
+            register={register}
+            required
+          />
+        </div>
+
+        <div className="form-row">
           <div className="flex-1">
             <label className="mb-1 block text-blue-900 text-md font-semibold leading-loose">
-              Whatsapp Number
+              Whatsapp Number{" "}
+              <span className="text-slate-300 text-md">(Optional)</span>
             </label>
             <PhoneInputWithCountry
               international
@@ -209,7 +231,6 @@ const ShopForm = ({ shop }: { shop: Shop | null }) => {
             />
             <ErrorMessage name="whatsapp_number" errors={errors} />
           </div>
-
           <InputField
             name="instagram_handle"
             label="Instagram Handle"
@@ -228,9 +249,6 @@ const ShopForm = ({ shop }: { shop: Shop | null }) => {
             label="Twitter Handle"
             register={register}
           />
-        </div>
-
-        <div className="form-row">
           <InputField
             name="tiktok_handle"
             label="TikTok Handle"
@@ -238,17 +256,40 @@ const ShopForm = ({ shop }: { shop: Shop | null }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-5 items-center md:flex-row md:items-end max-w-lg md:justify-center mx-auto">
-          {preview && (
-            <img src={preview} className="rounded-md w-40 h-40" alt="" />
-          )}
-          <div className="flex-1">
-            <CustomFileInput
-              label="Profile Image"
-              placeholder="Drop your profile image here"
-              required
-              onChange={setImage}
-            />
+        <div className="form-row">
+          <div className="flex-1 flex flex-col gap-5 items-center justify-center">
+            {previewProfileImage && (
+              <img
+                src={previewProfileImage}
+                className="rounded-md w-40 h-40"
+                alt=""
+              />
+            )}
+            <div className="flex-1">
+              <CustomFileInput
+                label="Profile Image"
+                placeholder="Drop your profile image here"
+                required
+                onChange={setProfileImage}
+              />
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col gap-5 justify-center">
+            {previewBanner && (
+              <img
+                src={previewBanner}
+                className="rounded-md w-full h-40"
+                alt=""
+              />
+            )}
+            <div className="flex-1">
+              <CustomFileInput
+                label="Banner"
+                placeholder="Drop your banner image here"
+                required
+                onChange={setBanner}
+              />
+            </div>
           </div>
         </div>
 

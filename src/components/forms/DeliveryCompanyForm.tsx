@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
+import Heading from "@components/shared/Heading";
 
 const DeliveryCompanyForm = ({
   deliveryCompany,
@@ -124,6 +125,7 @@ const DeliveryCompanyForm = ({
 
   return (
     <div className="p-5 bg-white">
+      <Heading label={`${deliveryCompany ? "Edit" : "Add"} Delivery Company`} />
       <form onSubmit={handleSubmit(submit)}>
         <div className="form-row">
           <InputField
@@ -218,7 +220,7 @@ const DeliveryCompanyForm = ({
           />
         </div>
 
-        <div className="flex gap-10 mt-10 flex-col md:flex-row">
+        <div className="flex mt-10 flex-col md:flex-row">
           <div className="flex-1 flex flex-col gap-5 items-center">
             <div className="flex">
               {preview && (
@@ -233,18 +235,8 @@ const DeliveryCompanyForm = ({
             />
           </div>
 
-          <div className="flex-[2] flex flex-col gap-5 items-center">
-            <div className="flex gap-5 items-center overflow-x-scroll">
-              {slideImagesPreview.map((image, idx) => (
-                <img
-                  key={idx}
-                  src={image}
-                  className="rounded-md w-40 h-40"
-                  alt=""
-                />
-              ))}
-            </div>
-            <div>
+          <div className="flex-[2] flex flex-col gap-5 items-center bg-red-500">
+            <div className="flex-1">
               <CustomFileInput
                 label="Company Slide Images"
                 placeholder="Drop your profile image here"

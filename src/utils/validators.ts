@@ -227,12 +227,6 @@ export const shopResolver = (shop: Shop | null) =>
     description: z
       .string({ required_error: "Shop description is required" })
       .min(1, "Shop description is required"),
-    password: z
-      .string({ required_error: "Password is required" })
-      .min(1, "Password is required"),
-    confirm_password: z
-      .string({ required_error: "Confirm password is required" })
-      .min(1, "Confirm password is required"),
     location: z
       .string({ required_error: "Location is required" })
       .min(1, "Location is required"),
@@ -256,6 +250,6 @@ export const shopResolver = (shop: Shop | null) =>
     closing_time: z
       .string({ required_error: "is required" })
       .min(1, "is required"),
-    image: z.any(),
+    profile_image: z.any(),
     banner: z.any(),
   });
