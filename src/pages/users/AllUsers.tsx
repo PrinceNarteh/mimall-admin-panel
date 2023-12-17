@@ -1,5 +1,6 @@
 import UserForm from "@components/forms/UserForm";
 import Heading from "@components/shared/Heading";
+import Modal from "@components/shared/Modal";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
 import { Client } from "@custom-types/index";
@@ -124,11 +125,19 @@ const AllUsers = () => {
         )}
       />
 
-      <UserForm
-        client={client}
-        setClient={setClient}
-        handleDelete={handleDelete}
-      />
+      <Modal
+        start
+        disableOutsideClick
+        width="max-w-3xl"
+        openModal={openForm}
+        closeModal={setOpenForm}
+      >
+        <UserForm
+          client={client}
+          setClient={setClient}
+          handleDelete={handleDelete}
+        />
+      </Modal>
 
       <ConfirmationDialog />
     </div>

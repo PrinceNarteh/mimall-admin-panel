@@ -1,9 +1,9 @@
+import Heading from "@components/shared/Heading";
 import { Admin, Client, Role } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchImage } from "@utils/fetchImage";
 import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
 import { adminResolver } from "@utils/validators";
@@ -142,6 +142,7 @@ const UserForm = ({ client }: UserFormProps) => {
 
   return (
     <div className="p-5 bg-white">
+      <Heading label={`${client ? "Edit" : "Add"} User`} />
       <form onSubmit={handleSubmit(submit)}>
         <div className="form-row">
           <InputField

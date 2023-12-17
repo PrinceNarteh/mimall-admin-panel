@@ -23,7 +23,7 @@ export type SortingTableState = {
 interface TableProps<T extends object> {
   columns: ColumnDef<T, unknown>[];
   data: T[] | undefined;
-  actionButton?: () => React.JSX;
+  actionButton?: () => React.ReactElement;
   linkPath?: string;
 }
 
