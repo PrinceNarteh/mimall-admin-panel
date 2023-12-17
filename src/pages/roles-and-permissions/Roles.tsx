@@ -45,16 +45,13 @@ const RolesAndPermissions = () => {
 
       mutate(
         {
-          url: "/role/delete",
+          url: `/roles/${role._id}`,
           method: "DELETE",
-          data: {
-            role_id: role._id,
-          },
         },
         {
           onSuccess(data) {
-            queryClient.setQueryData<Role[]>([queryKeys.Roles.key], (oldData) =>
-              (oldData ?? []).filter((item) => item._id !== role._id)
+            queryClient.setQueryData<Role[]>(queryKeys.Roles.key, (oldData) =>
+              (oldData ?? []).filter((item) => item._id !== data._id)
             );
             toast.dismiss(toastId);
             toast.success("Role delete successfully!");
