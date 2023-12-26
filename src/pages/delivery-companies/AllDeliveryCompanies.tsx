@@ -26,6 +26,7 @@ const AllDeliveryCompanies = () => {
     queryKey: queryKeys.DeliveryCompanies.key,
     url: queryKeys.DeliveryCompanies.url,
   });
+  console.log(data);
 
   const handleDetails = (deliveryCompany: DeliveryCompany) => {
     setDeliveryCompany(deliveryCompany);
@@ -54,7 +55,7 @@ const AllDeliveryCompanies = () => {
   const columnHelper = createColumnHelper<DeliveryCompany>();
   const columns = [
     columnHelper.display({
-      id: "name",
+      id: "SN",
       header: "No.",
       cell: (info) => <span className="pl-2">{info.row.index + 1}</span>,
     }),
@@ -151,7 +152,11 @@ const AllDeliveryCompanies = () => {
         openModal={openForm}
         closeModal={setOpenForm}
       >
-        <DeliveryCompanyForm deliveryCompany={deliveryCompany} />
+        <DeliveryCompanyForm
+          openForm={openForm}
+          setOpenForm={setOpenForm}
+          deliveryCompany={deliveryCompany}
+        />
       </Modal>
 
       <ConfirmationDialog />

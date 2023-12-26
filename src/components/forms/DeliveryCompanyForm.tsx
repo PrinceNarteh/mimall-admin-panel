@@ -11,20 +11,23 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 import ErrorMessage from "@components/shared/ErrorMessage";
+import Heading from "@components/shared/Heading";
 import { PhoneInput } from "@components/shared/PhoneInput";
 import { useSetQueryData } from "@hooks/useSetQueryData";
+import { useSetRole } from "@hooks/useSetRole";
 import { queryKeys } from "@utils/queryKeys";
-import { useNavigate } from "react-router-dom";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
-import Heading from "@components/shared/Heading";
-import { useSetRole } from "@hooks/useSetRole";
 
 const DeliveryCompanyForm = ({
   deliveryCompany,
+  setOpenForm,
+  openForm,
 }: {
+  openForm: boolean;
   deliveryCompany: DeliveryCompany | null;
+  setOpenForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { setOrUpdateQueryData } = useSetQueryData();
   const [image, setImage] = useState<File | null>(null);
@@ -51,6 +54,7 @@ const DeliveryCompanyForm = ({
   };
 
   const {
+    reset,
     getValues,
     control,
     register,
@@ -72,7 +76,6 @@ const DeliveryCompanyForm = ({
     setValue,
   });
 
-  const navigate = useNavigate();
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating Delivery company...");
@@ -111,8 +114,7 @@ const DeliveryCompanyForm = ({
             data,
           });
           toast.dismiss(toastId);
-          toast.success("Admin successfully created");
-          navigate("/admins");
+          toast.success("Delivery Company added successfully!");
         },
         onError(error: any) {
           console.log(error);
@@ -140,7 +142,14 @@ const DeliveryCompanyForm = ({
     }
   }, [slideImages]);
 
-  console.log(getValues());
+  useEffect(() => {
+    if (!openForm) {
+      reset();
+    }
+  }, [openForm]);
+
+  // console.log(getValues());
+  // console.log({ errors });
 
   return (
     <div className="p-5 bg-white">
@@ -276,6 +285,7 @@ const DeliveryCompanyForm = ({
               onChange={setSlideImages}
               multiple
             />
+            <ErrorMessage name="slide_images" errors={errors} />
           </div>
         </div>
 

@@ -52,16 +52,8 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
           />
         </div>
         <div className="w-full space-y-2">
-          <DetailsCardItem
-            label="Owner's Name"
-            value={`${deliveryCompany?.owner_first_name} ${deliveryCompany?.owner_last_name}`}
-          />
-          <DetailsCardItem
-            label="Owner's Number"
-            value={formatPhoneNumberIntl(
-              deliveryCompany?.owner_phone_number ?? ""
-            )}
-          />
+          <DetailsCardItem label="Address" value={deliveryCompany?.address} />
+          <DetailsCardItem label="Location" value={deliveryCompany?.location} />
           <DetailsCardItem
             label="Phone Number"
             value={formatPhoneNumberIntl(deliveryCompany?.phone_number ?? "")}
@@ -74,10 +66,21 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
           />
           <DetailsCardItem
             label="Whatsapp Number"
-            value={formatPhoneNumberIntl(deliveryCompany?.whatsapp_number ?? "")}
+            value={formatPhoneNumberIntl(
+              deliveryCompany?.whatsapp_number ?? ""
+            )}
           />
-          <DetailsCardItem label="Address" value={deliveryCompany?.location} />
-          <DetailsCardItem label="Location" value={deliveryCompany?.location} />
+
+          <DetailsCardItem
+            label="Owner's Name"
+            value={`${deliveryCompany?.owner_first_name} ${deliveryCompany?.owner_last_name}`}
+          />
+          <DetailsCardItem
+            label="Owner's Number"
+            value={formatPhoneNumberIntl(
+              deliveryCompany?.owner_phone_number ?? ""
+            )}
+          />
           <DetailsCardItem label="Role" value={deliveryCompany?.role.name} />
         </div>
       </div>
