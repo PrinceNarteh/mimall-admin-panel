@@ -1,7 +1,10 @@
 import { DeliveryCompany } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useMutate from "@hooks/useMutate";
-import { deliveryCompanyResolver } from "@utils/validators";
+import {
+  createDeliveryCompanyResolver,
+  updateDeliveryCompanyResolver,
+} from "@utils/validators";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -16,6 +19,7 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
 import Heading from "@components/shared/Heading";
+import { useSetRole } from "@hooks/useSetRole";
 
 const DeliveryCompanyForm = ({
   deliveryCompany,
@@ -28,8 +32,7 @@ const DeliveryCompanyForm = ({
   const [slideImages, setSlideImages] = useState<File[] | null>([]);
   const [previewSlideImages, setPreviewSlideImages] = useState<string[]>([]);
 
-  const formValues = deliveryCompanyResolver(deliveryCompany);
-  type FormValues = z.infer<typeof formValues>;
+  type FormValues = z.infer<typeof createDeliveryCompanyResolver>;
   const defaultValues: FormValues = {
     alternate_phone_number: "",
     email: "",
@@ -42,9 +45,13 @@ const DeliveryCompanyForm = ({
     phone_number: "",
     slide_images: [],
     whatsapp_number: "",
+    role: "Delivery",
+    password: "",
+    confirm_password: "",
   };
 
   const {
+    getValues,
     control,
     register,
     setValue,
@@ -52,8 +59,17 @@ const DeliveryCompanyForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: deliveryCompany ? deliveryCompany : defaultValues,
-    resolver: zodResolver(deliveryCompanyResolver(deliveryCompany)),
+    defaultValues,
+    resolver: zodResolver(
+      deliveryCompany
+        ? updateDeliveryCompanyResolver
+        : createDeliveryCompanyResolver
+    ),
+  });
+
+  useSetRole({
+    entity: "Delivery",
+    setValue,
   });
 
   const navigate = useNavigate();
@@ -70,7 +86,7 @@ const DeliveryCompanyForm = ({
     formData.append("owner_phone_number", data.owner_phone_number);
     formData.append("phone_number", data.phone_number);
     formData.append("whatsapp_number", data.whatsapp_number);
-    // if ( )
+    data?.password && formData.append("password", data.password as string);
     data?.logo && formData.append("logo", data.logo);
     data?.alternate_phone_number &&
       formData.append("alternate_phone_number", data.alternate_phone_number);
@@ -78,14 +94,12 @@ const DeliveryCompanyForm = ({
       formData.append("slide_images", image);
     }
 
-    console.log(data);
-
     mutate(
       {
         url: deliveryCompany
           ? `${queryKeys.DeliveryCompany.url(deliveryCompany._id)}`
-          : `${queryKeys.DeliveryCompanies.url}/register`,
-        data,
+          : `/delivery-companies/register`,
+        data: formData,
         method: deliveryCompany ? "PATCH" : "POST",
         multipart: true,
       },
@@ -126,7 +140,7 @@ const DeliveryCompanyForm = ({
     }
   }, [slideImages]);
 
-  console.log(previewSlideImages);
+  console.log(getValues());
 
   return (
     <div className="p-5 bg-white">

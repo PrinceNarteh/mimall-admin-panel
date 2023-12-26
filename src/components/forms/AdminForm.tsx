@@ -1,8 +1,8 @@
 import Heading from "@components/shared/Heading";
-import { Admin, Role } from "@custom-types/index";
+import { Admin } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
+import { useSetRole } from "@hooks/useSetRole";
 import { useQueryClient } from "@tanstack/react-query";
 import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
@@ -44,11 +44,6 @@ const AdminForm = ({
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
 
-  const { data: roles } = useGetQuery<Role[]>({
-    queryKey: queryKeys.Roles.key,
-    url: queryKeys.Roles.url,
-  });
-
   const formValues = adminResolver(admin);
   type FormValues = z.infer<typeof formValues>;
   const {
@@ -61,6 +56,11 @@ const AdminForm = ({
   } = useForm<FormValues>({
     defaultValues,
     resolver: zodResolver(adminResolver(admin)),
+  });
+
+  useSetRole({
+    setValue,
+    entity: "admin",
   });
 
   const { mutate } = useMutate();
@@ -110,17 +110,6 @@ const AdminForm = ({
       setValue("profile_image", image);
     }
   }, [admin, image, setValue]);
-
-  useEffect(() => {
-    if (roles) {
-      const admin = roles.find((role) =>
-        role.name.toLowerCase().startsWith("admin")
-      );
-      if (admin) {
-        setValue("role", admin._id);
-      }
-    }
-  }, [roles, setValue]);
 
   useEffect(() => {
     if (admin) {
