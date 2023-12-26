@@ -1,5 +1,7 @@
 import DetailsCard from "@components/shared/DetailsCard";
 import DetailsCardItem from "@components/shared/DetailsCardItem";
+import Gallery from "@components/shared/Gallery";
+import ImageGallery from "@components/shared/ImageGallery";
 import { DeliveryCompany } from "@custom-types/index";
 import { Icon } from "@iconify/react";
 import { fetchImage } from "@utils/fetchImage";
@@ -21,12 +23,13 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
 }) => {
   return (
     <DetailsCard
+      start={true}
       heading="Delivery Company Details"
       title={`${deliveryCompany?.name}`}
       description={`${deliveryCompany?.email}`}
       closeDetails={() => setDeliveryCompany(null)}
       image={`${fetchImage({
-        imageName: deliveryCompany?.slide_images[0],
+        imageName: deliveryCompany?.logo,
         entity: "delivery-companies",
       })}`}
       openDetails={!!deliveryCompany}
@@ -40,11 +43,11 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
         </button>
       )}
     >
-      <div className="bg-white flex flex-col md:flex-row gap-5 p-5 rounded-md">
+      <div className="bg-white flex flex-col md:flex-row gap-5 p-5 rounded-md mb-5">
         <div className="shrink-0 md:w-60 mx-auto">
           <img
             src={`${fetchImage({
-              imageName: deliveryCompany?.slide_images[0],
+              imageName: deliveryCompany?.logo,
               entity: "delivery-companies",
             })}`}
             alt=""
@@ -52,7 +55,6 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
           />
         </div>
         <div className="w-full space-y-2">
-          <DetailsCardItem label="Address" value={deliveryCompany?.address} />
           <DetailsCardItem label="Location" value={deliveryCompany?.location} />
           <DetailsCardItem
             label="Phone Number"
@@ -83,6 +85,13 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
           />
           <DetailsCardItem label="Role" value={deliveryCompany?.role.name} />
         </div>
+      </div>
+
+      <div className="bg-white rounded-md p-5">
+        <Gallery
+          images={deliveryCompany?.slide_images}
+          entity="delivery-companies"
+        />
       </div>
     </DetailsCard>
   );
