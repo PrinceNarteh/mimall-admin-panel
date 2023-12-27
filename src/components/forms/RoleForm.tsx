@@ -25,6 +25,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 type RoleFormProps = {
+  openModal: boolean;
   role: Role | null;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -37,9 +38,14 @@ const initialState: {
   permissions: [],
 };
 
-export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
+export default function RoleForm({
+  role,
+  openModal,
+  setOpenModal,
+}: RoleFormProps) {
   const queryClient = useQueryClient();
   const {
+    reset,
     register,
     setValue,
     handleSubmit,
@@ -120,6 +126,12 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
     setValue("permissions", permissions);
   }, [permissions, setValue]);
 
+  useEffect(() => {
+    if (!openModal) {
+      reset();
+    }
+  }, [openModal]);
+
   return (
     <div className="cursor-pointer p-5">
       <Spinner isLoading={isLoading} />
@@ -169,21 +181,21 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
                     />
                   </div>
                 ) : (
-                  <div className="grid grid-auto-fit-xs gap-5 mt-2">
+                  <div className="flex flex-wrap gap-5 mt-2">
                     {data?.map((module, index) => (
                       <label
                         key={index}
-                        className="space-x-2 basis-48 flex-1 block text-md font-normal text-slate-400 cursor-pointer "
+                        className="space-x-2 w-48 flex-1 flex items-center text-md font-normal text-slate-400 cursor-pointer "
                       >
                         <input
                           type="checkbox"
                           id="permissions"
                           name="permissions"
-                          className="accent-orange-700 "
+                          className="accent-primary-700"
                           onChange={() => handleChange(module.name)}
                           checked={permissions.includes(module.name)}
                         />
-                        <span>{module.name}</span>
+                        <span className="block w-40">{module.name}</span>
                       </label>
                     ))}
                   </div>

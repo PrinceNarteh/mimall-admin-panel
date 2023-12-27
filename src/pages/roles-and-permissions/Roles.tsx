@@ -169,12 +169,16 @@ const RolesAndPermissions = () => {
         disableOutsideClick
         closeModal={setOpenModal}
       >
-        <RoleForm role={role} setOpenModal={setOpenModal} />
+        <RoleForm
+          role={role}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
       </Modal>
 
       <Modal
         openModal={openPermissions}
-        closeModal={() => {}}
+        closeModal={setOpenPermissions}
         width="max-w-3xl"
       >
         <Permissions permissions={permissions} />

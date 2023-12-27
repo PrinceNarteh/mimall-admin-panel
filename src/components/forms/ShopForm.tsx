@@ -1,10 +1,8 @@
-import { Shop, Role } from "@custom-types/index";
+import Heading from "@components/shared/Heading";
+import { Shop } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchImage } from "@utils/fetchImage";
-import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
 import { shopResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
@@ -17,7 +15,6 @@ import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import ErrorMessage from "../shared/ErrorMessage";
 import InputField from "../shared/InputField";
-import Heading from "@components/shared/Heading";
 
 const defaultValues = {
   name: "",
@@ -50,11 +47,6 @@ const ShopForm = ({ shop }: ShopFormProps) => {
   const [banner, setBanner] = useState<File | null>(null);
   const [previewBanner, setPreviewBanner] = useState<string | null>(null);
 
-  const { data: roles } = useGetQuery<Role[]>({
-    queryKey: queryKeys.Roles.key,
-    url: queryKeys.Roles.url,
-  });
-
   const formValues = shopResolver(shop);
   type FormValues = z.infer<typeof formValues>;
   const {
@@ -71,16 +63,17 @@ const ShopForm = ({ shop }: ShopFormProps) => {
   const navigate = useNavigate();
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
+    console.log(data);
     const toastId = toast.loading("Creating Shop...");
     const formData = new FormData();
-    Object.values(data).forEach((item) => formData.append(item[0], item[1]));
+    Object.entries(data).forEach((item) => formData.append(item[0], item[1]));
 
     mutate(
       {
         url: shop
           ? `${queryKeys.Shop.url(shop._id)}`
           : `${queryKeys.Shops.url}/register`,
-        data,
+        data: formData,
         method: shop ? "PATCH" : "POST",
         multipart: true,
       },
@@ -103,6 +96,7 @@ const ShopForm = ({ shop }: ShopFormProps) => {
           navigate("/admins");
         },
         onError(error: any) {
+          console.log(error);
           toast.dismiss(toastId);
           toast.error(error.response.data.message);
         },
@@ -115,14 +109,14 @@ const ShopForm = ({ shop }: ShopFormProps) => {
       setValue("profile_image", profileImage);
       setPreviewProfileImage(URL.createObjectURL(profileImage));
     }
-  }, [profileImage]);
+  }, [profileImage, setValue]);
 
   useEffect(() => {
     if (banner) {
       setValue("banner", banner);
       setPreviewBanner(URL.createObjectURL(banner));
     }
-  }, [banner]);
+  }, [banner, setValue]);
 
   useEffect(() => {
     if (shop) {
@@ -269,6 +263,7 @@ const ShopForm = ({ shop }: ShopFormProps) => {
                 placeholder="Drop your profile image here"
                 required
                 onChange={setProfileImage}
+                height="h-28"
               />
             </div>
           </div>
@@ -282,6 +277,7 @@ const ShopForm = ({ shop }: ShopFormProps) => {
             )}
             <div className="flex-1">
               <CustomFileInput
+                height="h-28"
                 label="Banner"
                 placeholder="Drop your banner image here"
                 required

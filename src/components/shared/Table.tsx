@@ -61,7 +61,7 @@ const Table = <T extends object>({
   const handleClick = (id: string) => navigate(`${linkPath}/${id}`);
 
   return (
-    <div className="bg-white p-5 min-w-5xl mx-auto overflow-x-auto">
+    <div className="bg-white p-5 min-w-5xl mx-auto overflow-x-auto mt-5">
       <div className="h-20 text-blue-900 text-xl font-bold flex justify-between items-center">
         <div className="h-9 w-72 bg-[#F4F6FB] flex rounded-lg p-2">
           <Icon icon="circum:search" className="h-5 w-5 ml-3" />

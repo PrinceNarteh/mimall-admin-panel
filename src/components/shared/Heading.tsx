@@ -5,7 +5,7 @@ type HeadingProps = {
 };
 
 const Heading: React.FC<HeadingProps> = ({ label }) => {
-  return <div className="text-blue-900 text-3xl font-bold mb-5">{label}</div>;
+  return <div className="text-blue-900 text-3xl font-bold">{label}</div>;
 };
 
 export default Heading;
