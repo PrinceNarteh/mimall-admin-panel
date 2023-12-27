@@ -1,10 +1,8 @@
 import DetailsCard from "@components/shared/DetailsCard";
-import DetailsCardItem from "@components/shared/DetailsCardItem";
 import { Shop } from "@custom-types/index";
 import { Icon } from "@iconify/react";
 import { fetchImage } from "@utils/fetchImage";
 import React from "react";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type ShopDetailsProps = {
   shop: Shop | null;

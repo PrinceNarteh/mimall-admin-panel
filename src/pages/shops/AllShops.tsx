@@ -1,56 +1,24 @@
+import ShopForm from "@components/forms/ShopForm";
 import Heading from "@components/shared/Heading";
+import Modal from "@components/shared/Modal";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
 import { Admin, Shop } from "@custom-types/index";
+import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { formatPhoneNumberIntl } from "react-phone-number-input";
 import { Link } from "react-router-dom";
 import AdminDetails from "./ShopDetails";
-import useConfirm from "@hooks/useConfirm";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
-import Modal from "@components/shared/Modal";
-import ShopForm from "@components/forms/ShopForm";
-
-// _id: string;
-// role: Role;
-// phone_number: string;
-// alternate_phone_number: string;
-// active: boolean;
-// createdAt: string;
-// updatedAt: string;
-// token: string;
-// shopCode: string;
-// name: string;
-// password: string;
-// plainPassword: string;
-// description: string;
-// location: string;
-// mapDirection: string;
-// phoneNumber: string;
-// alternateNumber: string;
-// whatsappNumber: string;
-// instagramHandle: string;
-// facebookHandle: string;
-// twitterHandle: string;
-// tiktokHandle: string;
-// openingTime: string;
-// closingTime: string;
-// image: string;
-// banner: string;
-// products: Product[];
-// orders: OrderItem[];
-// quickOrderItems: QuickOrderItem[];
 
 const AllShops = () => {
-  const ref = useRef<HTMLDivElement>(null);
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [shop, setShop] = useState<Shop | null>(null);
   const [openForm, setOpenForm] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.Shops.key,
     url: queryKeys.Shops.url,
@@ -85,7 +53,7 @@ const AllShops = () => {
             <img
               src={fetchImage({
                 imageName: props.row.original.profile_image,
-                entity: "admins",
+                entity: "shops",
               })}
               alt=""
               className="h-12 w-12 object-cover rounded-full"
@@ -105,6 +73,9 @@ const AllShops = () => {
     columnHelper.accessor<"phone_number", string>("phone_number", {
       header: "Phone Number",
       cell: (info) => <span>{formatPhoneNumberIntl(info.getValue())}</span>,
+    }),
+    columnHelper.accessor<"location", string>("location", {
+      header: "Location",
     }),
     columnHelper.accessor<"active", boolean>("active", {
       header: "Status",
