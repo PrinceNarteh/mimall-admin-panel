@@ -27,6 +27,7 @@ const Permissions = ({
   const [permission, setPermission] = useState<Permission | null>(null);
   const [openForm, setOpenForm] = useState(false);
   const {
+    reset,
     setValue,
     register,
     handleSubmit,
@@ -124,6 +125,12 @@ const Permissions = ({
     }
   }, [permission, setValue]);
 
+  useEffect(() => {
+    if (!openForm) {
+      reset();
+    }
+  }, [openForm]);
+
   return (
     <div className="p-5">
       <div className="flex justify-between items-center mb-10 border-b pb-2 border-b-primary">
@@ -155,7 +162,11 @@ const Permissions = ({
         ))}
       </div>
 
-      <Modal openModal={openForm} closeModal={() => setOpenForm(false)}>
+      <Modal
+        fullWidth
+        openModal={openForm}
+        closeModal={() => setOpenForm(false)}
+      >
         <div className="flex justify-between items-center mb-5 border-b pb-2 border-b-primary">
           <h3 className="text-primary font-semibold text-4xl ">
             Add Permission

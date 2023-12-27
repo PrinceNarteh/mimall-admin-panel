@@ -78,7 +78,7 @@ const RolesAndPermissions = () => {
             Add Role
           </button>
           <button
-            onClick={() => setOpenModal(true)}
+            onClick={() => setOpenPermissions(true)}
             className="py-2 px-7 bg-primary text-white text-xs rounded"
           >
             Add Permission
