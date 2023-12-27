@@ -1,36 +1,37 @@
 import DetailsCard from "@components/shared/DetailsCard";
 import DetailsCardItem from "@components/shared/DetailsCardItem";
-import { Admin } from "@custom-types/index";
+import { Shop } from "@custom-types/index";
 import { Icon } from "@iconify/react";
 import { fetchImage } from "@utils/fetchImage";
 import React from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type ShopDetailsProps = {
-  admin: Admin | null;
-  setAdmin: React.Dispatch<React.SetStateAction<Admin | null>>;
-  handleDelete: (admin: Admin | null) => Promise<void>;
+  shop: Shop | null;
+  setShop: React.Dispatch<React.SetStateAction<Shop | null>>;
+  handleDelete: (shop: Shop | null) => Promise<void>;
 };
 
 const ShopDetails: React.FC<ShopDetailsProps> = ({
-  admin = null,
-  setAdmin,
+  shop = null,
+  setShop,
   handleDelete,
 }) => {
+  console.log(shop);
   return (
     <DetailsCard
-      heading="Admin Details"
-      title={`${admin?.first_name} ${admin?.middle_name} ${admin?.last_name}`}
-      description={`${admin?.email}`}
-      closeDetails={() => setAdmin(null)}
+      heading="Shop Details"
+      title={`${shop?.name}`}
+      description={`${shop?.description}`}
+      closeDetails={() => setShop(null)}
       image={`${fetchImage({
-        imageName: admin?.profile_image,
-        entity: "admins",
+        imageName: shop?.profile_image,
+        entity: "shops",
       })}`}
-      openDetails={!!admin}
-      editLink={`/admins/${admin?._id}/edit`}
+      openDetails={!!shop}
+      editLink={`/admins/${shop?._id}/edit`}
       actionButtons={() => (
-        <button onClick={() => handleDelete(admin)}>
+        <button onClick={() => handleDelete(shop)}>
           <Icon
             icon="fluent:delete-28-regular"
             className="text-xl text-red-500"
@@ -38,37 +39,40 @@ const ShopDetails: React.FC<ShopDetailsProps> = ({
         </button>
       )}
     >
-      <div className="bg-white flex flex-col md:flex-row gap-5 p-5 rounded-md">
-        <div className="shrink-0 md:w-60 md:h-60 mx-auto">
-          <img
-            src={`${fetchImage({
-              imageName: admin?.profile_image,
-              entity: "admins",
-            })}`}
-            alt=""
-            className="rounded-md"
-          />
-        </div>
-        <div className="w-full space-y-2">
-          <DetailsCardItem
-            label="Phone Number"
-            value={formatPhoneNumberIntl(admin?.phone_number ?? "")}
-          />
-          <DetailsCardItem
-            label="Alternate Phone Number"
-            value={formatPhoneNumberIntl(admin?.alternate_phone_number ?? "")}
-          />
-          <DetailsCardItem label="Address" value={admin?.address} />
-          <DetailsCardItem label="Nationality" value={admin?.nationality} />
-          <DetailsCardItem label="Role" value={admin?.role.name} />
-          <DetailsCardItem
-            label="Status"
-            value={admin?.active ? "Active" : "Not Active"}
-          />
-        </div>
+      <div className="bg-white flex flex-wrap justify-center gap-5 p-5 rounded-md">
+        <Item label="Shop Code" value={`${shop?.shop_code}`} />
+        <Item label="Plain Password" value={`${shop?.plain_password}`} />
+        <Item label="Status" value={shop?.active ? "Active" : "Not Active"} />
+        <Item label="Location" value={`${shop?.location}`} />
+        <Item label="Map Direction" value={`${shop?.map_direction}`} />
+        <Item label="Phone Number" value={`${shop?.phone_number}`} />
+        <Item
+          label="Alternate Phone Number"
+          value={`${shop?.alternate_phone_number}`}
+        />
+        <Item label="Whatsapp Number" value={`${shop?.whatsapp_number}`} />
+        <Item label="Opening Time" value={`${shop?.opening_time}`} />
+        <Item label="Closing Time" value={`${shop?.closing_time}`} />
+        <Item label="Facebook Handle" value={`${shop?.facebook_handle}`} />
+        <Item label="Instagram Handle" value={`${shop?.instagram_handle}`} />
+        <Item label="Twitter Handle" value={`${shop?.twitter_handle}`} />
+        <Item label="TikTok Handle" value={`${shop?.tiktok_handle}`} />
       </div>
+
+      {shop?.banner ? (
+        <div className="bg-white p-5 rounded-md">
+          <img src={shop?.banner} alt="" />
+        </div>
+      ) : null}
     </DetailsCard>
   );
 };
+
+const Item = ({ label, value }: { label: string; value: string }) => (
+  <div className="border rounded-md p-2 w-80 cursor-pointer hover:bg-primary duration-500 group">
+    <h6 className="font-bold text-gray-700 group-hover:text-white">{label}</h6>
+    <p className="text-gray-600 text-sm group-hover:text-white">{value}</p>
+  </div>
+);
 
 export default ShopDetails;

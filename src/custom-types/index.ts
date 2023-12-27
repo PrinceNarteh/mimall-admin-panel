@@ -105,7 +105,7 @@ export type Order = {
   items: OrderItem[];
 };
 
-export interface Shop extends BaseUser {
+export interface Shop {
   _id: string;
   role: Role;
   phone_number: string;
@@ -128,8 +128,8 @@ export interface Shop extends BaseUser {
   tiktok_handle: string;
   opening_time: string;
   closing_time: string;
-  image: string;
   banner: string;
+  profile_image: string;
   products: Product[];
   orders: OrderItem[];
   quick_order_items: QuickOrderItem[];

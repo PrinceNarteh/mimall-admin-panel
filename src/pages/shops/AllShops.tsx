@@ -51,18 +51,17 @@ const AllShops = () => {
   const [shop, setShop] = useState<Shop | null>(null);
   const [openForm, setOpenForm] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
-  const [admin, setAdmin] = useState<Admin | null>(null);
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.Shops.key,
     url: queryKeys.Shops.url,
   });
 
-  const handleDelete = async (admin: Admin | null) => {
-    if (!admin) return;
+  const handleDelete = async (shop: Shop | null) => {
+    if (!shop) return;
 
     const isConfirmed = await confirm({
       title: "Are You Sure?",
-      message: `Are you sure you want to delete "${admin?.first_name} ${admin?.last_name}"?`,
+      message: `Are you sure you want to delete "${shop?.name}"?`,
     });
 
     if (isConfirmed) {
@@ -71,14 +70,14 @@ const AllShops = () => {
     }
   };
 
-  const columnHelper = createColumnHelper<Admin>();
+  const columnHelper = createColumnHelper<Shop>();
   const columns = [
     columnHelper.display({
       id: "Index",
       header: "No.",
       cell: (info) => <span className="pl-2">{info.row.index + 1}</span>,
     }),
-    columnHelper.accessor((row) => `${row.first_name} ${row.last_name}`, {
+    columnHelper.accessor((row) => `${row.name}`, {
       id: "Admin",
       cell: (props) => (
         <div className="flex items-center">
@@ -94,10 +93,10 @@ const AllShops = () => {
           </div>
           <div className="ml-2">
             <div className=" text-blue-900 text-[15px] font-bold leading-snug">
-              {props.row.original.first_name} {props.row.original.last_name}
+              {props.row.original.name}
             </div>
             <div className=" text-slate-400 text-sm font-normal leading-tight">
-              {props.row.original.email}
+              {props.row.original.shop_code}
             </div>
           </div>
         </div>
@@ -115,7 +114,7 @@ const AllShops = () => {
       header: "Details",
       cell: (props) => (
         <button
-          onClick={() => setAdmin(props.row.original)}
+          onClick={() => setShop(props.row.original)}
           className="text-xs border border-primary px-2 py-1 rounded text-primary"
         >
           Details
@@ -158,11 +157,7 @@ const AllShops = () => {
         )}
       />
 
-      <AdminDetails
-        admin={admin}
-        setAdmin={setAdmin}
-        handleDelete={handleDelete}
-      />
+      <AdminDetails shop={shop} setShop={setShop} handleDelete={handleDelete} />
 
       <Modal
         start
