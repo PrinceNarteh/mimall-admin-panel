@@ -70,12 +70,18 @@ const RolesAndPermissions = () => {
     <div>
       <div className="ml-10 flex justify-between items-center mt-5">
         <Heading label="Role & Permissions" />
-        <div className="mr-12">
+        <div className="mr-12 space-x-5">
           <button
             onClick={() => setOpenModal(true)}
             className="py-2 px-7 bg-primary text-white text-xs rounded"
           >
             Add Role
+          </button>
+          <button
+            onClick={() => setOpenModal(true)}
+            className="py-2 px-7 bg-primary text-white text-xs rounded"
+          >
+            Add Permission
           </button>
         </div>
       </div>

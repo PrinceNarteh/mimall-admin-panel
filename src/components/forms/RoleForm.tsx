@@ -125,7 +125,7 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
       <Spinner isLoading={isLoading} />
 
       <div className="text-blue-900 text-3xl font-bold mb-2">
-        <h3>Add Role & Permission</h3>
+        <h3>{role ? "Edit" : "Add"} Role</h3>
       </div>
 
       <div className=" text-slate-400 text-[15px] font-normal mt-2">
@@ -196,7 +196,7 @@ export default function RoleForm({ role, setOpenModal }: RoleFormProps) {
               </div>
               <div className="flex justify-end">
                 <button className="px-10 py-2 bg-primary rounded-lg shadow justify-center items-center gap-2.5 flex mt-6 text-white text-md font-bold leading-loose ">
-                  Add role
+                  {role ? "Edit" : "Add"} role
                 </button>
               </div>
             </div>
