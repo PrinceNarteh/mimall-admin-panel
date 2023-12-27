@@ -13,9 +13,12 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images = [], entity }) => {
   return (
     <div>
       <img
-        src={images[active]}
+        src={fetchImage({
+          entity,
+          imageName: images[active],
+        })}
         alt=""
-        className="rounded-xl h-64 w-full object-cover"
+        className="rounded-xl h-80 w-full object-cover"
       />
 
       <div className="overflow-x-scroll">
