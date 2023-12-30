@@ -2,7 +2,6 @@ import DetailsCard from "@components/shared/DetailsCard";
 import DetailsCardItem from "@components/shared/DetailsCardItem";
 import { Admin } from "@custom-types/index";
 import { Icon } from "@iconify/react";
-import { fetchImage } from "@utils/fetchImage";
 import React from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 
@@ -32,10 +31,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({
       title={`${admin?.first_name} ${admin?.middle_name} ${admin?.last_name}`}
       description={`${admin?.email}`}
       closeDetails={() => closeDetails()}
-      image={`${fetchImage({
-        imageName: admin?.profile_image,
-        entity: "admins",
-      })}`}
+      image={`${admin?.profile_image}`}
       openDetails={openDetails}
       actionButtons={() => (
         <>
@@ -56,14 +52,7 @@ const AdminDetails: React.FC<AdminDetailsProps> = ({
     >
       <div className="bg-white flex flex-col md:flex-row gap-5 p-5 rounded-md">
         <div className="shrink-0 md:w-60 md:h-60 mx-auto">
-          <img
-            src={`${fetchImage({
-              imageName: admin?.profile_image,
-              entity: "admins",
-            })}`}
-            alt=""
-            className="rounded-md"
-          />
+          <img src={`${admin?.profile_image}`} alt="" className="rounded-md" />
         </div>
         <div className="w-full space-y-2">
           <DetailsCardItem

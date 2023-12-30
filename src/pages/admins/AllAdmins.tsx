@@ -26,7 +26,7 @@ const AllAdmins = () => {
     queryKey: queryKeys.Admins.key,
     url: queryKeys.Admins.url,
   });
-
+  console.log(data);
   const handleDetails = (admin: Admin) => {
     setAdmin(admin);
     setOpenDetails(true);
@@ -87,10 +87,7 @@ const AllAdmins = () => {
         <div className="flex items-center">
           <div>
             <img
-              src={fetchImage({
-                imageName: props.row.original.profile_image,
-                entity: "admins",
-              })}
+              src={props.row.original.profile_image}
               alt=""
               className="h-12 w-12 object-cover rounded-full"
             />
