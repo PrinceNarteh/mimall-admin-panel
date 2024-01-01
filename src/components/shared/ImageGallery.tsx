@@ -13,10 +13,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images = [], entity }) => {
   return (
     <div>
       <img
-        src={fetchImage({
-          entity,
-          imageName: images[active],
-        })}
+        src={images[active]}
         alt=""
         className="rounded-xl h-80 w-full object-cover"
       />
@@ -30,10 +27,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images = [], entity }) => {
             >
               <img
                 className={`h-20 w-full rounded-lg object-cover`}
-                src={fetchImage({
-                  entity,
-                  imageName: img,
-                })}
+                src={img}
                 alt=""
                 onClick={() => setActive(i)}
               />

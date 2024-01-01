@@ -137,7 +137,7 @@ export interface Shop {
 
 export type Product = {
   _id: string;
-  name: string;
+  title: string;
   description: string;
   price: number;
   discount_percentage: number;

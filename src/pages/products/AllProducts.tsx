@@ -33,7 +33,7 @@ const AllProducts = () => {
 
     const isConfirmed = await confirm({
       title: "Are You Sure?",
-      message: `Are you sure you want to delete "${product?.name}"?`,
+      message: `Are you sure you want to delete "${product?.title}"?`,
     });
 
     if (isConfirmed) {
@@ -49,7 +49,7 @@ const AllProducts = () => {
       header: "No.",
       cell: (info) => <span className="pl-2">{info.row.index + 1}</span>,
     }),
-    columnHelper.accessor("name", {
+    columnHelper.accessor("title", {
       id: "Product",
       cell: (props) => (
         <div className="flex items-center">
@@ -62,7 +62,7 @@ const AllProducts = () => {
           </div>
           <div className="ml-2">
             <div className=" text-blue-900 text-[15px] font-bold leading-snug">
-              {props.row.original.name}
+              {props.row.original.title}
             </div>
             <div className=" text-slate-400 text-sm font-normal leading-tight line-clamp-1">
               {props.row.original.description}

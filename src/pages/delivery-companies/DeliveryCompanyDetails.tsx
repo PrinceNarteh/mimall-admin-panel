@@ -28,10 +28,7 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
       title={`${deliveryCompany?.name}`}
       description={`${deliveryCompany?.email}`}
       closeDetails={() => setDeliveryCompany(null)}
-      image={`${fetchImage({
-        imageName: deliveryCompany?.logo,
-        entity: "delivery-companies",
-      })}`}
+      image={deliveryCompany?.logo}
       openDetails={!!deliveryCompany}
       editLink={`/delivery-companies/${deliveryCompany?._id}/edit`}
       actionButtons={() => (

@@ -7,7 +7,7 @@ type DetailsCardProps = {
   heading: string;
   title: string;
   description: string;
-  image: string;
+  image?: string;
   openDetails: boolean;
   closeDetails: () => void;
   editLink?: string | null;
@@ -48,11 +48,13 @@ const DetailsCard = ({
 
           <div className="absolute -bottom-10 h-20 ml-[2%] w-[96%] mx-auto bg-white/50 backdrop-blur-lg  rounded-xl flex justify-between items-center">
             <div className="flex items-center">
-              <img
-                src={image}
-                alt=""
-                className="h-14 w-14 ml-5 object-cover rounded-lg"
-              />
+              {image ? (
+                <img
+                  src={image}
+                  alt=""
+                  className="h-14 w-14 ml-5 object-cover rounded-lg"
+                />
+              ) : null}
               <div className="ml-3">
                 <div className="h-[25px] text-blue-900 text-lg font-bold leading-7">
                   {title}
