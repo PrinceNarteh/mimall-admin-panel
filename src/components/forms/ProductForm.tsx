@@ -1,32 +1,21 @@
+import CustomSelect from "@components/shared/CustomSelect";
+import ErrorMessage from "@components/shared/ErrorMessage";
 import Heading from "@components/shared/Heading";
 import { Product, Shop } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useGetQuery } from "@hooks/useGetQuery";
 import useMutate from "@hooks/useMutate";
+import { useUser } from "@hooks/useUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@utils/queryKeys";
 import { productResolver } from "@utils/validators";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
-import { useGetQuery } from "@hooks/useGetQuery";
-import CustomSelect from "@components/shared/CustomSelect";
-
-const defaultValues = {
-  title: "",
-  description: "",
-  price: 0,
-  stock: 0,
-  discount_percentage: 0,
-  brand: "",
-  category: "",
-  product_images: [],
-  shop: "",
-};
 
 type ProductFormProps = {
   product: Product | null;
@@ -50,21 +39,43 @@ const categories = [
 ];
 
 const ProductForm = ({ product }: ProductFormProps) => {
+  const user = useUser();
   const queryClient = useQueryClient();
-  const [image, setImage] = useState<File[] | null>(null);
-  const [preview, setPreview] = useState("");
+  const [images, setImages] = useState<File[] | null>(null);
+  const [preview, setPreview] = useState<string[]>([]);
 
   const {
+    control,
     register,
     setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: defaultValues,
+    defaultValues: {
+      title: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      discount_percentage: 0,
+      brand: "",
+      category: "",
+      product_images: [],
+      shop: user?.role.name === "Shop" ? user._id : "",
+    },
     resolver: zodResolver(productResolver),
   });
 
-  const navigate = useNavigate();
+  const { data, isLoading } = useGetQuery<Shop[]>({
+    queryKey: queryKeys.Shops.key,
+    url: queryKeys.Shops.url,
+  });
+
+  const shops =
+    data?.map((shop) => ({
+      id: shop._id,
+      label: shop.name,
+    })) ?? [];
+
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
     const toastId = toast.loading("Creating Product...");
@@ -85,7 +96,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
       {
         url: product
           ? `${queryKeys.Product.url(product._id)}`
-          : `${queryKeys.Admins.url}/register`,
+          : `${queryKeys.Products.url}`,
         data,
         method: product ? "PATCH" : "POST",
         multipart: true,
@@ -93,7 +104,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
       {
         onSuccess(data) {
           queryClient.setQueryData<Product[]>(
-            queryKeys.Admins.key,
+            queryKeys.Products.key,
             (oldData) => {
               if (product) {
                 return (oldData ?? []).map((item) => {
@@ -109,7 +120,6 @@ const ProductForm = ({ product }: ProductFormProps) => {
           );
           toast.dismiss(toastId);
           toast.success("Product successfully created");
-          navigate("/admins");
         },
         onError(error: any) {
           toast.dismiss(toastId);
@@ -120,31 +130,27 @@ const ProductForm = ({ product }: ProductFormProps) => {
   };
 
   useEffect(() => {
-    // if (!product && image && image.some((image) => image !== undefined)) {
-    //   setValue("profile_image", image[0]);
-    //   setPreview(URL.createObjectURL(image[0]));
-    // } else if (!image && product && product.profile_image) {
-    //   setPreview(
-    //     fetchImage({ imageName: product.profile_image, entity: "admins" })
-    //   );
-    // } else if (product && image && image.some((image) => image !== undefined)) {
-    //   setValue("profile_image", image[0]);
-    //   setPreview(URL.createObjectURL(image[0]));
-    // }
-  }, [product, image, setValue]);
+    if (images) {
+      setValue("product_images", images);
+      setPreview(images.map((image) => URL.createObjectURL(image)));
+    }
+  }, [images, setValue]);
 
-  // useEffect(() => {
-  //   if (product) {
-  //     Object.entries(product).forEach((item) =>
-  //       setValue(item[0] as keyof FormValues, item[1])
-  //     );
-  //   }
-  // }, [product, setValue]);
+  console.log(errors);
 
   return (
     <div className="p-5 bg-white">
       <Heading label={`${product ? "Edit" : "Add"} Product`} />
-      <form onSubmit={handleSubmit(submit)}>
+      <form onSubmit={handleSubmit(submit)} className="mt-5">
+        <CustomSelect
+          data={shops}
+          label="Select Shop"
+          loading={isLoading}
+          name="shop"
+          placeholder="Select Shop..."
+          setValue={setValue}
+          errors={errors}
+        />
         <div className="form-row">
           <InputField name="title" label="Title" register={register} required />
           <InputField
@@ -201,19 +207,26 @@ const ProductForm = ({ product }: ProductFormProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 items-center md:flex-row md:items-end max-w-lg md:justify-center mx-auto">
-          {preview && (
-            <img src={preview} className="rounded-md w-40 h-40" alt="" />
-          )}
-          <div className="flex-1">
-            <CustomFileInput
-              height="h-28"
-              label="Profile Image"
-              placeholder="Drop your profile image here"
-              required
-              onChange={setImage}
+        <div className="flex justify-center overflow-auto gap-5 mt-5">
+          {preview.map((image, key) => (
+            <img
+              key={key}
+              src={image}
+              className="rounded-md w-40 h-40"
+              alt=""
             />
-          </div>
+          ))}
+        </div>
+        <div className="max-w-sm mx-auto">
+          <CustomFileInput
+            label="Product Images"
+            placeholder="Drop slide images here"
+            required
+            onChange={setImages}
+            multiple
+            height="h-28"
+          />
+          <ErrorMessage name="slide_images" errors={errors} />
         </div>
 
         <div className="flex justify-end mt-5">

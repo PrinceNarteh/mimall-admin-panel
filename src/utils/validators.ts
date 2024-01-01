@@ -1,5 +1,5 @@
-import { Admin, DeliveryCompany, Product, Shop } from "@custom-types/index";
-import { ZodIssueCode, z } from "zod";
+import { Admin, Shop } from "@custom-types/index";
+import { z } from "zod";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -229,8 +229,8 @@ export const productResolver = z.object({
   description: z
     .string({ required_error: "Product description is required" })
     .min(1, "Product description is required"),
-  price: z.number({ required_error: "Product price is required" }),
-  stock: z.number({ required_error: "Product price is required" }),
+  price: z.coerce.number({ required_error: "Product price is required" }),
+  stock: z.coerce.number({ required_error: "Product price is required" }),
   discount_percentage: z.number({
     required_error: "Product price is required",
   }),

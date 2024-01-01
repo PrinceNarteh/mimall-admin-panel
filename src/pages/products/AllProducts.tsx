@@ -1,9 +1,11 @@
 import Heading from "@components/shared/Heading";
+import Modal from "@components/shared/Modal";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
 import { Product } from "@custom-types/index";
 import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
+import { useUser } from "@hooks/useUser";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
@@ -12,9 +14,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ProductDetails from "./ProductDetails";
 import ProductForm from "@components/forms/ProductForm";
-import Modal from "@components/shared/Modal";
-import { useUser } from "@hooks/useUser";
-import AdminProductForm from "@components/forms/AdminProductForm";
 
 const AllProducts = () => {
   const user = useUser();
@@ -139,19 +138,11 @@ const AllProducts = () => {
         openModal={openForm}
         closeModal={setOpenForm}
       >
-        {user?.role.name === "Admin" || user?.role.name === "Super Admin" ? (
-          <AdminProductForm
-            product={product}
-            setProduct={setProduct}
-            handleDelete={handleDelete}
-          />
-        ) : (
-          <ProductForm
-            product={product}
-            setProduct={setProduct}
-            handleDelete={handleDelete}
-          />
-        )}
+        <ProductForm
+          product={product}
+          setProduct={setProduct}
+          handleDelete={handleDelete}
+        />
       </Modal>
 
       <ConfirmationDialog />
