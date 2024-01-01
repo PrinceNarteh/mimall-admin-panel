@@ -26,6 +26,8 @@ const AllProducts = () => {
     url: queryKeys.Products.url,
   });
 
+  console.log(data);
+
   const handleDelete = async (product: Product | null) => {
     if (!product) return;
 
@@ -53,10 +55,7 @@ const AllProducts = () => {
         <div className="flex items-center">
           <div>
             <img
-              src={fetchImage({
-                imageName: props.row.original.product_images[0],
-                entity: "admins",
-              })}
+              src={props.row.original.product_images[0]}
               alt=""
               className="h-12 w-12 object-cover rounded-full"
             />

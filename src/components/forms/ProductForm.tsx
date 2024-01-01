@@ -60,7 +60,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
       brand: "",
       category: "",
       product_images: [],
-      shop: user?.role.name === "Shop" ? user._id : "",
+      shopId: user?.role.name === "Shop" ? user._id : "",
     },
     resolver: zodResolver(productResolver),
   });
@@ -97,7 +97,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
         url: product
           ? `${queryKeys.Product.url(product._id)}`
           : `${queryKeys.Products.url}`,
-        data,
+        data: formData,
         method: product ? "PATCH" : "POST",
         multipart: true,
       },
@@ -142,15 +142,18 @@ const ProductForm = ({ product }: ProductFormProps) => {
     <div className="p-5 bg-white">
       <Heading label={`${product ? "Edit" : "Add"} Product`} />
       <form onSubmit={handleSubmit(submit)} className="mt-5">
-        <CustomSelect
-          data={shops}
-          label="Select Shop"
-          loading={isLoading}
-          name="shop"
-          placeholder="Select Shop..."
-          setValue={setValue}
-          errors={errors}
-        />
+        <div>
+          <CustomSelect
+            data={shops}
+            label="Select Shop"
+            loading={isLoading}
+            name="shopId"
+            placeholder="Select Shop..."
+            setValue={setValue}
+            errors={errors}
+          />
+          <ErrorMessage errors={errors} name="shopId" />
+        </div>
         <div className="form-row">
           <InputField name="title" label="Title" register={register} required />
           <InputField

@@ -244,9 +244,9 @@ export const productResolver = z.object({
     z.array(image("product_images")),
     z.string().array(),
   ]),
-  shop: z
-    .string({ required_error: "First name is required" })
-    .min(1, "First name is required"),
+  shopId: z
+    .string({ required_error: "Please select shop" })
+    .min(1, "Please select shop"),
 });
 
 export const shopResolver = (shop: Shop | null) =>
