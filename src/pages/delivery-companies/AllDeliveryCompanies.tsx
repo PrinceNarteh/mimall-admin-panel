@@ -1,4 +1,6 @@
+import DeliveryCompanyForm from "@components/forms/DeliveryCompanyForm";
 import Heading from "@components/shared/Heading";
+import Modal from "@components/shared/Modal";
 import Spinner from "@components/shared/Spinner";
 import Table from "@components/shared/Table";
 import { DeliveryCompany } from "@custom-types/index";
@@ -10,10 +12,7 @@ import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
 import { useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
-import { Link } from "react-router-dom";
 import DeliveryCompanyDetails from "./DeliveryCompanyDetails";
-import Modal from "@components/shared/Modal";
-import DeliveryCompanyForm from "@components/forms/DeliveryCompanyForm";
 
 const AllDeliveryCompanies = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
@@ -26,7 +25,6 @@ const AllDeliveryCompanies = () => {
     queryKey: queryKeys.DeliveryCompanies.key,
     url: queryKeys.DeliveryCompanies.url,
   });
-  console.log(data);
 
   const handleDetails = (deliveryCompany: DeliveryCompany) => {
     setDeliveryCompany(deliveryCompany);

@@ -13,6 +13,8 @@ type Props = {
   label: string;
   loading: boolean;
   link?: string;
+  setValue: any;
+  errors: any;
 };
 
 const CustomSelect = ({
@@ -22,11 +24,9 @@ const CustomSelect = ({
   label = "",
   loading = false,
   link,
+  setValue,
+  errors,
 }: Props) => {
-  const {
-    setValue,
-    formState: { errors },
-  } = useFormContext();
   const [inputValue, setInputValue] = useState("");
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);

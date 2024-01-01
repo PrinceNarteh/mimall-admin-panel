@@ -1,5 +1,5 @@
 import Heading from "@components/shared/Heading";
-import { Product } from "@custom-types/index";
+import { Product, Shop } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useMutate from "@hooks/useMutate";
 import { useQueryClient } from "@tanstack/react-query";
@@ -13,6 +13,8 @@ import { z } from "zod";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
 import InputField from "../shared/InputField";
+import { useGetQuery } from "@hooks/useGetQuery";
+import CustomSelect from "@components/shared/CustomSelect";
 
 const defaultValues = {
   title: "",
@@ -32,6 +34,7 @@ type ProductFormProps = {
   handleDelete: (product: Product | null) => Promise<void>;
 };
 
+type FormValues = z.infer<typeof productResolver>;
 const categories = [
   { label: "Food", value: "food" },
   { label: "Fashion And Wears", value: "fashion_and_wears" },
@@ -51,17 +54,14 @@ const ProductForm = ({ product }: ProductFormProps) => {
   const [image, setImage] = useState<File[] | null>(null);
   const [preview, setPreview] = useState("");
 
-  const formValues = productResolver(product);
-  type FormValues = z.infer<typeof formValues>;
   const {
-    control,
     register,
     setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: defaultValues,
-    resolver: zodResolver(productResolver(product)),
+    resolver: zodResolver(productResolver),
   });
 
   const navigate = useNavigate();
@@ -207,6 +207,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
           )}
           <div className="flex-1">
             <CustomFileInput
+              height="h-28"
               label="Profile Image"
               placeholder="Drop your profile image here"
               required

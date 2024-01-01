@@ -13,8 +13,11 @@ import { Link } from "react-router-dom";
 import ProductDetails from "./ProductDetails";
 import ProductForm from "@components/forms/ProductForm";
 import Modal from "@components/shared/Modal";
+import { useUser } from "@hooks/useUser";
+import AdminProductForm from "@components/forms/AdminProductForm";
 
 const AllProducts = () => {
+  const user = useUser();
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [openForm, setOpenForm] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
@@ -136,11 +139,19 @@ const AllProducts = () => {
         openModal={openForm}
         closeModal={setOpenForm}
       >
-        <ProductForm
-          product={product}
-          setProduct={setProduct}
-          handleDelete={handleDelete}
-        />
+        {user?.role.name === "Admin" || user?.role.name === "Super Admin" ? (
+          <AdminProductForm
+            product={product}
+            setProduct={setProduct}
+            handleDelete={handleDelete}
+          />
+        ) : (
+          <ProductForm
+            product={product}
+            setProduct={setProduct}
+            handleDelete={handleDelete}
+          />
+        )}
       </Modal>
 
       <ConfirmationDialog />

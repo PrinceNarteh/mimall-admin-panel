@@ -19,6 +19,7 @@ const AllShops = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [shop, setShop] = useState<Shop | null>(null);
   const [openForm, setOpenForm] = useState(false);
+
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.Shops.key,
     url: queryKeys.Shops.url,

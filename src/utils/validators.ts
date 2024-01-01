@@ -222,34 +222,32 @@ export const createDeliveryCompanyResolver = z
     }
   });
 
-export const productResolver = (product: Product | null) => {
-  return z.object({
-    title: z
-      .string({ required_error: "Product name is required" })
-      .min(1, "Product name is required"),
-    description: z
-      .string({ required_error: "Product description is required" })
-      .min(1, "Product description is required"),
-    price: z.number({ required_error: "Product price is required" }),
-    stock: z.number({ required_error: "Product price is required" }),
-    discount_percentage: z.number({
-      required_error: "Product price is required",
-    }),
-    brand: z
-      .string({ required_error: "Product brand must be provided" })
-      .min(1, "Product brand must be provided"),
-    category: z
-      .string({ required_error: "Please kindly select product category" })
-      .min(1, "Please kindly select product category"),
-    product_images: z.union([
-      z.array(image("product_images")),
-      z.string().array(),
-    ]),
-    shop: z
-      .string({ required_error: "First name is required" })
-      .min(1, "First name is required"),
-  });
-};
+export const productResolver = z.object({
+  title: z
+    .string({ required_error: "Product name is required" })
+    .min(1, "Product name is required"),
+  description: z
+    .string({ required_error: "Product description is required" })
+    .min(1, "Product description is required"),
+  price: z.number({ required_error: "Product price is required" }),
+  stock: z.number({ required_error: "Product price is required" }),
+  discount_percentage: z.number({
+    required_error: "Product price is required",
+  }),
+  brand: z
+    .string({ required_error: "Product brand must be provided" })
+    .min(1, "Product brand must be provided"),
+  category: z
+    .string({ required_error: "Please kindly select product category" })
+    .min(1, "Please kindly select product category"),
+  product_images: z.union([
+    z.array(image("product_images")),
+    z.string().array(),
+  ]),
+  shop: z
+    .string({ required_error: "First name is required" })
+    .min(1, "First name is required"),
+});
 
 export const shopResolver = (shop: Shop | null) =>
   z.object({
