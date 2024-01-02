@@ -30,7 +30,6 @@ const defaultValues = {
   card_type: "",
   card_number: "",
   active: true,
-  role: "",
 };
 
 const AdminForm = ({
@@ -124,6 +123,8 @@ const AdminForm = ({
       reset();
     }
   }, [admin]);
+
+  console.log(errors);
 
   return (
     <div className="p-5 bg-white">

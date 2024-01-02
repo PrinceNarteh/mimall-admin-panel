@@ -1,24 +1,21 @@
 import DetailsCard from "@components/shared/DetailsCard";
 import DetailsCardItem from "@components/shared/DetailsCardItem";
-import Gallery from "@components/shared/Gallery";
 import ImageGallery from "@components/shared/ImageGallery";
 import { DeliveryCompany } from "@custom-types/index";
 import { Icon } from "@iconify/react";
-import { fetchImage } from "@utils/fetchImage";
 import React from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type DeliveryCompanyDetailsProps = {
+  openDetails: boolean;
   deliveryCompany: DeliveryCompany | null;
-  setDeliveryCompany: React.Dispatch<
-    React.SetStateAction<DeliveryCompany | null>
-  >;
+  setOpenDetails: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: (deliveryCompany: DeliveryCompany | null) => Promise<void>;
 };
-
 const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
   deliveryCompany = null,
-  setDeliveryCompany,
+  openDetails,
+  setOpenDetails,
   handleDelete,
 }) => {
   return (
@@ -27,9 +24,9 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
       heading="Delivery Company Details"
       title={`${deliveryCompany?.name}`}
       description={`${deliveryCompany?.email}`}
-      closeDetails={() => setDeliveryCompany(null)}
+      closeDetails={() => setOpenDetails(false)}
       image={deliveryCompany?.logo}
-      openDetails={!!deliveryCompany}
+      openDetails={openDetails}
       editLink={`/delivery-companies/${deliveryCompany?._id}/edit`}
       actionButtons={() => (
         <button onClick={() => handleDelete(deliveryCompany)}>

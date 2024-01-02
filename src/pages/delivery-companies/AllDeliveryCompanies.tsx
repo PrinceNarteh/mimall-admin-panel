@@ -8,7 +8,6 @@ import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
 import { useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
@@ -91,7 +90,7 @@ const AllDeliveryCompanies = () => {
       header: "Details",
       cell: (props) => (
         <button
-          onClick={() => setDeliveryCompany(props.row.original)}
+          onClick={() => handleDetails(props.row.original)}
           className="text-xs border border-primary px-2 py-1 rounded text-primary"
         >
           Details
@@ -135,8 +134,9 @@ const AllDeliveryCompanies = () => {
       />
 
       <DeliveryCompanyDetails
+        openDetails={openDetails}
         deliveryCompany={deliveryCompany}
-        setDeliveryCompany={setDeliveryCompany}
+        setOpenDetails={setOpenDetails}
         handleDelete={handleDelete}
       />
 

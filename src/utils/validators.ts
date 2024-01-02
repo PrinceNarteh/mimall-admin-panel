@@ -47,7 +47,6 @@ export const adminResolver = (admin: Admin | null) => {
     card_type: z.union([z.string(), z.undefined()]),
     card_number: z.union([z.string(), z.undefined()]),
     active: z.boolean().default(true),
-    role: z.string({ required_error: "role is required" }),
   });
 
   if (!admin) {
