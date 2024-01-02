@@ -30,6 +30,7 @@ const defaultValues = {
   card_type: "",
   card_number: "",
   active: true,
+  role: "",
 };
 
 const AdminForm = ({
@@ -119,12 +120,8 @@ const AdminForm = ({
   }, [admin, setValue]);
 
   useEffect(() => {
-    if (!admin) {
-      reset();
-    }
+    !admin && reset();
   }, [admin]);
-
-  console.log(errors);
 
   return (
     <div className="p-5 bg-white">
@@ -257,6 +254,7 @@ const AdminForm = ({
           )}
           <div className="flex-1">
             <CustomFileInput
+              height="h-28"
               label="Profile Image"
               placeholder="Drop your profile image here"
               required

@@ -96,6 +96,11 @@ export const adminResolver = (admin: Admin | null) => {
     }
   });
 };
+const Role = z.object({
+  _id: z.string(),
+  name: z.string(),
+  permissions: z.string().array(),
+});
 
 export const updateDeliveryCompanyResolver = z
   .object({
@@ -131,7 +136,6 @@ export const updateDeliveryCompanyResolver = z
       z.string().array(),
     ]),
     logo: z.union([image("logo"), z.string(), z.undefined()]),
-    role: z.string({ required_error: "role is required" }),
   })
   .superRefine((val, ctx) => {
     if (val.phone_number.length !== 13) {
@@ -188,7 +192,6 @@ export const createDeliveryCompanyResolver = z
       z.string().array(),
     ]),
     logo: z.union([image("logo"), z.string(), z.undefined()]),
-    role: z.string({ required_error: "role is required" }),
     password: z.string().min(6, "Passwords must be at least 6 characters"),
     confirm_password: z.string().min(6, "Please confirm your password"),
   })

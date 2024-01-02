@@ -8,6 +8,7 @@ import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type DeliveryCompanyDetailsProps = {
   openDetails: boolean;
+  handleEdit: (deliveryCompany: DeliveryCompany | null) => void;
   deliveryCompany: DeliveryCompany | null;
   setOpenDetails: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: (deliveryCompany: DeliveryCompany | null) => Promise<void>;
@@ -17,7 +18,13 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
   openDetails,
   setOpenDetails,
   handleDelete,
+  handleEdit,
 }) => {
+  const edit = () => {
+    handleEdit(deliveryCompany);
+    setOpenDetails(false);
+  };
+
   return (
     <DetailsCard
       start={true}
@@ -27,14 +34,21 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
       closeDetails={() => setOpenDetails(false)}
       image={deliveryCompany?.logo}
       openDetails={openDetails}
-      editLink={`/delivery-companies/${deliveryCompany?._id}/edit`}
       actionButtons={() => (
-        <button onClick={() => handleDelete(deliveryCompany)}>
-          <Icon
-            icon="fluent:delete-28-regular"
-            className="text-xl text-red-500"
-          />
-        </button>
+        <>
+          <button onClick={() => edit()}>
+            <Icon
+              icon="iconamoon:edit-light"
+              className="text-xl text-primary"
+            />
+          </button>
+          <button onClick={() => handleDelete(deliveryCompany)}>
+            <Icon
+              icon="fluent:delete-28-regular"
+              className="text-xl text-red-500"
+            />
+          </button>
+        </>
       )}
     >
       <div className="flex flex-col lg:flex-row gap-5 rounded-md mb-5">

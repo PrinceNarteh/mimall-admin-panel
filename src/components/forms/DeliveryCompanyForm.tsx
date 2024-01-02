@@ -22,7 +22,6 @@ import InputField from "../shared/InputField";
 
 const DeliveryCompanyForm = ({
   deliveryCompany,
-  setOpenForm,
   openForm,
 }: {
   openForm: boolean;
@@ -48,7 +47,6 @@ const DeliveryCompanyForm = ({
     phone_number: "",
     slide_images: [],
     whatsapp_number: "",
-    role: "Delivery",
     password: "",
     confirm_password: "",
   };
@@ -143,7 +141,13 @@ const DeliveryCompanyForm = ({
   }, [slideImages]);
 
   useEffect(() => {
-    if (!openForm) {
+    if (deliveryCompany) {
+      reset(deliveryCompany);
+    }
+  }, [deliveryCompany]);
+
+  useEffect(() => {
+    if (openForm) {
       reset();
     }
   }, [openForm]);

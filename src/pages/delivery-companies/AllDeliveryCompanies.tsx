@@ -9,9 +9,10 @@ import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { queryKeys } from "@utils/queryKeys";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 import DeliveryCompanyDetails from "./DeliveryCompanyDetails";
+import { effect } from "zod";
 
 const AllDeliveryCompanies = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
@@ -30,7 +31,7 @@ const AllDeliveryCompanies = () => {
     setOpenDetails(true);
   };
 
-  const handleEdit = (deliveryCompany: DeliveryCompany) => {
+  const handleEdit = (deliveryCompany: DeliveryCompany | null) => {
     setDeliveryCompany(deliveryCompany);
     setOpenForm(true);
   };
@@ -134,6 +135,7 @@ const AllDeliveryCompanies = () => {
       />
 
       <DeliveryCompanyDetails
+        handleEdit={handleEdit}
         openDetails={openDetails}
         deliveryCompany={deliveryCompany}
         setOpenDetails={setOpenDetails}
