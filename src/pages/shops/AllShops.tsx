@@ -10,20 +10,31 @@ import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 import { Link } from "react-router-dom";
-import AdminDetails from "./ShopDetails";
+import ShopDetails from "./ShopDetails";
 
 const AllShops = () => {
   const { ConfirmationDialog, confirm, setIsOpen } = useConfirm();
   const [shop, setShop] = useState<Shop | null>(null);
+  const [openDetails, setOpenDetails] = useState(false);
   const [openForm, setOpenForm] = useState(false);
 
   const { data, isLoading } = useGetQuery<Admin[]>({
     queryKey: queryKeys.Shops.key,
     url: queryKeys.Shops.url,
   });
+
+  const handleDetails = (shop: Shop | null) => {
+    setShop(shop);
+    setOpenDetails(true);
+  };
+
+  const handleEdit = (shop: Shop | null) => {
+    setShop(shop);
+    setOpenForm(true);
+  };
 
   const handleDelete = async (shop: Shop | null) => {
     if (!shop) return;
@@ -86,7 +97,7 @@ const AllShops = () => {
       header: "Details",
       cell: (props) => (
         <button
-          onClick={() => setShop(props.row.original)}
+          onClick={() => handleDetails(props.row.original)}
           className="text-xs border border-primary px-2 py-1 rounded text-primary"
         >
           Details
@@ -96,10 +107,13 @@ const AllShops = () => {
     columnHelper.display({
       header: "Actions",
       cell: (props) => (
-        <span className="w-20 flex gap-3">
-          <Link to={`/admins/${props.row.original._id}/edit`}>
-            <Icon icon="iconamoon:edit-light" className="text-xl" />
-          </Link>
+        <span className="w-20 flex gap-5">
+          <button onClick={() => handleEdit(props.row.original)}>
+            <Icon
+              icon="iconamoon:edit-light"
+              className="text-xl text-primary"
+            />
+          </button>
           <button onClick={() => handleDelete(props.row.original)}>
             <Icon
               icon="fluent:delete-28-regular"
@@ -110,6 +124,12 @@ const AllShops = () => {
       ),
     }),
   ] as Array<ColumnDef<Admin, unknown>>;
+
+  useEffect(() => {
+    if (!openDetails && !openForm) {
+      setShop(null);
+    }
+  }, [openForm, openDetails]);
 
   return (
     <div>
@@ -129,7 +149,12 @@ const AllShops = () => {
         )}
       />
 
-      <AdminDetails shop={shop} setShop={setShop} handleDelete={handleDelete} />
+      <ShopDetails
+        shop={shop}
+        openDetails={openDetails}
+        setOpenDetails={setOpenDetails}
+        handleDelete={handleDelete}
+      />
 
       <Modal
         start

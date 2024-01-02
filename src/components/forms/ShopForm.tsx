@@ -50,6 +50,7 @@ const ShopForm = ({ shop }: ShopFormProps) => {
   const formValues = shopResolver(shop);
   type FormValues = z.infer<typeof formValues>;
   const {
+    reset,
     control,
     register,
     setValue,
@@ -126,7 +127,9 @@ const ShopForm = ({ shop }: ShopFormProps) => {
     }
   }, [shop, setValue]);
 
-  console.log({ errors });
+  useEffect(() => {
+    !shop && reset();
+  }, [shop]);
 
   return (
     <div className="p-5 bg-white">

@@ -5,14 +5,16 @@ import { fetchImage } from "@utils/fetchImage";
 import React from "react";
 
 type ShopDetailsProps = {
+  openDetails: boolean;
   shop: Shop | null;
-  setShop: React.Dispatch<React.SetStateAction<Shop | null>>;
+  setOpenDetails: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: (shop: Shop | null) => Promise<void>;
 };
 
 const ShopDetails: React.FC<ShopDetailsProps> = ({
   shop = null,
-  setShop,
+  openDetails,
+  setOpenDetails,
   handleDelete,
 }) => {
   console.log(shop);
@@ -21,12 +23,12 @@ const ShopDetails: React.FC<ShopDetailsProps> = ({
       heading="Shop Details"
       title={`${shop?.name}`}
       description={`${shop?.description}`}
-      closeDetails={() => setShop(null)}
+      closeDetails={() => setOpenDetails(false)}
       image={`${fetchImage({
         imageName: shop?.profile_image,
         entity: "shops",
       })}`}
-      openDetails={!!shop}
+      openDetails={openDetails}
       editLink={`/admins/${shop?._id}/edit`}
       actionButtons={() => (
         <button onClick={() => handleDelete(shop)}>
