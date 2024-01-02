@@ -17,7 +17,6 @@ const ProductDetails: React.FC<ProductProps> = ({
   setProduct,
   handleDelete,
 }) => {
-  console.log(product);
   return (
     <DetailsCard
       heading="Product Details"
@@ -36,11 +35,11 @@ const ProductDetails: React.FC<ProductProps> = ({
         </button>
       )}
     >
-      <div className="flex flex-col lg:flex-row gap-5 mb-5">
-        <div className="flex-1 bg-white p-5 rounded-md">
-          <ImageGallery images={product?.product_images} entity="products" />
+      <div className="grid grid-cols-12 gap-5 mb-5">
+        <div className="h-96 col-span-12 lg:col-span-6 bg-white p-5 rounded-md">
+          <ImageGallery images={product?.product_images} />
         </div>
-        <div className="flex-1 bg-white space-y-2 p-5 rounded-md">
+        <div className="col-span-12 lg:col-span-6 bg-white space-y-2 p-5 rounded-md">
           <DetailsCardItem label="Price" value={product?.price} />
           <DetailsCardItem label="Stock" value={product?.stock} />
           <DetailsCardItem label="Brand" value={product?.brand} />

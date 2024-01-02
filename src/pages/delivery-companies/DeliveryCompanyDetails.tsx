@@ -42,10 +42,7 @@ const DeliveryCompanyDetails: React.FC<DeliveryCompanyDetailsProps> = ({
     >
       <div className="flex flex-col lg:flex-row gap-5 rounded-md mb-5">
         <div className="flex-1 bg-white p-5 rounded-md">
-          <ImageGallery
-            entity="delivery-companies"
-            images={deliveryCompany?.slide_images}
-          />
+          <ImageGallery images={deliveryCompany?.slide_images} />
         </div>
         <div className="bg-white p-5 rounded-md w-full space-y-2 flex-1">
           <DetailsCardItem

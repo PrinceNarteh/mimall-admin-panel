@@ -1,22 +1,21 @@
-import { Entity } from "@custom-types/index";
-import { fetchImage } from "@utils/fetchImage";
 import React, { useState } from "react";
 
 type ImageGalleryProps = {
-  entity: Entity;
   images: string[] | undefined;
 };
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ images = [], entity }) => {
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images = [] }) => {
   const [active, setActive] = useState(0);
 
   return (
-    <div>
-      <img
-        src={images[active]}
-        alt=""
-        className="rounded-xl h-80 w-full object-cover"
-      />
+    <div className="flex flex-col min-h-full">
+      <div className="flex-1">
+        <img
+          src={images[active]}
+          alt=""
+          className="rounded-xl h-60 w-full object-cover"
+        />
+      </div>
 
       <div className="overflow-x-scroll">
         <div className="flex">

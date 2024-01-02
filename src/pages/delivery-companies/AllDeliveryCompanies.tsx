@@ -63,10 +63,7 @@ const AllDeliveryCompanies = () => {
         <div className="flex items-center">
           <div>
             <img
-              src={fetchImage({
-                imageName: props.row.original.slide_images[0],
-                entity: "delivery-companies",
-              })}
+              src={props.row.original.slide_images[0]}
               alt=""
               className="h-12 w-12 object-cover rounded-full"
             />
