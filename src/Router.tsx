@@ -1,8 +1,10 @@
 import Layout from "@components/layout";
+import AllDeliveries from "@pages/AllDeliveries";
 import AllAdmins from "@pages/admins/AllAdmins";
 import Login from "@pages/auth/Login";
 import DashBoard from "@pages/dashboard";
 import AllDeliveryCompanies from "@pages/delivery-companies/AllDeliveryCompanies";
+import AllOrders from "@pages/orders/AllOrders";
 import AllProducts from "@pages/products/AllProducts";
 import RolesAndPermissions from "@pages/roles-and-permissions/Roles";
 import AllShops from "@pages/shops/AllShops";
@@ -41,6 +43,12 @@ export default function Router() {
 
           {/* Users */}
           <Route path="/users" element={<AllUsers />} />
+
+          {/* Orders */}
+          <Route path="/orders" element={<AllOrders />} />
+
+          {/* Deliveries */}
+          <Route path="/deliveries" element={<AllDeliveries />} />
         </Route>
       </Routes>
     </BrowserRouter>

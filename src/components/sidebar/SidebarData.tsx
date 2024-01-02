@@ -56,6 +56,13 @@ export const sidebarData: SidebarData[] = [
         path: "/products",
       },
       {
+        groupTitle: "Deliveries",
+        icon: (
+          <Icon icon="streamline:transfer-motorcycle" className="h-6 w-6" />
+        ),
+        path: "/deliveries",
+      },
+      {
         groupTitle: "Orders",
         icon: (
           <Icon

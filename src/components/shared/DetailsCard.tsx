@@ -28,7 +28,7 @@ const DetailsCard = ({
 }: React.PropsWithChildren<DetailsCardProps>) => {
   return (
     <div
-      className={`flex items-start lg:${
+      className={`flex ${
         start ? "items-start" : "items-center"
       } fixed top-0 right-0 bottom-0 left-20 md:left-72 min-h-screen  p-5 overflow-y-auto  bg-black/80 z-50 transform ${
         openDetails ? "scale-100 opacity-100" : "scale-0 opacity-0"
