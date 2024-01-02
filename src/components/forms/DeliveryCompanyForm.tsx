@@ -142,18 +142,15 @@ const DeliveryCompanyForm = ({
 
   useEffect(() => {
     if (deliveryCompany) {
-      reset(deliveryCompany);
+      Object.entries(deliveryCompany).forEach((item) => {
+        setValue(item[0] as keyof FormValues, item[1]);
+      });
     }
   }, [deliveryCompany]);
 
   useEffect(() => {
-    if (openForm) {
-      reset();
-    }
-  }, [openForm]);
-
-  // console.log(getValues());
-  // console.log({ errors });
+    !deliveryCompany && reset();
+  }, [deliveryCompany]);
 
   return (
     <div className="p-5 bg-white">

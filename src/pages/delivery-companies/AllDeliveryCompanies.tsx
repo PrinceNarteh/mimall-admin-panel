@@ -116,6 +116,12 @@ const AllDeliveryCompanies = () => {
     }),
   ] as Array<ColumnDef<DeliveryCompany, unknown>>;
 
+  useEffect(() => {
+    if (!openDetails && !openForm) {
+      setDeliveryCompany(null);
+    }
+  }, [openForm, openDetails]);
+
   return (
     <div>
       {isLoading && <Spinner isLoading={isLoading} />}
