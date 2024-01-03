@@ -151,6 +151,7 @@ const AllShops = () => {
 
       <ShopDetails
         shop={shop}
+        handleEdit={handleEdit}
         openDetails={openDetails}
         setOpenDetails={setOpenDetails}
         handleDelete={handleDelete}

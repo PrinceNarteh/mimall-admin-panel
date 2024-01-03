@@ -1,3 +1,4 @@
+import ProductForm from "@components/forms/ProductForm";
 import Heading from "@components/shared/Heading";
 import Modal from "@components/shared/Modal";
 import Spinner from "@components/shared/Spinner";
@@ -8,12 +9,11 @@ import { useGetQuery } from "@hooks/useGetQuery";
 import { useUser } from "@hooks/useUser";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { fetchImage } from "@utils/fetchImage";
+import { capitalize } from "@utils/capitalize";
 import { queryKeys } from "@utils/queryKeys";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ProductDetails from "./ProductDetails";
-import ProductForm from "@components/forms/ProductForm";
 
 const AllProducts = () => {
   const user = useUser();
@@ -26,7 +26,15 @@ const AllProducts = () => {
     url: queryKeys.Products.url,
   });
 
-  console.log(data);
+  const handleDetails = (shop: Product | null) => {
+    setProduct(shop);
+    setOpenDetails(true);
+  };
+
+  const handleEdit = (shop: Product | null) => {
+    setProduct(shop);
+    setOpenForm(true);
+  };
 
   const handleDelete = async (product: Product | null) => {
     if (!product) return;
@@ -71,17 +79,21 @@ const AllProducts = () => {
         </div>
       ),
     }),
-    columnHelper.accessor<"stock", number>("stock", {
-      header: "Stock",
+    columnHelper.accessor("category", {
+      header: "category",
+      cell: (info) => capitalize(info.getValue()),
     }),
     columnHelper.accessor<"price", number>("price", {
       header: "Price",
+    }),
+    columnHelper.accessor<"stock", number>("stock", {
+      header: "Stock",
     }),
     columnHelper.display({
       header: "Details",
       cell: (props) => (
         <button
-          onClick={() => setProduct(props.row.original)}
+          onClick={() => handleDetails(props.row.original)}
           className="text-xs border border-primary px-2 py-1 rounded text-primary"
         >
           Details
@@ -91,10 +103,10 @@ const AllProducts = () => {
     columnHelper.display({
       header: "Actions",
       cell: (props) => (
-        <span className="w-20 flex gap-3">
-          <Link to={`/admins/${props.row.original._id}/edit`}>
+        <span className="flex gap-3">
+          <button onClick={() => handleEdit(props.row.original)}>
             <Icon icon="iconamoon:edit-light" className="text-xl" />
-          </Link>
+          </button>
           <button onClick={() => handleDelete(props.row.original)}>
             <Icon
               icon="fluent:delete-28-regular"
@@ -126,8 +138,10 @@ const AllProducts = () => {
 
       <ProductDetails
         product={product}
-        setProduct={setProduct}
+        handleEdit={handleEdit}
+        openDetails={openDetails}
         handleDelete={handleDelete}
+        setOpenDetails={setOpenDetails}
       />
 
       <Modal

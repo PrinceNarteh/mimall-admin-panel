@@ -8,31 +8,47 @@ import React from "react";
 
 type ProductProps = {
   product: Product | null;
-  setProduct: React.Dispatch<React.SetStateAction<Product | null>>;
+  openDetails: boolean;
+  handleEdit: (product: Product | null) => void;
+  setOpenDetails: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: (product: Product | null) => Promise<void>;
 };
 
 const ProductDetails: React.FC<ProductProps> = ({
-  product = null,
-  setProduct,
+  openDetails,
+  handleEdit,
   handleDelete,
+  product = null,
+  setOpenDetails,
 }) => {
+  const edit = () => {
+    handleEdit(product);
+    setOpenDetails(false);
+  };
+
   return (
     <DetailsCard
       heading="Product Details"
       title={`${product?.title}`}
       description={`${product?.description}`}
-      closeDetails={() => setProduct(null)}
+      closeDetails={() => setOpenDetails(false)}
       image={product?.product_images[0]}
-      openDetails={!!product}
-      editLink={`/admins/${product?._id}/edit`}
+      openDetails={openDetails}
       actionButtons={() => (
-        <button onClick={() => handleDelete(product)}>
-          <Icon
-            icon="fluent:delete-28-regular"
-            className="text-xl text-red-500"
-          />
-        </button>
+        <>
+          <button onClick={() => edit()}>
+            <Icon
+              icon="iconamoon:edit-light"
+              className="text-xl text-primary"
+            />
+          </button>
+          <button onClick={() => handleDelete(product)}>
+            <Icon
+              icon="fluent:delete-28-regular"
+              className="text-xl text-red-500"
+            />
+          </button>
+        </>
       )}
     >
       <div className="grid grid-cols-12 gap-5 mb-5">

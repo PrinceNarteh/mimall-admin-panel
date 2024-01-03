@@ -7,6 +7,7 @@ import React from "react";
 type ShopDetailsProps = {
   openDetails: boolean;
   shop: Shop | null;
+  handleEdit: (shop: Shop | null) => void;
   setOpenDetails: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: (shop: Shop | null) => Promise<void>;
 };
@@ -14,29 +15,38 @@ type ShopDetailsProps = {
 const ShopDetails: React.FC<ShopDetailsProps> = ({
   shop = null,
   openDetails,
+  handleEdit,
   setOpenDetails,
   handleDelete,
 }) => {
-  console.log(shop);
+  const edit = () => {
+    handleEdit(shop);
+    setOpenDetails(false);
+  };
+
   return (
     <DetailsCard
       heading="Shop Details"
       title={`${shop?.name}`}
       description={`${shop?.description}`}
       closeDetails={() => setOpenDetails(false)}
-      image={`${fetchImage({
-        imageName: shop?.profile_image,
-        entity: "shops",
-      })}`}
+      image={shop?.profile_image}
       openDetails={openDetails}
-      editLink={`/admins/${shop?._id}/edit`}
       actionButtons={() => (
-        <button onClick={() => handleDelete(shop)}>
-          <Icon
-            icon="fluent:delete-28-regular"
-            className="text-xl text-red-500"
-          />
-        </button>
+        <>
+          <button onClick={() => edit()}>
+            <Icon
+              icon="iconamoon:edit-light"
+              className="text-xl text-primary"
+            />
+          </button>
+          <button onClick={() => handleDelete(shop)}>
+            <Icon
+              icon="fluent:delete-28-regular"
+              className="text-xl text-red-500"
+            />
+          </button>
+        </>
       )}
     >
       <div className="bg-white flex flex-wrap justify-center gap-5 p-5 rounded-md">
