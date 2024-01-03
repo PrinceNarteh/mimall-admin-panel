@@ -2,7 +2,6 @@ import Heading from "@components/shared/Heading";
 import { Admin } from "@custom-types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useMutate from "@hooks/useMutate";
-import { useSetRole } from "@hooks/useSetRole";
 import { useQueryClient } from "@tanstack/react-query";
 import { nationalities } from "@utils/nationalities";
 import { queryKeys } from "@utils/queryKeys";
@@ -56,11 +55,6 @@ const AdminForm = ({
   } = useForm<FormValues>({
     defaultValues,
     resolver: zodResolver(adminResolver(admin)),
-  });
-
-  useSetRole({
-    setValue,
-    entity: "admin",
   });
 
   const { mutate } = useMutate();
