@@ -14,7 +14,6 @@ import ErrorMessage from "@components/shared/ErrorMessage";
 import Heading from "@components/shared/Heading";
 import { PhoneInput } from "@components/shared/PhoneInput";
 import { useSetQueryData } from "@hooks/useSetQueryData";
-import { useSetRole } from "@hooks/useSetRole";
 import { queryKeys } from "@utils/queryKeys";
 import Button from "../shared/Button";
 import CustomFileInput from "../shared/CustomFileInput";
@@ -67,11 +66,6 @@ const DeliveryCompanyForm = ({
         ? updateDeliveryCompanyResolver
         : createDeliveryCompanyResolver
     ),
-  });
-
-  useSetRole({
-    entity: "Delivery",
-    setValue,
   });
 
   const { mutate } = useMutate();
@@ -138,7 +132,7 @@ const DeliveryCompanyForm = ({
       setValue("slide_images", slideImages);
       clearErrors("slide_images");
     }
-  }, [slideImages]);
+  }, [slideImages, setValue, clearErrors]);
 
   useEffect(() => {
     if (deliveryCompany) {
@@ -146,7 +140,7 @@ const DeliveryCompanyForm = ({
         setValue(item[0] as keyof FormValues, item[1]);
       });
     }
-  }, [deliveryCompany]);
+  }, [deliveryCompany, setValue]);
 
   useEffect(() => {
     !deliveryCompany && reset();

@@ -1,7 +1,6 @@
 import DetailsCard from "@components/shared/DetailsCard";
 import { Shop } from "@custom-types/index";
 import { Icon } from "@iconify/react";
-import { fetchImage } from "@utils/fetchImage";
 import React from "react";
 
 type ShopDetailsProps = {

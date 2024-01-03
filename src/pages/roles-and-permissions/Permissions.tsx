@@ -129,7 +129,7 @@ const Permissions = ({
     if (!openForm) {
       reset();
     }
-  }, [openForm]);
+  }, [openForm, reset]);
 
   return (
     <div className="p-5">

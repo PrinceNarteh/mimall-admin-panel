@@ -129,7 +129,7 @@ const ShopForm = ({ shop }: ShopFormProps) => {
 
   useEffect(() => {
     !shop && reset();
-  }, [shop]);
+  }, [shop, reset]);
 
   return (
     <div className="p-5 bg-white">

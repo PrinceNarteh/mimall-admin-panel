@@ -12,7 +12,6 @@ import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
 import { useEffect, useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
-import { Link } from "react-router-dom";
 import ShopDetails from "./ShopDetails";
 
 const AllShops = () => {

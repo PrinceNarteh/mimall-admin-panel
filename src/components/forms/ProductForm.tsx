@@ -44,7 +44,10 @@ const ProductForm = ({ product }: ProductFormProps) => {
   const [images, setImages] = useState<File[] | null>(null);
   const [preview, setPreview] = useState<string[]>([]);
 
+  console.log(product);
+
   const {
+    reset,
     control,
     register,
     setValue,
@@ -135,6 +138,12 @@ const ProductForm = ({ product }: ProductFormProps) => {
       setPreview(images.map((image) => URL.createObjectURL(image)));
     }
   }, [images, setValue]);
+
+  useEffect(() => {
+    if (product) {
+      reset(product);
+    }
+  }, [product]);
 
   console.log(errors);
 

@@ -2,12 +2,6 @@ import { Admin, Shop } from "@custom-types/index";
 import { z } from "zod";
 
 const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
 
 const image = (path: string) =>
   z.instanceof(File).superRefine((val, ctx) => {
@@ -19,12 +13,6 @@ const image = (path: string) =>
       });
     }
   });
-
-// .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-//   .refine(
-//     (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-//     "Only .jpg, .jpeg, .png and .webp formats are supported."
-//   )
 
 export const adminResolver = (admin: Admin | null) => {
   const schema = z.object({
@@ -96,11 +84,6 @@ export const adminResolver = (admin: Admin | null) => {
     }
   });
 };
-const Role = z.object({
-  _id: z.string(),
-  name: z.string(),
-  permissions: z.string().array(),
-});
 
 export const updateDeliveryCompanyResolver = z
   .object({
