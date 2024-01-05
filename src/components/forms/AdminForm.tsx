@@ -103,19 +103,23 @@ const AdminForm = ({
       setPreview(URL.createObjectURL(image));
       setValue("profile_image", image);
     }
-  }, [admin, image, setValue]);
+  }, [image, setValue]);
 
   useEffect(() => {
     if (admin) {
       Object.entries(admin).forEach((item) =>
         setValue(item[0] as keyof FormValues, item[1])
       );
+      setPreview(admin.profile_image);
     }
   }, [admin, setValue]);
 
   useEffect(() => {
-    !admin && reset();
-  }, [admin]);
+    if (!admin) {
+      reset();
+      setPreview("");
+    }
+  }, [admin, reset]);
 
   return (
     <div className="p-5 bg-white">
@@ -242,13 +246,13 @@ const AdminForm = ({
           />
         </div>
 
-        <div className="flex flex-col gap-5 items-center md:flex-row md:items-end max-w-lg md:justify-center mx-auto">
+        <div className="flex flex-col gap-10 mt-8 items-center md:flex-row md:items-end max-w-lg md:justify-center mx-auto">
           {preview && (
             <img src={preview} className="rounded-md w-40 h-40" alt="" />
           )}
           <div className="flex-1">
             <CustomFileInput
-              height="h-28"
+              height="h-32"
               label="Profile Image"
               placeholder="Drop your profile image here"
               required

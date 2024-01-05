@@ -8,7 +8,6 @@ import useConfirm from "@hooks/useConfirm";
 import { useGetQuery } from "@hooks/useGetQuery";
 import { Icon } from "@iconify/react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { fetchImage } from "@utils/fetchImage";
 import { queryKeys } from "@utils/queryKeys";
 import { useEffect, useState } from "react";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
@@ -26,7 +25,6 @@ const AllAdmins = () => {
     queryKey: queryKeys.Admins.key,
     url: queryKeys.Admins.url,
   });
-  console.log(data);
   const handleDetails = (admin: Admin) => {
     setAdmin(admin);
     setOpenDetails(true);
