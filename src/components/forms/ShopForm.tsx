@@ -63,12 +63,9 @@ const ShopForm = ({ shop }: ShopFormProps) => {
 
   const { mutate } = useMutate();
   const submit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
     const toastId = toast.loading("Creating Shop...");
     const formData = new FormData();
     Object.entries(data).forEach((item) => formData.append(item[0], item[1]));
-
-    console.log(data);
 
     mutate(
       {

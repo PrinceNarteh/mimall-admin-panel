@@ -36,6 +36,7 @@ interface BaseUser {
   createdAt: string;
   updatedAt: string;
   token: string;
+  name?: string;
 }
 
 export interface Client extends BaseUser {
@@ -113,9 +114,9 @@ export interface Shop {
   active: boolean;
   createdAt: string;
   updatedAt: string;
+  name: string;
   token: string;
   shop_code: string;
-  name: string;
   password: string;
   plain_password: string;
   description: string;

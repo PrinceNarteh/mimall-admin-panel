@@ -55,10 +55,7 @@ const Login = () => {
       },
       {
         onSuccess(data) {
-          setUser({
-            ...data.data,
-            token: data.token,
-          });
+          setUser(data);
           toast.dismiss(toastId);
           toast.success("Login successful");
           navigate(state?.from ? state.from : "/");
